@@ -9364,6 +9364,12 @@ CS_URL.InitializeMap = function (baseSystemPath, baseFilePath) {
             isDir = fs.statSync(realItem).isDirectory();
         }
         if (isDir) {
+            const folderName = entry.name;
+            const folderPathPosix = path.posix.join(baseSystemPath, folderName);
+            const folderPath = path.join(baseSystemPath, folderName);
+            CS_URL.urlMap[folderPathPosix] = folderPathPosix;
+            CS_URL.urlMap[folderPathPosix.toLowerCase()] = folderPathPosix;
+            CS_URL.urlMap[folderPath] = folderPathPosix;
             CS_URL.InitializeMap(
                 path.join(baseSystemPath, entry.name),
                 path.posix.join(baseFilePath, entry.name));
