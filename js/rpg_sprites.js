@@ -44,10 +44,10 @@ Sprite_Base.prototype.updateVisibility = function () {
 
 Sprite_Base.prototype.updateAnimationSprites = function () {
     if (this._animationSprites.length > 0) {
-        var sprites = this._animationSprites.clone();
+        const sprites = this._animationSprites.clone();
         this._animationSprites = [];
-        for (var i = 0; i < sprites.length; i++) {
-            var sprite = sprites[i];
+        for (let i = 0; i < sprites.length; i++) {
+            const sprite = sprites[i];
             if (sprite.isPlaying()) {
                 this._animationSprites.push(sprite);
             } else {
@@ -58,7 +58,7 @@ Sprite_Base.prototype.updateAnimationSprites = function () {
 };
 
 Sprite_Base.prototype.startAnimation = function (animation, mirror, delay) {
-    var sprite = new Sprite_Animation();
+    const sprite = new Sprite_Animation();
     sprite.setup(this._effectTarget, animation, mirror, delay);
     this.parent.addChild(sprite);
     this._animationSprites.push(sprite);
@@ -95,7 +95,7 @@ Sprite_Button.prototype.update = function () {
 };
 
 Sprite_Button.prototype.updateFrame = function () {
-    var frame;
+    let frame;
     if (this._touching) {
         frame = this._hotFrame;
     } else {
@@ -143,7 +143,7 @@ Sprite_Button.prototype.processTouch = function () {
 };
 
 Sprite_Button.prototype.isActive = function () {
-    var node = this;
+    let node = this;
     while (node) {
         if (!node.visible) {
             return false;
@@ -154,13 +154,13 @@ Sprite_Button.prototype.isActive = function () {
 };
 
 Sprite_Button.prototype.isButtonTouched = function () {
-    var x = this.canvasToLocalX(TouchInput.x);
-    var y = this.canvasToLocalY(TouchInput.y);
+    const x = this.canvasToLocalX(TouchInput.x);
+    const y = this.canvasToLocalY(TouchInput.y);
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
 };
 
 Sprite_Button.prototype.canvasToLocalX = function (x) {
-    var node = this;
+    let node = this;
     while (node) {
         x -= node.x;
         node = node.parent;
@@ -169,7 +169,7 @@ Sprite_Button.prototype.canvasToLocalX = function (x) {
 };
 
 Sprite_Button.prototype.canvasToLocalY = function (y) {
-    var node = this;
+    let node = this;
     while (node) {
         y -= node.y;
         node = node.parent;
@@ -231,8 +231,8 @@ Sprite_Character.prototype.isTile = function () {
 };
 
 Sprite_Character.prototype.tilesetBitmap = function (tileId) {
-    var tileset = $gameMap.tileset();
-    var setNumber = 5 + Math.floor(tileId / 256);
+    const tileset = $gameMap.tileset();
+    const setNumber = 5 + Math.floor(tileId / 256);
     return ImageManager.loadTileset(tileset.tilesetNames[setNumber]);
 };
 
@@ -275,21 +275,21 @@ Sprite_Character.prototype.updateFrame = function () {
 };
 
 Sprite_Character.prototype.updateTileFrame = function () {
-    var pw = this.patternWidth();
-    var ph = this.patternHeight();
-    var sx = (Math.floor(this._tileId / 128) % 2 * 8 + this._tileId % 8) * pw;
-    var sy = Math.floor(this._tileId % 256 / 8) % 16 * ph;
+    const pw = this.patternWidth();
+    const ph = this.patternHeight();
+    const sx = (Math.floor(this._tileId / 128) % 2 * 8 + this._tileId % 8) * pw;
+    const sy = Math.floor(this._tileId % 256 / 8) % 16 * ph;
     this.setFrame(sx, sy, pw, ph);
 };
 
 Sprite_Character.prototype.updateCharacterFrame = function () {
-    var pw = this.patternWidth();
-    var ph = this.patternHeight();
-    var sx = (this.characterBlockX() + this.characterPatternX()) * pw;
-    var sy = (this.characterBlockY() + this.characterPatternY()) * ph;
+    const pw = this.patternWidth();
+    const ph = this.patternHeight();
+    const sx = (this.characterBlockX() + this.characterPatternX()) * pw;
+    const sy = (this.characterBlockY() + this.characterPatternY()) * ph;
     this.updateHalfBodySprites();
     if (this._bushDepth > 0) {
-        var d = this._bushDepth;
+        const d = this._bushDepth;
         this._upperBody.setFrame(sx, sy, pw, ph - d);
         this._lowerBody.setFrame(sx, sy + ph - d, pw, d);
         this.setFrame(sx, sy, 0, ph);
@@ -302,7 +302,7 @@ Sprite_Character.prototype.characterBlockX = function () {
     if (this._isBigCharacter) {
         return 0;
     } else {
-        var index = this._character.characterIndex();
+        const index = this._character.characterIndex();
         return index % 4 * 3;
     }
 };
@@ -311,7 +311,7 @@ Sprite_Character.prototype.characterBlockY = function () {
     if (this._isBigCharacter) {
         return 0;
     } else {
-        var index = this._character.characterIndex();
+        const index = this._character.characterIndex();
         return Math.floor(index / 4) * 4;
     }
 };
@@ -402,7 +402,7 @@ Sprite_Character.prototype.updateOther = function () {
 
 Sprite_Character.prototype.setupAnimation = function () {
     if (this._character.animationId() > 0) {
-        var animation = $dataAnimations[this._character.animationId()];
+        const animation = $dataAnimations[this._character.animationId()];
         this.startAnimation(animation, false, 0);
         this._character.startAnimation();
     }
@@ -524,7 +524,7 @@ Sprite_Battler.prototype.updateFrame = function () {
 
 Sprite_Battler.prototype.updateMove = function () {
     if (this._movementDuration > 0) {
-        var d = this._movementDuration;
+        const d = this._movementDuration;
         this._offsetX = (this._offsetX * (d - 1) + this._targetOffsetX) / d;
         this._offsetY = (this._offsetY * (d - 1) + this._targetOffsetY) / d;
         this._movementDuration--;
@@ -546,7 +546,7 @@ Sprite_Battler.prototype.updateAnimation = function () {
 Sprite_Battler.prototype.updateDamagePopup = function () {
     this.setupDamagePopup();
     if (this._damages.length > 0) {
-        for (var i = 0; i < this._damages.length; i++) {
+        for (let i = 0; i < this._damages.length; i++) {
             this._damages[i].update();
         }
         if (!this._damages[0].isPlaying()) {
@@ -557,7 +557,7 @@ Sprite_Battler.prototype.updateDamagePopup = function () {
 };
 
 Sprite_Battler.prototype.updateSelectionEffect = function () {
-    var target = this._effectTarget;
+    const target = this._effectTarget;
     if (this._battler.isSelected()) {
         this._selectionEffectCount++;
         if (this._selectionEffectCount % 30 < 15) {
@@ -573,13 +573,13 @@ Sprite_Battler.prototype.updateSelectionEffect = function () {
 
 Sprite_Battler.prototype.setupAnimation = function () {
     while (this._battler.isAnimationRequested()) {
-        var data = this._battler.shiftAnimation();
-        var animation = $dataAnimations[data.animationId];
-        var mirror = data.mirror;
-        var delay = animation.position === 3 ? 0 : data.delay;
+        const data = this._battler.shiftAnimation();
+        const animation = $dataAnimations[data.animationId];
+        const mirror = data.mirror;
+        const delay = animation.position === 3 ? 0 : data.delay;
         this.startAnimation(animation, mirror, delay);
-        for (var i = 0; i < this._animationSprites.length; i++) {
-            var sprite = this._animationSprites[i];
+        for (let i = 0; i < this._animationSprites.length; i++) {
+            const sprite = this._animationSprites[i];
             sprite.visible = this._battler.isSpriteVisible();
         }
     }
@@ -588,7 +588,7 @@ Sprite_Battler.prototype.setupAnimation = function () {
 Sprite_Battler.prototype.setupDamagePopup = function () {
     if (this._battler.isDamagePopupRequested()) {
         if (this._battler.isSpriteVisible()) {
-            var sprite = new Sprite_Damage();
+            const sprite = new Sprite_Damage();
             sprite.x = this.x + this.damageOffsetX();
             sprite.y = this.y + this.damageOffsetY();
             sprite.setup(this._battler);
@@ -714,7 +714,7 @@ Sprite_Actor.prototype.createStateSprite = function () {
 
 Sprite_Actor.prototype.setBattler = function (battler) {
     Sprite_Battler.prototype.setBattler.call(this, battler);
-    var changed = (battler !== this._actor);
+    const changed = (battler !== this._actor);
     if (changed) {
         this._actor = battler;
         if (battler) {
@@ -767,7 +767,7 @@ Sprite_Actor.prototype.setupWeaponAnimation = function () {
 };
 
 Sprite_Actor.prototype.startMotion = function (motionType) {
-    var newMotion = Sprite_Actor.MOTIONS[motionType];
+    const newMotion = Sprite_Actor.MOTIONS[motionType];
     if (this._motion !== newMotion) {
         this._motion = newMotion;
         this._motionCount = 0;
@@ -787,7 +787,7 @@ Sprite_Actor.prototype.updateTargetPosition = function () {
 
 Sprite_Actor.prototype.updateBitmap = function () {
     Sprite_Battler.prototype.updateBitmap.call(this);
-    var name = this._actor.battlerName();
+    const name = this._actor.battlerName();
     if (this._battlerName !== name) {
         this._battlerName = name;
         this._mainSprite.bitmap = ImageManager.loadSvActor(name);
@@ -796,20 +796,20 @@ Sprite_Actor.prototype.updateBitmap = function () {
 
 Sprite_Actor.prototype.updateFrame = function () {
     Sprite_Battler.prototype.updateFrame.call(this);
-    var bitmap = this._mainSprite.bitmap;
+    const bitmap = this._mainSprite.bitmap;
     if (bitmap) {
-        var motionIndex = this._motion ? this._motion.index : 0;
-        var pattern = this._pattern < 3 ? this._pattern : 1;
-        var cw = bitmap.width / 9;
-        var ch = bitmap.height / 6;
-        var cx = Math.floor(motionIndex / 6) * 3 + pattern;
-        var cy = motionIndex % 6;
+        const motionIndex = this._motion ? this._motion.index : 0;
+        const pattern = this._pattern < 3 ? this._pattern : 1;
+        const cw = bitmap.width / 9;
+        const ch = bitmap.height / 6;
+        const cx = Math.floor(motionIndex / 6) * 3 + pattern;
+        const cy = motionIndex % 6;
         this._mainSprite.setFrame(cx * cw, cy * ch, cw, ch);
     }
 };
 
 Sprite_Actor.prototype.updateMove = function () {
-    var bitmap = this._mainSprite.bitmap;
+    const bitmap = this._mainSprite.bitmap;
     if (!bitmap || bitmap.isReady()) {
         Sprite_Battler.prototype.updateMove.call(this);
     }
@@ -843,13 +843,13 @@ Sprite_Actor.prototype.motionSpeed = function () {
 };
 
 Sprite_Actor.prototype.refreshMotion = function () {
-    var actor = this._actor;
-    var motionGuard = Sprite_Actor.MOTIONS.guard;
+    const actor = this._actor;
+    const motionGuard = Sprite_Actor.MOTIONS.guard;
     if (actor) {
         if (this._motion === motionGuard && !BattleManager.isInputting()) {
             return;
         }
-        var stateMotion = actor.stateMotionIndex();
+        const stateMotion = actor.stateMotionIndex();
         if (actor.isInputting() || actor.isActing()) {
             this.startMotion('walk');
         } else if (stateMotion === 3) {
@@ -959,8 +959,8 @@ Sprite_Enemy.prototype.update = function () {
 
 Sprite_Enemy.prototype.updateBitmap = function () {
     Sprite_Battler.prototype.updateBitmap.call(this);
-    var name = this._enemy.battlerName();
-    var hue = this._enemy.battlerHue();
+    const name = this._enemy.battlerName();
+    const hue = this._enemy.battlerHue();
     if (this._battlerName !== name || this._battlerHue !== hue) {
         this._battlerName = name;
         this._battlerHue = hue;
@@ -979,7 +979,7 @@ Sprite_Enemy.prototype.loadBitmap = function (name, hue) {
 
 Sprite_Enemy.prototype.updateFrame = function () {
     Sprite_Battler.prototype.updateFrame.call(this);
-    var frameHeight = this.bitmap.height;
+    let frameHeight = this.bitmap.height;
     if (this._effectType === 'bossCollapse') {
         frameHeight = this._effectDuration;
     }
@@ -1123,7 +1123,7 @@ Sprite_Enemy.prototype.revertToNormal = function () {
 };
 
 Sprite_Enemy.prototype.updateWhiten = function () {
-    var alpha = 128 - (16 - this._effectDuration) * 10;
+    const alpha = 128 - (16 - this._effectDuration) * 10;
     this.setBlendColor([255, 255, 255, alpha]);
 };
 
@@ -1248,7 +1248,7 @@ Sprite_Animation.prototype.update = function () {
 
 Sprite_Animation.prototype.updateFlash = function () {
     if (this._flashDuration > 0) {
-        var d = this._flashDuration--;
+        const d = this._flashDuration--;
         this._flashColor[3] *= (d - 1) / d;
         this._target.setBlendColor(this._flashColor);
     }
@@ -1256,7 +1256,7 @@ Sprite_Animation.prototype.updateFlash = function () {
 
 Sprite_Animation.prototype.updateScreenFlash = function () {
     if (this._screenFlashDuration > 0) {
-        var d = this._screenFlashDuration--;
+        const d = this._screenFlashDuration--;
         if (this._screenFlashSprite) {
             this._screenFlashSprite.x = -this.absoluteX();
             this._screenFlashSprite.y = -this.absoluteY();
@@ -1267,8 +1267,8 @@ Sprite_Animation.prototype.updateScreenFlash = function () {
 };
 
 Sprite_Animation.prototype.absoluteX = function () {
-    var x = 0;
-    var object = this;
+    let x = 0;
+    let object = this;
     while (object) {
         x += object.x;
         object = object.parent;
@@ -1277,8 +1277,8 @@ Sprite_Animation.prototype.absoluteX = function () {
 };
 
 Sprite_Animation.prototype.absoluteY = function () {
-    var y = 0;
-    var object = this;
+    let y = 0;
+    let object = this;
     while (object) {
         y += object.y;
         object = object.parent;
@@ -1300,10 +1300,10 @@ Sprite_Animation.prototype.isPlaying = function () {
 };
 
 Sprite_Animation.prototype.loadBitmaps = function () {
-    var name1 = this._animation.animation1Name;
-    var name2 = this._animation.animation2Name;
-    var hue1 = this._animation.animation1Hue;
-    var hue2 = this._animation.animation2Hue;
+    const name1 = this._animation.animation1Name;
+    const name2 = this._animation.animation2Name;
+    const hue1 = this._animation.animation1Hue;
+    const hue2 = this._animation.animation2Hue;
     this._bitmap1 = ImageManager.loadAnimation(name1, hue1);
     this._bitmap2 = ImageManager.loadAnimation(name2, hue2);
 };
@@ -1332,8 +1332,8 @@ Sprite_Animation.prototype.createSprites = function () {
 
 Sprite_Animation.prototype.createCellSprites = function () {
     this._cellSprites = [];
-    for (var i = 0; i < 16; i++) {
-        var sprite = new Sprite();
+    for (let i = 0; i < 16; i++) {
+        const sprite = new Sprite();
         sprite.anchor.x = 0.5;
         sprite.anchor.y = 0.5;
         this._cellSprites.push(sprite);
@@ -1365,8 +1365,8 @@ Sprite_Animation.prototype.updatePosition = function () {
         this.x = this.parent.width / 2;
         this.y = this.parent.height / 2;
     } else {
-        var parent = this._target.parent;
-        var grandparent = parent ? parent.parent : null;
+        const parent = this._target.parent;
+        const grandparent = parent ? parent.parent : null;
         this.x = this._target.x;
         this.y = this._target.y;
         if (this.parent === grandparent) {
@@ -1383,7 +1383,7 @@ Sprite_Animation.prototype.updatePosition = function () {
 
 Sprite_Animation.prototype.updateFrame = function () {
     if (this._duration > 0) {
-        var frameIndex = this.currentFrameIndex();
+        const frameIndex = this.currentFrameIndex();
         this.updateAllCellSprites(this._animation.frames[frameIndex]);
         this._animation.timings.forEach(function (timing) {
             if (timing.frame === frameIndex) {
@@ -1399,8 +1399,8 @@ Sprite_Animation.prototype.currentFrameIndex = function () {
 };
 
 Sprite_Animation.prototype.updateAllCellSprites = function (frame) {
-    for (var i = 0; i < this._cellSprites.length; i++) {
-        var sprite = this._cellSprites[i];
+    for (let i = 0; i < this._cellSprites.length; i++) {
+        const sprite = this._cellSprites[i];
         if (i < frame.length) {
             this.updateCellSprite(sprite, frame[i]);
         } else {
@@ -1410,11 +1410,11 @@ Sprite_Animation.prototype.updateAllCellSprites = function (frame) {
 };
 
 Sprite_Animation.prototype.updateCellSprite = function (sprite, cell) {
-    var pattern = cell[0];
+    const pattern = cell[0];
     if (pattern >= 0) {
-        var sx = pattern % 5 * 192;
-        var sy = Math.floor(pattern % 100 / 5) * 192;
-        var mirror = this._mirror;
+        const sx = pattern % 5 * 192;
+        const sy = Math.floor(pattern % 100 / 5) * 192;
+        const mirror = this._mirror;
         sprite.bitmap = pattern < 100 ? this._bitmap1 : this._bitmap2;
         sprite.setFrame(sx, sy, 192, 192);
         sprite.x = cell[1];
@@ -1441,7 +1441,7 @@ Sprite_Animation.prototype.updateCellSprite = function (sprite, cell) {
 };
 
 Sprite_Animation.prototype.processTimingData = function (timing) {
-    var duration = timing.flashDuration * this._rate;
+    const duration = timing.flashDuration * this._rate;
     switch (timing.flashScope) {
         case 1:
             this.startFlash(timing.flashColor, duration);
@@ -1497,7 +1497,7 @@ Sprite_Damage.prototype.initialize = function () {
 };
 
 Sprite_Damage.prototype.setup = function (target) {
-    var result = target.result();
+    const result = target.result();
     if (result.missed || result.evaded) {
         this.createMiss();
     } else if (result.hpAffected) {
@@ -1524,21 +1524,21 @@ Sprite_Damage.prototype.digitHeight = function () {
 };
 
 Sprite_Damage.prototype.createMiss = function () {
-    var w = this.digitWidth();
-    var h = this.digitHeight();
-    var sprite = this.createChildSprite();
+    const w = this.digitWidth();
+    const h = this.digitHeight();
+    const sprite = this.createChildSprite();
     sprite.setFrame(0, 4 * h, 4 * w, h);
     sprite.dy = 0;
 };
 
 Sprite_Damage.prototype.createDigits = function (baseRow, value) {
-    var string = Math.abs(value).toString();
-    var row = baseRow + (value < 0 ? 1 : 0);
-    var w = this.digitWidth();
-    var h = this.digitHeight();
-    for (var i = 0; i < string.length; i++) {
-        var sprite = this.createChildSprite();
-        var n = Number(string[i]);
+    const string = Math.abs(value).toString();
+    const row = baseRow + (value < 0 ? 1 : 0);
+    const w = this.digitWidth();
+    const h = this.digitHeight();
+    for (let i = 0; i < string.length; i++) {
+        const sprite = this.createChildSprite();
+        const n = Number(string[i]);
         sprite.setFrame(n * w, row * h, w, h);
         sprite.x = (i - (string.length - 1) / 2) * w;
         sprite.dy = -i;
@@ -1546,7 +1546,7 @@ Sprite_Damage.prototype.createDigits = function (baseRow, value) {
 };
 
 Sprite_Damage.prototype.createChildSprite = function () {
-    var sprite = new Sprite();
+    const sprite = new Sprite();
     sprite.bitmap = this._damageBitmap;
     sprite.anchor.x = 0.5;
     sprite.anchor.y = 1;
@@ -1560,7 +1560,7 @@ Sprite_Damage.prototype.update = function () {
     Sprite.prototype.update.call(this);
     if (this._duration > 0) {
         this._duration--;
-        for (var i = 0; i < this.children.length; i++) {
+        for (let i = 0; i < this.children.length; i++) {
             this.updateChild(this.children[i]);
         }
     }
@@ -1581,7 +1581,7 @@ Sprite_Damage.prototype.updateChild = function (sprite) {
 
 Sprite_Damage.prototype.updateFlash = function () {
     if (this._flashDuration > 0) {
-        var d = this._flashDuration--;
+        const d = this._flashDuration--;
         this._flashColor[3] *= (d - 1) / d;
     }
 };
@@ -1650,7 +1650,7 @@ Sprite_StateIcon.prototype.animationWait = function () {
 };
 
 Sprite_StateIcon.prototype.updateIcon = function () {
-    var icons = [];
+    let icons = [];
     if (this._battler && this._battler.isAlive()) {
         icons = this._battler.allIcons();
     }
@@ -1667,10 +1667,10 @@ Sprite_StateIcon.prototype.updateIcon = function () {
 };
 
 Sprite_StateIcon.prototype.updateFrame = function () {
-    var pw = Sprite_StateIcon._iconWidth;
-    var ph = Sprite_StateIcon._iconHeight;
-    var sx = this._iconIndex % 16 * pw;
-    var sy = Math.floor(this._iconIndex / 16) * ph;
+    const pw = Sprite_StateIcon._iconWidth;
+    const ph = Sprite_StateIcon._iconHeight;
+    const sx = this._iconIndex % 16 * pw;
+    const sy = Math.floor(this._iconIndex / 16) * ph;
     this.setFrame(sx, sy, pw, ph);
 };
 
@@ -1734,10 +1734,10 @@ Sprite_StateOverlay.prototype.updatePattern = function () {
 
 Sprite_StateOverlay.prototype.updateFrame = function () {
     if (this._overlayIndex > 0) {
-        var w = 96;
-        var h = 96;
-        var sx = this._pattern * w;
-        var sy = (this._overlayIndex - 1) * h;
+        const w = 96;
+        const h = 96;
+        const sx = this._pattern * w;
+        const sy = (this._overlayIndex - 1) * h;
         this.setFrame(sx, sy, w, h);
     } else {
         this.setFrame(0, 0, 0, 0);
@@ -1800,7 +1800,7 @@ Sprite_Weapon.prototype.updatePattern = function () {
 };
 
 Sprite_Weapon.prototype.loadBitmap = function () {
-    var pageId = Math.floor((this._weaponImageId - 1) / 12) + 1;
+    const pageId = Math.floor((this._weaponImageId - 1) / 12) + 1;
     if (pageId >= 1) {
         this.bitmap = ImageManager.loadSystem('Weapons' + pageId);
     } else {
@@ -1810,11 +1810,11 @@ Sprite_Weapon.prototype.loadBitmap = function () {
 
 Sprite_Weapon.prototype.updateFrame = function () {
     if (this._weaponImageId > 0) {
-        var index = (this._weaponImageId - 1) % 12;
-        var w = 96;
-        var h = 64;
-        var sx = (Math.floor(index / 6) * 3 + this._pattern) * w;
-        var sy = Math.floor(index % 6) * h;
+        const index = (this._weaponImageId - 1) % 12;
+        const w = 96;
+        const h = 64;
+        const sx = (Math.floor(index / 6) * 3 + this._pattern) * w;
+        const sy = Math.floor(index % 6) * h;
         this.setFrame(sx, sy, w, h);
     } else {
         this.setFrame(0, 0, 0, 0);
@@ -1872,10 +1872,10 @@ Sprite_Balloon.prototype.update = function () {
 };
 
 Sprite_Balloon.prototype.updateFrame = function () {
-    var w = 48;
-    var h = 48;
-    var sx = this.frameIndex() * w;
-    var sy = (this._balloonId - 1) * h;
+    const w = 48;
+    const h = 48;
+    const sx = this.frameIndex() * w;
+    const sy = (this._balloonId - 1) * h;
     this.setFrame(sx, sy, w, h);
 };
 
@@ -1888,7 +1888,7 @@ Sprite_Balloon.prototype.waitTime = function () {
 };
 
 Sprite_Balloon.prototype.frameIndex = function () {
-    var index = (this._duration - this.waitTime()) / this.speed();
+    const index = (this._duration - this.waitTime()) / this.speed();
     return 7 - Math.max(Math.floor(index), 0);
 };
 
@@ -1936,9 +1936,9 @@ Sprite_Picture.prototype.update = function () {
 };
 
 Sprite_Picture.prototype.updateBitmap = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     if (picture) {
-        var pictureName = picture.name();
+        const pictureName = picture.name();
         if (this._pictureName !== pictureName) {
             this._pictureName = pictureName;
             this.loadBitmap();
@@ -1952,7 +1952,7 @@ Sprite_Picture.prototype.updateBitmap = function () {
 };
 
 Sprite_Picture.prototype.updateOrigin = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     if (picture.origin() === 0) {
         this.anchor.x = 0;
         this.anchor.y = 0;
@@ -1963,19 +1963,19 @@ Sprite_Picture.prototype.updateOrigin = function () {
 };
 
 Sprite_Picture.prototype.updatePosition = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     this.x = Math.floor(picture.x());
     this.y = Math.floor(picture.y());
 };
 
 Sprite_Picture.prototype.updateScale = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     this.scale.x = picture.scaleX() / 100;
     this.scale.y = picture.scaleY() / 100;
 };
 
 Sprite_Picture.prototype.updateTone = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     if (picture.tone()) {
         this.setColorTone(picture.tone());
     } else {
@@ -1984,7 +1984,7 @@ Sprite_Picture.prototype.updateTone = function () {
 };
 
 Sprite_Picture.prototype.updateOther = function () {
-    var picture = this.picture();
+    const picture = this.picture();
     this.opacity = picture.opacity();
     this.blendMode = picture.blendMode();
     this.rotation = picture.angle() * Math.PI / 180;
@@ -2033,16 +2033,16 @@ Sprite_Timer.prototype.updateBitmap = function () {
 };
 
 Sprite_Timer.prototype.redraw = function () {
-    var text = this.timerText();
-    var width = this.bitmap.width;
-    var height = this.bitmap.height;
+    const text = this.timerText();
+    const width = this.bitmap.width;
+    const height = this.bitmap.height;
     this.bitmap.clear();
     this.bitmap.drawText(text, 0, 0, width, height, 'center');
 };
 
 Sprite_Timer.prototype.timerText = function () {
-    var min = Math.floor(this._seconds / 60) % 60;
-    var sec = this._seconds % 60;
+    const min = Math.floor(this._seconds / 60) % 60;
+    const sec = this._seconds % 60;
     return min.padZero(2) + ':' + sec.padZero(2);
 };
 
@@ -2086,8 +2086,8 @@ Sprite_Destination.prototype.update = function () {
 };
 
 Sprite_Destination.prototype.createBitmap = function () {
-    var tileWidth = $gameMap.tileWidth();
-    var tileHeight = $gameMap.tileHeight();
+    const tileWidth = $gameMap.tileWidth();
+    const tileHeight = $gameMap.tileHeight();
     this.bitmap = new Bitmap(tileWidth, tileHeight);
     this.bitmap.fillAll('white');
     this.anchor.x = 0.5;
@@ -2096,10 +2096,10 @@ Sprite_Destination.prototype.createBitmap = function () {
 };
 
 Sprite_Destination.prototype.updatePosition = function () {
-    var tileWidth = $gameMap.tileWidth();
-    var tileHeight = $gameMap.tileHeight();
-    var x = $gameTemp.destinationX();
-    var y = $gameTemp.destinationY();
+    const tileWidth = $gameMap.tileWidth();
+    const tileHeight = $gameMap.tileHeight();
+    const x = $gameTemp.destinationX();
+    const y = $gameTemp.destinationY();
     this.x = ($gameMap.adjustX(x) + 0.5) * tileWidth;
     this.y = ($gameMap.adjustY(y) + 0.5) * tileHeight;
 };
@@ -2170,9 +2170,9 @@ Spriteset_Base.prototype.createToneChanger = function () {
 };
 
 Spriteset_Base.prototype.createWebGLToneChanger = function () {
-    var margin = 48;
-    var width = Graphics.width + margin * 2;
-    var height = Graphics.height + margin * 2;
+    const margin = 48;
+    const width = Graphics.width + margin * 2;
+    const height = Graphics.height + margin * 2;
     this._toneFilter = new ToneFilter();
     this._baseSprite.filters = [this._toneFilter];
     this._baseSprite.filterArea = new Rectangle(-margin, -margin, width, height);
@@ -2184,13 +2184,13 @@ Spriteset_Base.prototype.createCanvasToneChanger = function () {
 };
 
 Spriteset_Base.prototype.createPictures = function () {
-    var width = Graphics.boxWidth;
-    var height = Graphics.boxHeight;
-    var x = (Graphics.width - width) / 2;
-    var y = (Graphics.height - height) / 2;
+    const width = Graphics.boxWidth;
+    const height = Graphics.boxHeight;
+    const x = (Graphics.width - width) / 2;
+    const y = (Graphics.height - height) / 2;
     this._pictureContainer = new Sprite();
     this._pictureContainer.setFrame(x, y, width, height);
-    for (var i = 1; i <= $gameScreen.maxPictures(); i++) {
+    for (let i = 1; i <= $gameScreen.maxPictures(); i++) {
         this._pictureContainer.addChild(new Sprite_Picture(i));
     }
     this.addChild(this._pictureContainer);
@@ -2209,14 +2209,14 @@ Spriteset_Base.prototype.createScreenSprites = function () {
 };
 
 Spriteset_Base.prototype.updateScreenSprites = function () {
-    var color = $gameScreen.flashColor();
+    const color = $gameScreen.flashColor();
     this._flashSprite.setColor(color[0], color[1], color[2]);
     this._flashSprite.opacity = color[3];
     this._fadeSprite.opacity = 255 - $gameScreen.brightness();
 };
 
 Spriteset_Base.prototype.updateToneChanger = function () {
-    var tone = $gameScreen.tone();
+    const tone = $gameScreen.tone();
     if (!this._tone.equals(tone)) {
         this._tone = tone.clone();
         if (Graphics.isWebGL()) {
@@ -2228,20 +2228,20 @@ Spriteset_Base.prototype.updateToneChanger = function () {
 };
 
 Spriteset_Base.prototype.updateWebGLToneChanger = function () {
-    var tone = this._tone;
+    const tone = this._tone;
     this._toneFilter.reset();
     this._toneFilter.adjustTone(tone[0], tone[1], tone[2]);
     this._toneFilter.adjustSaturation(-tone[3]);
 };
 
 Spriteset_Base.prototype.updateCanvasToneChanger = function () {
-    var tone = this._tone;
+    const tone = this._tone;
     this._toneSprite.setTone(tone[0], tone[1], tone[2], tone[3]);
 };
 
 Spriteset_Base.prototype.updatePosition = function () {
-    var screen = $gameScreen;
-    var scale = screen.zoomScale();
+    const screen = $gameScreen;
+    const scale = screen.zoomScale();
     this.scale.x = scale;
     this.scale.y = scale;
     this.x = Math.round(-screen.zoomX() * (scale - 1));
@@ -2285,8 +2285,8 @@ Spriteset_Map.prototype.update = function () {
 };
 
 Spriteset_Map.prototype.hideCharacters = function () {
-    for (var i = 0; i < this._characterSprites.length; i++) {
-        var sprite = this._characterSprites[i];
+    for (let i = 0; i < this._characterSprites.length; i++) {
+        const sprite = this._characterSprites[i];
         if (!sprite.isTile()) {
             sprite.hide();
         }
@@ -2317,11 +2317,11 @@ Spriteset_Map.prototype.createTilemap = function () {
 Spriteset_Map.prototype.loadTileset = function () {
     this._tileset = $gameMap.tileset();
     if (this._tileset) {
-        var tilesetNames = this._tileset.tilesetNames;
-        for (var i = 0; i < tilesetNames.length; i++) {
+        const tilesetNames = this._tileset.tilesetNames;
+        for (let i = 0; i < tilesetNames.length; i++) {
             this._tilemap.bitmaps[i] = ImageManager.loadTileset(tilesetNames[i]);
         }
-        var newTilesetFlags = $gameMap.tilesetFlags();
+        const newTilesetFlags = $gameMap.tilesetFlags();
         this._tilemap.refreshTileset();
         if (!this._tilemap.flags.equals(newTilesetFlags)) {
             this._tilemap.refresh();
@@ -2342,7 +2342,7 @@ Spriteset_Map.prototype.createCharacters = function () {
         this._characterSprites.push(new Sprite_Character(follower));
     }, this);
     this._characterSprites.push(new Sprite_Character($gamePlayer));
-    for (var i = 0; i < this._characterSprites.length; i++) {
+    for (let i = 0; i < this._characterSprites.length; i++) {
         this._tilemap.addChild(this._characterSprites[i]);
     }
 };
@@ -2377,7 +2377,7 @@ Spriteset_Map.prototype.updateTileset = function () {
  * Simple fix for canvas parallax issue, destroy old parallax and readd to  the tree.
  */
 Spriteset_Map.prototype._canvasReAddParallax = function () {
-    var index = this._baseSprite.children.indexOf(this._parallax);
+    const index = this._baseSprite.children.indexOf(this._parallax);
     this._baseSprite.removeChild(this._parallax);
     this._parallax = new TilingSprite();
     this._parallax.move(0, 0, Graphics.width, Graphics.height);
@@ -2415,7 +2415,7 @@ Spriteset_Map.prototype.updateTilemap = function () {
 };
 
 Spriteset_Map.prototype.updateShadow = function () {
-    var airship = $gameMap.airship();
+    const airship = $gameMap.airship();
     this._shadowSprite.x = airship.shadowX();
     this._shadowSprite.y = airship.shadowY();
     this._shadowSprite.opacity = airship.shadowOpacity();
@@ -2467,10 +2467,10 @@ Spriteset_Battle.prototype.update = function () {
 };
 
 Spriteset_Battle.prototype.createBattleField = function () {
-    var width = Graphics.boxWidth;
-    var height = Graphics.boxHeight;
-    var x = (Graphics.width - width) / 2;
-    var y = (Graphics.height - height) / 2;
+    const width = Graphics.boxWidth;
+    const height = Graphics.boxHeight;
+    const x = (Graphics.width - width) / 2;
+    const y = (Graphics.height - height) / 2;
     this._battleField = new Sprite();
     this._battleField.setFrame(x, y, width, height);
     this._battleField.x = x;
@@ -2479,11 +2479,11 @@ Spriteset_Battle.prototype.createBattleField = function () {
 };
 
 Spriteset_Battle.prototype.createBattleback = function () {
-    var margin = 32;
-    var x = -this._battleField.x - margin;
-    var y = -this._battleField.y - margin;
-    var width = Graphics.width + margin * 2;
-    var height = Graphics.height + margin * 2;
+    const margin = 32;
+    const x = -this._battleField.x - margin;
+    const y = -this._battleField.y - margin;
+    const width = Graphics.width + margin * 2;
+    const height = Graphics.height + margin * 2;
     this._back1Sprite = new TilingSprite();
     this._back2Sprite = new TilingSprite();
     this._back1Sprite.bitmap = this.battleback1Bitmap();
@@ -2502,10 +2502,10 @@ Spriteset_Battle.prototype.updateBattleback = function () {
 };
 
 Spriteset_Battle.prototype.locateBattleback = function () {
-    var width = this._battleField.width;
-    var height = this._battleField.height;
-    var sprite1 = this._back1Sprite;
-    var sprite2 = this._back2Sprite;
+    const width = this._battleField.width;
+    const height = this._battleField.height;
+    const sprite1 = this._back1Sprite;
+    const sprite2 = this._back2Sprite;
     sprite1.origin.x = sprite1.x + (sprite1.bitmap.width - width) / 2;
     sprite2.origin.x = sprite1.y + (sprite2.bitmap.width - width) / 2;
     if ($gameSystem.isSideView()) {
@@ -2641,14 +2641,14 @@ Spriteset_Battle.prototype.autotileType = function (z) {
 };
 
 Spriteset_Battle.prototype.createEnemies = function () {
-    var enemies = $gameTroop.members();
-    var sprites = [];
-    for (var i = 0; i < enemies.length; i++) {
+    const enemies = $gameTroop.members();
+    const sprites = [];
+    for (let i = 0; i < enemies.length; i++) {
         sprites[i] = new Sprite_Enemy(enemies[i]);
     }
     sprites.sort(this.compareEnemySprite.bind(this));
-    for (var j = 0; j < sprites.length; j++) {
-        this._battleField.addChild(sprites[j]);
+    for (let i = 0; i < sprites.length; i++) {
+        this._battleField.addChild(sprites[i]);
     }
     this._enemySprites = sprites;
 };
@@ -2663,15 +2663,15 @@ Spriteset_Battle.prototype.compareEnemySprite = function (a, b) {
 
 Spriteset_Battle.prototype.createActors = function () {
     this._actorSprites = [];
-    for (var i = 0; i < $gameParty.maxBattleMembers(); i++) {
+    for (let i = 0; i < $gameParty.maxBattleMembers(); i++) {
         this._actorSprites[i] = new Sprite_Actor();
         this._battleField.addChild(this._actorSprites[i]);
     }
 };
 
 Spriteset_Battle.prototype.updateActors = function () {
-    var members = $gameParty.battleMembers();
-    for (var i = 0; i < this._actorSprites.length; i++) {
+    const members = $gameParty.battleMembers();
+    for (let i = 0; i < this._actorSprites.length; i++) {
         this._actorSprites[i].setBattler(members[i]);
     }
 };

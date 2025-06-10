@@ -88,7 +88,7 @@ Window_Base.prototype.fittingHeight = function (numLines) {
 };
 
 Window_Base.prototype.updateTone = function () {
-    var tone = $gameSystem.windowTone();
+    const tone = $gameSystem.windowTone();
     this.setTone(tone[0], tone[1], tone[2]);
 };
 
@@ -172,8 +172,8 @@ Window_Base.prototype.deactivate = function () {
 };
 
 Window_Base.prototype.textColor = function (n) {
-    var px = 96 + (n % 8) * 12 + 6;
-    var py = 144 + Math.floor(n / 8) * 12 + 6;
+    const px = 96 + (n % 8) * 12 + 6;
+    const py = 144 + Math.floor(n / 8) * 12 + 6;
     return this.windowskin.getPixel(px, py);
 };
 
@@ -263,7 +263,7 @@ Window_Base.prototype.textWidth = function (text) {
 
 Window_Base.prototype.drawTextEx = function (text, x, y) {
     if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
+        const textState = { index: 0, x: x, y: y, left: x };
         textState.text = this.convertEscapeCharacters(text);
         textState.height = this.calcTextHeight(textState, false);
         this.resetFontSettings();
@@ -296,12 +296,12 @@ Window_Base.prototype.convertEscapeCharacters = function (text) {
 };
 
 Window_Base.prototype.actorName = function (n) {
-    var actor = n >= 1 ? $gameActors.actor(n) : null;
+    const actor = n >= 1 ? $gameActors.actor(n) : null;
     return actor ? actor.name() : '';
 };
 
 Window_Base.prototype.partyMemberName = function (n) {
-    var actor = n >= 1 ? $gameParty.members()[n - 1] : null;
+    const actor = n >= 1 ? $gameParty.members()[n - 1] : null;
     return actor ? actor.name() : '';
 };
 
@@ -323,8 +323,8 @@ Window_Base.prototype.processCharacter = function (textState) {
 };
 
 Window_Base.prototype.processNormalCharacter = function (textState) {
-    var c = textState.text[textState.index++];
-    var w = this.textWidth(c);
+    const c = textState.text[textState.index++];
+    const w = this.textWidth(c);
     this.contents.drawText(c, textState.x, textState.y, w * 2, textState.height);
     textState.x += w;
 };
@@ -342,8 +342,8 @@ Window_Base.prototype.processNewPage = function (textState) {
 
 Window_Base.prototype.obtainEscapeCode = function (textState) {
     textState.index++;
-    var regExp = /^[\$\.\|\^!><\{\}\\]|^[A-Z]+/i;
-    var arr = regExp.exec(textState.text.slice(textState.index));
+    const regExp = /^[\$\.\|\^!><\{\}\\]|^[A-Z]+/i;
+    const arr = regExp.exec(textState.text.slice(textState.index));
     if (arr) {
         textState.index += arr[0].length;
         return arr[0].toUpperCase();
@@ -353,7 +353,7 @@ Window_Base.prototype.obtainEscapeCode = function (textState) {
 };
 
 Window_Base.prototype.obtainEscapeParam = function (textState) {
-    var arr = /^\[\d+\]/.exec(textState.text.slice(textState.index));
+    const arr = /^\[\d+\]/.exec(textState.text.slice(textState.index));
     if (arr) {
         textState.index += arr[0].length;
         return parseInt(arr[0].slice(1));
@@ -397,16 +397,16 @@ Window_Base.prototype.makeFontSmaller = function () {
 };
 
 Window_Base.prototype.calcTextHeight = function (textState, all) {
-    var lastFontSize = this.contents.fontSize;
-    var textHeight = 0;
-    var lines = textState.text.slice(textState.index).split('\n');
-    var maxLines = all ? lines.length : 1;
+    const lastFontSize = this.contents.fontSize;
+    let textHeight = 0;
+    const lines = textState.text.slice(textState.index).split('\n');
+    const maxLines = all ? lines.length : 1;
 
-    for (var i = 0; i < maxLines; i++) {
-        var maxFontSize = this.contents.fontSize;
-        var regExp = /\x1b[\{\}]/g;
+    for (let i = 0; i < maxLines; i++) {
+        let maxFontSize = this.contents.fontSize;
+        const regExp = /\x1b[\{\}]/g;
         for (; ;) {
-            var array = regExp.exec(lines[i]);
+            const array = regExp.exec(lines[i]);
             if (array) {
                 if (array[0] === '\x1b{') {
                     this.makeFontBigger();
@@ -429,43 +429,43 @@ Window_Base.prototype.calcTextHeight = function (textState, all) {
 };
 
 Window_Base.prototype.drawIcon = function (iconIndex, x, y) {
-    var bitmap = ImageManager.loadSystem('IconSet');
-    var pw = Window_Base._iconWidth;
-    var ph = Window_Base._iconHeight;
-    var sx = iconIndex % 16 * pw;
-    var sy = Math.floor(iconIndex / 16) * ph;
+    const bitmap = ImageManager.loadSystem('IconSet');
+    const pw = Window_Base._iconWidth;
+    const ph = Window_Base._iconHeight;
+    const sx = iconIndex % 16 * pw;
+    const sy = Math.floor(iconIndex / 16) * ph;
     this.contents.blt(bitmap, sx, sy, pw, ph, x, y);
 };
 
 Window_Base.prototype.drawFace = function (faceName, faceIndex, x, y, width, height) {
     width = width || Window_Base._faceWidth;
     height = height || Window_Base._faceHeight;
-    var bitmap = ImageManager.loadFace(faceName);
-    var pw = Window_Base._faceWidth;
-    var ph = Window_Base._faceHeight;
-    var sw = Math.min(width, pw);
-    var sh = Math.min(height, ph);
-    var dx = Math.floor(x + Math.max(width - pw, 0) / 2);
-    var dy = Math.floor(y + Math.max(height - ph, 0) / 2);
-    var sx = faceIndex % 4 * pw + (pw - sw) / 2;
-    var sy = Math.floor(faceIndex / 4) * ph + (ph - sh) / 2;
+    const bitmap = ImageManager.loadFace(faceName);
+    const pw = Window_Base._faceWidth;
+    const ph = Window_Base._faceHeight;
+    const sw = Math.min(width, pw);
+    const sh = Math.min(height, ph);
+    const dx = Math.floor(x + Math.max(width - pw, 0) / 2);
+    const dy = Math.floor(y + Math.max(height - ph, 0) / 2);
+    const sx = faceIndex % 4 * pw + (pw - sw) / 2;
+    const sy = Math.floor(faceIndex / 4) * ph + (ph - sh) / 2;
     this.contents.blt(bitmap, sx, sy, sw, sh, dx, dy);
 };
 
 Window_Base.prototype.drawCharacter = function (characterName, characterIndex, x, y) {
-    var bitmap = ImageManager.loadCharacter(characterName);
-    var big = ImageManager.isBigCharacter(characterName);
-    var pw = bitmap.width / (big ? 3 : 12);
-    var ph = bitmap.height / (big ? 4 : 8);
-    var n = characterIndex;
-    var sx = (n % 4 * 3 + 1) * pw;
-    var sy = (Math.floor(n / 4) * 4) * ph;
+    const bitmap = ImageManager.loadCharacter(characterName);
+    const big = ImageManager.isBigCharacter(characterName);
+    const pw = bitmap.width / (big ? 3 : 12);
+    const ph = bitmap.height / (big ? 4 : 8);
+    const n = characterIndex;
+    const sx = (n % 4 * 3 + 1) * pw;
+    const sy = (Math.floor(n / 4) * 4) * ph;
     this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
 };
 
 Window_Base.prototype.drawGauge = function (x, y, width, rate, color1, color2) {
-    var fillW = Math.floor(width * rate);
-    var gaugeY = y + this.lineHeight() - 8;
+    const fillW = Math.floor(width * rate);
+    const gaugeY = y + this.lineHeight() - 8;
     this.contents.fillRect(x, gaugeY, width, 6, this.gaugeBackColor());
     this.contents.gradientFillRect(x, gaugeY, fillW, 6, color1, color2);
 };
@@ -523,20 +523,20 @@ Window_Base.prototype.drawActorLevel = function (actor, x, y) {
 
 Window_Base.prototype.drawActorIcons = function (actor, x, y, width) {
     width = width || 144;
-    var icons = actor.allIcons().slice(0, Math.floor(width / Window_Base._iconWidth));
-    for (var i = 0; i < icons.length; i++) {
+    const icons = actor.allIcons().slice(0, Math.floor(width / Window_Base._iconWidth));
+    for (let i = 0; i < icons.length; i++) {
         this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + 2);
     }
 };
 
 Window_Base.prototype.drawCurrentAndMax = function (current, max, x, y,
     width, color1, color2) {
-    var labelWidth = this.textWidth('HP');
-    var valueWidth = this.textWidth('0000');
-    var slashWidth = this.textWidth('/');
-    var x1 = x + width - valueWidth;
-    var x2 = x1 - slashWidth;
-    var x3 = x2 - valueWidth;
+    const labelWidth = this.textWidth('HP');
+    const valueWidth = this.textWidth('0000');
+    const slashWidth = this.textWidth('/');
+    const x1 = x + width - valueWidth;
+    const x2 = x1 - slashWidth;
+    const x3 = x2 - valueWidth;
     if (x3 >= x + labelWidth) {
         this.changeTextColor(color1);
         this.drawText(current, x3, y, valueWidth, 'right');
@@ -551,8 +551,8 @@ Window_Base.prototype.drawCurrentAndMax = function (current, max, x, y,
 
 Window_Base.prototype.drawActorHp = function (actor, x, y, width) {
     width = width || 186;
-    var color1 = this.hpGaugeColor1();
-    var color2 = this.hpGaugeColor2();
+    const color1 = this.hpGaugeColor1();
+    const color2 = this.hpGaugeColor2();
     this.drawGauge(x, y, width, actor.hpRate(), color1, color2);
     this.changeTextColor(this.systemColor());
     this.drawText(TextManager.hpA, x, y, 44);
@@ -562,8 +562,8 @@ Window_Base.prototype.drawActorHp = function (actor, x, y, width) {
 
 Window_Base.prototype.drawActorMp = function (actor, x, y, width) {
     width = width || 186;
-    var color1 = this.mpGaugeColor1();
-    var color2 = this.mpGaugeColor2();
+    const color1 = this.mpGaugeColor1();
+    const color2 = this.mpGaugeColor2();
     this.drawGauge(x, y, width, actor.mpRate(), color1, color2);
     this.changeTextColor(this.systemColor());
     this.drawText(TextManager.mpA, x, y, 44);
@@ -573,8 +573,8 @@ Window_Base.prototype.drawActorMp = function (actor, x, y, width) {
 
 Window_Base.prototype.drawActorTp = function (actor, x, y, width) {
     width = width || 96;
-    var color1 = this.tpGaugeColor1();
-    var color2 = this.tpGaugeColor2();
+    const color1 = this.tpGaugeColor1();
+    const color2 = this.tpGaugeColor2();
     this.drawGauge(x, y, width, actor.tpRate(), color1, color2);
     this.changeTextColor(this.systemColor());
     this.drawText(TextManager.tpA, x, y, 44);
@@ -583,9 +583,9 @@ Window_Base.prototype.drawActorTp = function (actor, x, y, width) {
 };
 
 Window_Base.prototype.drawActorSimpleStatus = function (actor, x, y, width) {
-    var lineHeight = this.lineHeight();
-    var x2 = x + 180;
-    var width2 = Math.min(200, width - 180 - this.textPadding());
+    const lineHeight = this.lineHeight();
+    const x2 = x + 180;
+    const width2 = Math.min(200, width - 180 - this.textPadding());
     this.drawActorName(actor, x, y);
     this.drawActorLevel(actor, x, y + lineHeight * 1);
     this.drawActorIcons(actor, x, y + lineHeight * 2);
@@ -597,7 +597,7 @@ Window_Base.prototype.drawActorSimpleStatus = function (actor, x, y, width) {
 Window_Base.prototype.drawItemName = function (item, x, y, width) {
     width = width || 312;
     if (item) {
-        var iconBoxWidth = Window_Base._iconWidth + 4;
+        const iconBoxWidth = Window_Base._iconWidth + 4;
         this.resetTextColor();
         this.drawIcon(item.iconIndex, x + 2, y + 2);
         this.drawText(item.name, x + iconBoxWidth, y, width - iconBoxWidth);
@@ -605,7 +605,7 @@ Window_Base.prototype.drawItemName = function (item, x, y, width) {
 };
 
 Window_Base.prototype.drawCurrencyValue = function (value, unit, x, y, width) {
-    var unitWidth = Math.min(80, this.textWidth(unit));
+    const unitWidth = Math.min(80, this.textWidth(unit));
     this.resetTextColor();
     this.drawText(value, x, y, width - unitWidth - 6, 'right');
     this.changeTextColor(this.systemColor());
@@ -641,7 +641,7 @@ Window_Base.prototype.showBackgroundDimmer = function () {
         this._dimmerSprite.bitmap = new Bitmap(0, 0);
         this.addChildToBack(this._dimmerSprite);
     }
-    var bitmap = this._dimmerSprite.bitmap;
+    const bitmap = this._dimmerSprite.bitmap;
     if (bitmap.width !== this.width || bitmap.height !== this.height) {
         this.refreshDimmerBitmap();
     }
@@ -663,12 +663,12 @@ Window_Base.prototype.updateBackgroundDimmer = function () {
 
 Window_Base.prototype.refreshDimmerBitmap = function () {
     if (this._dimmerSprite) {
-        var bitmap = this._dimmerSprite.bitmap;
-        var w = this.width;
-        var h = this.height;
-        var m = this.padding;
-        var c1 = this.dimColor1();
-        var c2 = this.dimColor2();
+        const bitmap = this._dimmerSprite.bitmap;
+        const w = this.width;
+        const h = this.height;
+        const m = this.padding;
+        const c1 = this.dimColor1();
+        const c2 = this.dimColor2();
         bitmap.resize(w, h);
         bitmap.gradientFillRect(0, 0, w, m, c2, c1, true);
         bitmap.fillRect(0, m, w, h - m * 2, c1);
@@ -686,7 +686,7 @@ Window_Base.prototype.dimColor2 = function () {
 };
 
 Window_Base.prototype.canvasToLocalX = function (x) {
-    var node = this;
+    let node = this;
     while (node) {
         x -= node.x;
         node = node.parent;
@@ -695,7 +695,7 @@ Window_Base.prototype.canvasToLocalX = function (x) {
 };
 
 Window_Base.prototype.canvasToLocalY = function (y) {
-    var node = this;
+    let node = this;
     while (node) {
         y -= node.y;
         node = node.parent;
@@ -819,7 +819,7 @@ Window_Selectable.prototype.maxTopRow = function () {
 };
 
 Window_Selectable.prototype.setTopRow = function (row) {
-    var scrollY = row.clamp(0, this.maxTopRow()) * this.itemHeight();
+    const scrollY = row.clamp(0, this.maxTopRow()) * this.itemHeight();
     if (this._scrollY !== scrollY) {
         this._scrollY = scrollY;
         this.refresh();
@@ -832,7 +832,7 @@ Window_Selectable.prototype.resetScroll = function () {
 };
 
 Window_Selectable.prototype.maxPageRows = function () {
-    var pageHeight = this.height - this.padding * 2;
+    const pageHeight = this.height - this.padding * 2;
     return Math.floor(pageHeight / this.itemHeight());
 };
 
@@ -857,8 +857,8 @@ Window_Selectable.prototype.topIndex = function () {
 };
 
 Window_Selectable.prototype.itemRect = function (index) {
-    var rect = new Rectangle();
-    var maxCols = this.maxCols();
+    const rect = new Rectangle();
+    const maxCols = this.maxCols();
     rect.width = this.itemWidth();
     rect.height = this.itemHeight();
     rect.x = index % maxCols * (rect.width + this.spacing()) - this._scrollX;
@@ -867,7 +867,7 @@ Window_Selectable.prototype.itemRect = function (index) {
 };
 
 Window_Selectable.prototype.itemRectForText = function (index) {
-    var rect = this.itemRect(index);
+    const rect = this.itemRect(index);
     rect.x += this.textPadding();
     rect.width -= this.textPadding() * 2;
     return rect;
@@ -914,44 +914,44 @@ Window_Selectable.prototype.isCursorMovable = function () {
 };
 
 Window_Selectable.prototype.cursorDown = function (wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
+    const index = this.index();
+    const maxItems = this.maxItems();
+    const maxCols = this.maxCols();
     if (index < maxItems - maxCols || (wrap && maxCols === 1)) {
         this.select((index + maxCols) % maxItems);
     }
 };
 
 Window_Selectable.prototype.cursorUp = function (wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
+    const index = this.index();
+    const maxItems = this.maxItems();
+    const maxCols = this.maxCols();
     if (index >= maxCols || (wrap && maxCols === 1)) {
         this.select((index - maxCols + maxItems) % maxItems);
     }
 };
 
 Window_Selectable.prototype.cursorRight = function (wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
+    const index = this.index();
+    const maxItems = this.maxItems();
+    const maxCols = this.maxCols();
     if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
         this.select((index + 1) % maxItems);
     }
 };
 
 Window_Selectable.prototype.cursorLeft = function (wrap) {
-    var index = this.index();
-    var maxItems = this.maxItems();
-    var maxCols = this.maxCols();
+    const index = this.index();
+    const maxItems = this.maxItems();
+    const maxCols = this.maxCols();
     if (maxCols >= 2 && (index > 0 || (wrap && this.isHorizontal()))) {
         this.select((index - 1 + maxItems) % maxItems);
     }
 };
 
 Window_Selectable.prototype.cursorPagedown = function () {
-    var index = this.index();
-    var maxItems = this.maxItems();
+    const index = this.index();
+    const maxItems = this.maxItems();
     if (this.topRow() + this.maxPageRows() < this.maxRows()) {
         this.setTopRow(this.topRow() + this.maxPageRows());
         this.select(Math.min(index + this.maxPageItems(), maxItems - 1));
@@ -959,7 +959,7 @@ Window_Selectable.prototype.cursorPagedown = function () {
 };
 
 Window_Selectable.prototype.cursorPageup = function () {
-    var index = this.index();
+    const index = this.index();
     if (this.topRow() > 0) {
         this.setTopRow(this.topRow() - this.maxPageRows());
         this.select(Math.max(index - this.maxPageItems(), 0));
@@ -989,15 +989,15 @@ Window_Selectable.prototype.update = function () {
 };
 
 Window_Selectable.prototype.updateArrows = function () {
-    var topRow = this.topRow();
-    var maxTopRow = this.maxTopRow();
+    const topRow = this.topRow();
+    const maxTopRow = this.maxTopRow();
     this.downArrowVisible = maxTopRow > 0 && topRow < maxTopRow;
     this.upArrowVisible = topRow > 0;
 };
 
 Window_Selectable.prototype.processCursorMove = function () {
     if (this.isCursorMovable()) {
-        var lastIndex = this.index();
+        const lastIndex = this.index();
         if (Input.isRepeated('down')) {
             this.cursorDown(Input.isTriggered('down'));
         }
@@ -1038,7 +1038,7 @@ Window_Selectable.prototype.processHandling = function () {
 
 Window_Selectable.prototype.processWheel = function () {
     if (this.isOpenAndActive()) {
-        var threshold = 20;
+        const threshold = 20;
         if (TouchInput.wheelY >= threshold) {
             this.scrollDown();
         }
@@ -1071,16 +1071,16 @@ Window_Selectable.prototype.processTouch = function () {
 };
 
 Window_Selectable.prototype.isTouchedInsideFrame = function () {
-    var x = this.canvasToLocalX(TouchInput.x);
-    var y = this.canvasToLocalY(TouchInput.y);
+    const x = this.canvasToLocalX(TouchInput.x);
+    const y = this.canvasToLocalY(TouchInput.y);
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
 };
 
 Window_Selectable.prototype.onTouch = function (triggered) {
-    var lastIndex = this.index();
-    var x = this.canvasToLocalX(TouchInput.x);
-    var y = this.canvasToLocalY(TouchInput.y);
-    var hitIndex = this.hitTest(x, y);
+    const lastIndex = this.index();
+    const x = this.canvasToLocalX(TouchInput.x);
+    const y = this.canvasToLocalY(TouchInput.y);
+    const hitIndex = this.hitTest(x, y);
     if (hitIndex >= 0) {
         if (hitIndex === this.index()) {
             if (triggered && this.isTouchOkEnabled()) {
@@ -1103,15 +1103,15 @@ Window_Selectable.prototype.onTouch = function (triggered) {
 
 Window_Selectable.prototype.hitTest = function (x, y) {
     if (this.isContentsArea(x, y)) {
-        var cx = x - this.padding;
-        var cy = y - this.padding;
-        var topIndex = this.topIndex();
-        for (var i = 0; i < this.maxPageItems(); i++) {
-            var index = topIndex + i;
+        const cx = x - this.padding;
+        const cy = y - this.padding;
+        const topIndex = this.topIndex();
+        for (let i = 0; i < this.maxPageItems(); i++) {
+            const index = topIndex + i;
             if (index < this.maxItems()) {
-                var rect = this.itemRect(index);
-                var right = rect.x + rect.width;
-                var bottom = rect.y + rect.height;
+                const rect = this.itemRect(index);
+                const right = rect.x + rect.width;
+                const bottom = rect.y + rect.height;
                 if (cx >= rect.x && cy >= rect.y && cx < right && cy < bottom) {
                     return index;
                 }
@@ -1122,10 +1122,10 @@ Window_Selectable.prototype.hitTest = function (x, y) {
 };
 
 Window_Selectable.prototype.isContentsArea = function (x, y) {
-    var left = this.padding;
-    var top = this.padding;
-    var right = this.width - this.padding;
-    var bottom = this.height - this.padding;
+    const left = this.padding;
+    const top = this.padding;
+    const right = this.width - this.padding;
+    const bottom = this.height - this.padding;
     return (x >= left && y >= top && x < right && y < bottom);
 };
 
@@ -1204,11 +1204,11 @@ Window_Selectable.prototype.updateInputData = function () {
 
 Window_Selectable.prototype.updateCursor = function () {
     if (this._cursorAll) {
-        var allRowsHeight = this.maxRows() * this.itemHeight();
+        const allRowsHeight = this.maxRows() * this.itemHeight();
         this.setCursorRect(0, 0, this.contents.width, allRowsHeight);
         this.setTopRow(0);
     } else if (this.isCursorVisible()) {
-        var rect = this.itemRect(this.index());
+        const rect = this.itemRect(this.index());
         this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
     } else {
         this.setCursorRect(0, 0, 0, 0);
@@ -1216,12 +1216,12 @@ Window_Selectable.prototype.updateCursor = function () {
 };
 
 Window_Selectable.prototype.isCursorVisible = function () {
-    var row = this.row();
+    const row = this.row();
     return row >= this.topRow() && row <= this.bottomRow();
 };
 
 Window_Selectable.prototype.ensureCursorVisible = function () {
-    var row = this.row();
+    const row = this.row();
     if (row < this.topRow()) {
         this.setTopRow(row);
     } else if (row > this.bottomRow()) {
@@ -1250,9 +1250,9 @@ Window_Selectable.prototype.isCurrentItemEnabled = function () {
 };
 
 Window_Selectable.prototype.drawAllItems = function () {
-    var topIndex = this.topIndex();
-    for (var i = 0; i < this.maxPageItems(); i++) {
-        var index = topIndex + i;
+    const topIndex = this.topIndex();
+    for (let i = 0; i < this.maxPageItems(); i++) {
+        const index = topIndex + i;
         if (index < this.maxItems()) {
             this.drawItem(index);
         }
@@ -1263,7 +1263,7 @@ Window_Selectable.prototype.drawItem = function (index) {
 };
 
 Window_Selectable.prototype.clearItem = function (index) {
-    var rect = this.itemRect(index);
+    const rect = this.itemRect(index);
     this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
 };
 
@@ -1300,8 +1300,8 @@ Window_Command.prototype.constructor = Window_Command;
 Window_Command.prototype.initialize = function (x, y) {
     this.clearCommandList();
     this.makeCommandList();
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this.refresh();
     this.select(0);
@@ -1370,7 +1370,7 @@ Window_Command.prototype.currentExt = function () {
 };
 
 Window_Command.prototype.findSymbol = function (symbol) {
-    for (var i = 0; i < this._list.length; i++) {
+    for (let i = 0; i < this._list.length; i++) {
         if (this._list[i].symbol === symbol) {
             return i;
         }
@@ -1379,7 +1379,7 @@ Window_Command.prototype.findSymbol = function (symbol) {
 };
 
 Window_Command.prototype.selectSymbol = function (symbol) {
-    var index = this.findSymbol(symbol);
+    const index = this.findSymbol(symbol);
     if (index >= 0) {
         this.select(index);
     } else {
@@ -1388,7 +1388,7 @@ Window_Command.prototype.selectSymbol = function (symbol) {
 };
 
 Window_Command.prototype.findExt = function (ext) {
-    for (var i = 0; i < this._list.length; i++) {
+    for (let i = 0; i < this._list.length; i++) {
         if (this._list[i].ext === ext) {
             return i;
         }
@@ -1397,7 +1397,7 @@ Window_Command.prototype.findExt = function (ext) {
 };
 
 Window_Command.prototype.selectExt = function (ext) {
-    var index = this.findExt(ext);
+    const index = this.findExt(ext);
     if (index >= 0) {
         this.select(index);
     } else {
@@ -1406,8 +1406,8 @@ Window_Command.prototype.selectExt = function (ext) {
 };
 
 Window_Command.prototype.drawItem = function (index) {
-    var rect = this.itemRectForText(index);
-    var align = this.itemTextAlign();
+    const rect = this.itemRectForText(index);
+    const align = this.itemTextAlign();
     this.resetTextColor();
     this.changePaintOpacity(this.isCommandEnabled(index));
     this.drawText(this.commandName(index), rect.x, rect.y, rect.width, align);
@@ -1422,7 +1422,7 @@ Window_Command.prototype.isOkEnabled = function () {
 };
 
 Window_Command.prototype.callOkHandler = function () {
-    var symbol = this.currentSymbol();
+    const symbol = this.currentSymbol();
     if (this.isHandled(symbol)) {
         this.callHandler(symbol);
     } else if (this.isHandled('ok')) {
@@ -1480,8 +1480,8 @@ Window_Help.prototype = Object.create(Window_Base.prototype);
 Window_Help.prototype.constructor = Window_Help;
 
 Window_Help.prototype.initialize = function (numLines) {
-    var width = Graphics.boxWidth;
-    var height = this.fittingHeight(numLines || 2);
+    const width = Graphics.boxWidth;
+    const height = this.fittingHeight(numLines || 2);
     Window_Base.prototype.initialize.call(this, 0, 0, width, height);
     this._text = '';
 };
@@ -1519,8 +1519,8 @@ Window_Gold.prototype = Object.create(Window_Base.prototype);
 Window_Gold.prototype.constructor = Window_Gold;
 
 Window_Gold.prototype.initialize = function (x, y) {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Base.prototype.initialize.call(this, x, y, width, height);
     this.refresh();
 };
@@ -1534,8 +1534,8 @@ Window_Gold.prototype.windowHeight = function () {
 };
 
 Window_Gold.prototype.refresh = function () {
-    var x = this.textPadding();
-    var width = this.contents.width - this.textPadding() * 2;
+    const x = this.textPadding();
+    const width = this.contents.width - this.textPadding() * 2;
     this.contents.clear();
     this.drawCurrencyValue(this.value(), this.currencyUnit(), x, 0, width);
 };
@@ -1594,7 +1594,7 @@ Window_MenuCommand.prototype.makeCommandList = function () {
 };
 
 Window_MenuCommand.prototype.addMainCommands = function () {
-    var enabled = this.areMainCommandsEnabled();
+    const enabled = this.areMainCommandsEnabled();
     if (this.needsCommand('item')) {
         this.addCommand(TextManager.item, 'item', enabled);
     }
@@ -1611,7 +1611,7 @@ Window_MenuCommand.prototype.addMainCommands = function () {
 
 Window_MenuCommand.prototype.addFormationCommand = function () {
     if (this.needsCommand('formation')) {
-        var enabled = this.isFormationEnabled();
+        const enabled = this.isFormationEnabled();
         this.addCommand(TextManager.formation, 'formation', enabled);
     }
 };
@@ -1621,25 +1621,25 @@ Window_MenuCommand.prototype.addOriginalCommands = function () {
 
 Window_MenuCommand.prototype.addOptionsCommand = function () {
     if (this.needsCommand('options')) {
-        var enabled = this.isOptionsEnabled();
+        const enabled = this.isOptionsEnabled();
         this.addCommand(TextManager.options, 'options', enabled);
     }
 };
 
 Window_MenuCommand.prototype.addSaveCommand = function () {
     if (this.needsCommand('save')) {
-        var enabled = this.isSaveEnabled();
+        const enabled = this.isSaveEnabled();
         this.addCommand(TextManager.save, 'save', enabled);
     }
 };
 
 Window_MenuCommand.prototype.addGameEndCommand = function () {
-    var enabled = this.isGameEndEnabled();
+    const enabled = this.isGameEndEnabled();
     this.addCommand(TextManager.gameEnd, 'gameEnd', enabled);
 };
 
 Window_MenuCommand.prototype.needsCommand = function (name) {
-    var flags = $dataSystem.menuCommands;
+    const flags = $dataSystem.menuCommands;
     if (flags) {
         switch (name) {
             case 'item':
@@ -1701,8 +1701,8 @@ Window_MenuStatus.prototype = Object.create(Window_Selectable.prototype);
 Window_MenuStatus.prototype.constructor = Window_MenuStatus;
 
 Window_MenuStatus.prototype.initialize = function (x, y) {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this._formationMode = false;
     this._pendingIndex = -1;
@@ -1722,7 +1722,7 @@ Window_MenuStatus.prototype.maxItems = function () {
 };
 
 Window_MenuStatus.prototype.itemHeight = function () {
-    var clientHeight = this.height - this.padding * 2;
+    const clientHeight = this.height - this.padding * 2;
     return Math.floor(clientHeight / this.numVisibleRows());
 };
 
@@ -1744,8 +1744,8 @@ Window_MenuStatus.prototype.drawItem = function (index) {
 
 Window_MenuStatus.prototype.drawItemBackground = function (index) {
     if (index === this._pendingIndex) {
-        var rect = this.itemRect(index);
-        var color = this.pendingColor();
+        const rect = this.itemRect(index);
+        const color = this.pendingColor();
         this.changePaintOpacity(false);
         this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
         this.changePaintOpacity(true);
@@ -1753,19 +1753,19 @@ Window_MenuStatus.prototype.drawItemBackground = function (index) {
 };
 
 Window_MenuStatus.prototype.drawItemImage = function (index) {
-    var actor = $gameParty.members()[index];
-    var rect = this.itemRect(index);
+    const actor = $gameParty.members()[index];
+    const rect = this.itemRect(index);
     this.changePaintOpacity(actor.isBattleMember());
     this.drawActorFace(actor, rect.x + 1, rect.y + 1, Window_Base._faceWidth, Window_Base._faceHeight);
     this.changePaintOpacity(true);
 };
 
 Window_MenuStatus.prototype.drawItemStatus = function (index) {
-    var actor = $gameParty.members()[index];
-    var rect = this.itemRect(index);
-    var x = rect.x + 162;
-    var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
-    var width = rect.width - x - this.textPadding();
+    const actor = $gameParty.members()[index];
+    const rect = this.itemRect(index);
+    const x = rect.x + 162;
+    const y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
+    const width = rect.width - x - this.textPadding();
     this.drawActorSimpleStatus(actor, x, y, width);
 };
 
@@ -1776,7 +1776,7 @@ Window_MenuStatus.prototype.processOk = function () {
 
 Window_MenuStatus.prototype.isCurrentItemEnabled = function () {
     if (this._formationMode) {
-        var actor = $gameParty.members()[this.index()];
+        const actor = $gameParty.members()[this.index()];
         return actor && actor.isFormationChangeOk();
     } else {
         return true;
@@ -1800,7 +1800,7 @@ Window_MenuStatus.prototype.pendingIndex = function () {
 };
 
 Window_MenuStatus.prototype.setPendingIndex = function (index) {
-    var lastPendingIndex = this._pendingIndex;
+    const lastPendingIndex = this._pendingIndex;
     this._pendingIndex = index;
     this.redrawItem(this._pendingIndex);
     this.redrawItem(lastPendingIndex);
@@ -1835,8 +1835,8 @@ Window_MenuActor.prototype.selectLast = function () {
 };
 
 Window_MenuActor.prototype.selectForItem = function (item) {
-    var actor = $gameParty.menuActor();
-    var action = new Game_Action(actor);
+    const actor = $gameParty.menuActor();
+    const action = new Game_Action(actor);
     action.setItemObject(item);
     this.setCursorFixed(false);
     this.setCursorAll(false);
@@ -1936,7 +1936,7 @@ Window_ItemList.prototype.maxItems = function () {
 };
 
 Window_ItemList.prototype.item = function () {
-    var index = this.index();
+    const index = this.index();
     return this._data && index >= 0 ? this._data[index] : null;
 };
 
@@ -1977,20 +1977,20 @@ Window_ItemList.prototype.makeItemList = function () {
 };
 
 Window_ItemList.prototype.selectLast = function () {
-    var index = this._data.indexOf($gameParty.lastItem());
+    const index = this._data.indexOf($gameParty.lastItem());
     this.select(index >= 0 ? index : 0);
 };
 
 Window_ItemList.prototype.drawItem = function (index) {
-    var item = this._data[index];
+    const item = this._data[index];
     if (item) {
-        var numberWidth = this.numberWidth();
-        var rect = this.itemRect(index);
+        const numberWidth = this.numberWidth();
+        const rect = this.itemRect(index);
         rect.width -= this.textPadding();
         this.changePaintOpacity(this.isEnabled(item));
         this.drawItemName(item, rect.x, rect.y, rect.width - numberWidth);
         this.drawItemNumber(item, rect.x, rect.y, rect.width);
-        this.changePaintOpacity(1);
+        this.changePaintOpacity(true);
     }
 };
 
@@ -2050,12 +2050,12 @@ Window_SkillType.prototype.numVisibleRows = function () {
 
 Window_SkillType.prototype.makeCommandList = function () {
     if (this._actor) {
-        var skillTypes = this._actor.addedSkillTypes();
+        const skillTypes = this._actor.addedSkillTypes();
         skillTypes.sort(function (a, b) {
             return a - b;
         });
         skillTypes.forEach(function (stypeId) {
-            var name = $dataSystem.skillTypes[stypeId];
+            const name = $dataSystem.skillTypes[stypeId];
             this.addCommand(name, 'skill', true, stypeId);
         }, this);
     }
@@ -2073,7 +2073,7 @@ Window_SkillType.prototype.setSkillWindow = function (skillWindow) {
 };
 
 Window_SkillType.prototype.selectLast = function () {
-    var skill = this._actor.lastMenuSkill();
+    const skill = this._actor.lastMenuSkill();
     if (skill) {
         this.selectExt(skill.stypeId);
     } else {
@@ -2108,10 +2108,10 @@ Window_SkillStatus.prototype.setActor = function (actor) {
 Window_SkillStatus.prototype.refresh = function () {
     this.contents.clear();
     if (this._actor) {
-        var w = this.width - this.padding * 2;
-        var h = this.height - this.padding * 2;
-        var y = h / 2 - this.lineHeight() * 1.5;
-        var width = w - 162 - this.textPadding();
+        const w = this.width - this.padding * 2;
+        const h = this.height - this.padding * 2;
+        const y = h / 2 - this.lineHeight() * 1.5;
+        const width = w - 162 - this.textPadding();
         this.drawActorFace(this._actor, 0, 0, 144, h);
         this.drawActorSimpleStatus(this._actor, 162, y, width);
     }
@@ -2191,26 +2191,26 @@ Window_SkillList.prototype.makeItemList = function () {
 };
 
 Window_SkillList.prototype.selectLast = function () {
-    var skill;
+    let skill;
     if ($gameParty.inBattle()) {
         skill = this._actor.lastBattleSkill();
     } else {
         skill = this._actor.lastMenuSkill();
     }
-    var index = this._data.indexOf(skill);
+    const index = this._data.indexOf(skill);
     this.select(index >= 0 ? index : 0);
 };
 
 Window_SkillList.prototype.drawItem = function (index) {
-    var skill = this._data[index];
+    const skill = this._data[index];
     if (skill) {
-        var costWidth = this.costWidth();
-        var rect = this.itemRect(index);
+        const costWidth = this.costWidth();
+        const rect = this.itemRect(index);
         rect.width -= this.textPadding();
         this.changePaintOpacity(this.isEnabled(skill));
         this.drawItemName(skill, rect.x, rect.y, rect.width - costWidth);
         this.drawSkillCost(skill, rect.x, rect.y, rect.width);
-        this.changePaintOpacity(1);
+        this.changePaintOpacity(true);
     }
 };
 
@@ -2251,8 +2251,8 @@ Window_EquipStatus.prototype = Object.create(Window_Base.prototype);
 Window_EquipStatus.prototype.constructor = Window_EquipStatus;
 
 Window_EquipStatus.prototype.initialize = function (x, y) {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Base.prototype.initialize.call(this, x, y, width, height);
     this._actor = null;
     this._tempActor = null;
@@ -2282,7 +2282,7 @@ Window_EquipStatus.prototype.refresh = function () {
     this.contents.clear();
     if (this._actor) {
         this.drawActorName(this._actor, this.textPadding(), 0);
-        for (var i = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             this.drawItem(0, this.lineHeight() * (1 + i), 2 + i);
         }
     }
@@ -2322,8 +2322,8 @@ Window_EquipStatus.prototype.drawRightArrow = function (x, y) {
 };
 
 Window_EquipStatus.prototype.drawNewParam = function (x, y, paramId) {
-    var newValue = this._tempActor.param(paramId);
-    var diffvalue = newValue - this._actor.param(paramId);
+    const newValue = this._tempActor.param(paramId);
+    const diffvalue = newValue - this._actor.param(paramId);
     this.changeTextColor(this.paramchangeTextColor(diffvalue));
     this.drawText(newValue, x, y, 48, 'right');
 };
@@ -2401,7 +2401,7 @@ Window_EquipSlot.prototype.item = function () {
 
 Window_EquipSlot.prototype.drawItem = function (index) {
     if (this._actor) {
-        var rect = this.itemRectForText(index);
+        const rect = this.itemRectForText(index);
         this.changeTextColor(this.systemColor());
         this.changePaintOpacity(this.isEnabled(index));
         this.drawText(this.slotName(index), rect.x, rect.y, 138, this.lineHeight());
@@ -2411,7 +2411,7 @@ Window_EquipSlot.prototype.drawItem = function (index) {
 };
 
 Window_EquipSlot.prototype.slotName = function (index) {
-    var slots = this._actor.equipSlots();
+    const slots = this._actor.equipSlots();
     return this._actor ? $dataSystem.equipTypes[slots[index]] : '';
 };
 
@@ -2499,7 +2499,7 @@ Window_EquipItem.prototype.setStatusWindow = function (statusWindow) {
 Window_EquipItem.prototype.updateHelp = function () {
     Window_ItemList.prototype.updateHelp.call(this);
     if (this._actor && this._statusWindow) {
-        var actor = JsonEx.makeDeepCopy(this._actor);
+        const actor = JsonEx.makeDeepCopy(this._actor);
         actor.forceChangeEquip(this._slotId, this.item());
         this._statusWindow.setTempActor(actor);
     }
@@ -2521,8 +2521,8 @@ Window_Status.prototype = Object.create(Window_Selectable.prototype);
 Window_Status.prototype.constructor = Window_Status;
 
 Window_Status.prototype.initialize = function () {
-    var width = Graphics.boxWidth;
-    var height = Graphics.boxHeight;
+    const width = Graphics.boxWidth;
+    const height = Graphics.boxHeight;
     Window_Selectable.prototype.initialize.call(this, 0, 0, width, height);
     this._actor = null;
     this.refresh();
@@ -2539,7 +2539,7 @@ Window_Status.prototype.setActor = function (actor) {
 Window_Status.prototype.refresh = function () {
     this.contents.clear();
     if (this._actor) {
-        var lineHeight = this.lineHeight();
+        const lineHeight = this.lineHeight();
         this.drawBlock1(lineHeight * 0);
         this.drawHorzLine(lineHeight * 1);
         this.drawBlock2(lineHeight * 2);
@@ -2572,7 +2572,7 @@ Window_Status.prototype.drawBlock4 = function (y) {
 };
 
 Window_Status.prototype.drawHorzLine = function (y) {
-    var lineY = y + this.lineHeight() / 2 - 1;
+    const lineY = y + this.lineHeight() / 2 - 1;
     this.contents.paintOpacity = 48;
     this.contents.fillRect(0, lineY, this.contentsWidth(), 2, this.lineColor());
     this.contents.paintOpacity = 255;
@@ -2583,7 +2583,7 @@ Window_Status.prototype.lineColor = function () {
 };
 
 Window_Status.prototype.drawBasicInfo = function (x, y) {
-    var lineHeight = this.lineHeight();
+    const lineHeight = this.lineHeight();
     this.drawActorLevel(this._actor, x, y + lineHeight * 0);
     this.drawActorIcons(this._actor, x, y + lineHeight * 1);
     this.drawActorHp(this._actor, x, y + lineHeight * 2);
@@ -2591,10 +2591,10 @@ Window_Status.prototype.drawBasicInfo = function (x, y) {
 };
 
 Window_Status.prototype.drawParameters = function (x, y) {
-    var lineHeight = this.lineHeight();
-    for (var i = 0; i < 6; i++) {
-        var paramId = i + 2;
-        var y2 = y + lineHeight * i;
+    const lineHeight = this.lineHeight();
+    for (let i = 0; i < 6; i++) {
+        const paramId = i + 2;
+        const y2 = y + lineHeight * i;
         this.changeTextColor(this.systemColor());
         this.drawText(TextManager.param(paramId), x, y2, 160);
         this.resetTextColor();
@@ -2603,11 +2603,11 @@ Window_Status.prototype.drawParameters = function (x, y) {
 };
 
 Window_Status.prototype.drawExpInfo = function (x, y) {
-    var lineHeight = this.lineHeight();
-    var expTotal = TextManager.expTotal.format(TextManager.exp);
-    var expNext = TextManager.expNext.format(TextManager.level);
-    var value1 = this._actor.currentExp();
-    var value2 = this._actor.nextRequiredExp();
+    const lineHeight = this.lineHeight();
+    const expTotal = TextManager.expTotal.format(TextManager.exp);
+    const expNext = TextManager.expNext.format(TextManager.level);
+    let value1 = this._actor.currentExp();
+    let value2 = this._actor.nextRequiredExp();
     if (this._actor.isMaxLevel()) {
         value1 = '-------';
         value2 = '-------';
@@ -2621,9 +2621,9 @@ Window_Status.prototype.drawExpInfo = function (x, y) {
 };
 
 Window_Status.prototype.drawEquipments = function (x, y) {
-    var equips = this._actor.equips();
-    var count = Math.min(equips.length, this.maxEquipmentLines());
-    for (var i = 0; i < count; i++) {
+    const equips = this._actor.equips();
+    const count = Math.min(equips.length, this.maxEquipmentLines());
+    for (let i = 0; i < count; i++) {
         this.drawItemName(equips[i], x, y + this.lineHeight() * i);
     }
 };
@@ -2684,9 +2684,9 @@ Window_Options.prototype.addVolumeOptions = function () {
 };
 
 Window_Options.prototype.drawItem = function (index) {
-    var rect = this.itemRectForText(index);
-    var statusWidth = this.statusWidth();
-    var titleWidth = rect.width - statusWidth;
+    const rect = this.itemRectForText(index);
+    const statusWidth = this.statusWidth();
+    const titleWidth = rect.width - statusWidth;
     this.resetTextColor();
     this.changePaintOpacity(this.isCommandEnabled(index));
     this.drawText(this.commandName(index), rect.x, rect.y, titleWidth, 'left');
@@ -2698,8 +2698,8 @@ Window_Options.prototype.statusWidth = function () {
 };
 
 Window_Options.prototype.statusText = function (index) {
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
+    const symbol = this.commandSymbol(index);
+    const value = this.getConfigValue(symbol);
     if (this.isVolumeSymbol(symbol)) {
         return this.volumeStatusText(value);
     } else {
@@ -2720,9 +2720,9 @@ Window_Options.prototype.volumeStatusText = function (value) {
 };
 
 Window_Options.prototype.processOk = function () {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
+    const index = this.index();
+    const symbol = this.commandSymbol(index);
+    let value = this.getConfigValue(symbol);
     if (this.isVolumeSymbol(symbol)) {
         value += this.volumeOffset();
         if (value > 100) {
@@ -2736,9 +2736,9 @@ Window_Options.prototype.processOk = function () {
 };
 
 Window_Options.prototype.cursorRight = function (wrap) {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
+    const index = this.index();
+    const symbol = this.commandSymbol(index);
+    let value = this.getConfigValue(symbol);
     if (this.isVolumeSymbol(symbol)) {
         value += this.volumeOffset();
         value = value.clamp(0, 100);
@@ -2749,9 +2749,9 @@ Window_Options.prototype.cursorRight = function (wrap) {
 };
 
 Window_Options.prototype.cursorLeft = function (wrap) {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
+    const index = this.index();
+    const symbol = this.commandSymbol(index);
+    let value = this.getConfigValue(symbol);
     if (this.isVolumeSymbol(symbol)) {
         value -= this.volumeOffset();
         value = value.clamp(0, 100);
@@ -2766,7 +2766,7 @@ Window_Options.prototype.volumeOffset = function () {
 };
 
 Window_Options.prototype.changeValue = function (symbol, value) {
-    var lastValue = this.getConfigValue(symbol);
+    const lastValue = this.getConfigValue(symbol);
     if (lastValue !== value) {
         this.setConfigValue(symbol, value);
         this.redrawItem(this.findSymbol(symbol));
@@ -2813,15 +2813,15 @@ Window_SavefileList.prototype.maxVisibleItems = function () {
 };
 
 Window_SavefileList.prototype.itemHeight = function () {
-    var innerHeight = this.height - this.padding * 2;
+    const innerHeight = this.height - this.padding * 2;
     return Math.floor(innerHeight / this.maxVisibleItems());
 };
 
 Window_SavefileList.prototype.drawItem = function (index) {
-    var id = index + 1;
-    var valid = DataManager.isThisGameFile(id);
-    var info = DataManager.loadSavefileInfo(id);
-    var rect = this.itemRectForText(index);
+    const id = index + 1;
+    const valid = DataManager.isThisGameFile(id);
+    const info = DataManager.loadSavefileInfo(id);
+    const rect = this.itemRectForText(index);
     this.resetTextColor();
     if (this._mode === 'load') {
         this.changePaintOpacity(valid);
@@ -2839,15 +2839,15 @@ Window_SavefileList.prototype.drawFileId = function (id, x, y) {
 };
 
 Window_SavefileList.prototype.drawContents = function (info, rect, valid) {
-    var bottom = rect.y + rect.height;
+    const bottom = rect.y + rect.height;
     if (rect.width >= 420) {
         this.drawGameTitle(info, rect.x + 192, rect.y, rect.width - 192);
         if (valid) {
             this.drawPartyCharacters(info, rect.x + 220, bottom - 4);
         }
     }
-    var lineHeight = this.lineHeight();
-    var y2 = bottom - lineHeight;
+    const lineHeight = this.lineHeight();
+    const y2 = bottom - lineHeight;
     if (y2 >= lineHeight) {
         this.drawPlaytime(info, rect.x, y2, rect.width);
     }
@@ -2861,8 +2861,8 @@ Window_SavefileList.prototype.drawGameTitle = function (info, x, y, width) {
 
 Window_SavefileList.prototype.drawPartyCharacters = function (info, x, y) {
     if (info.characters) {
-        for (var i = 0; i < info.characters.length; i++) {
-            var data = info.characters[i];
+        for (let i = 0; i < info.characters.length; i++) {
+            const data = info.characters[i];
             this.drawCharacter(data[0], data[1], x + i * 48, y);
         }
     }
@@ -2922,7 +2922,7 @@ Window_ShopBuy.prototype = Object.create(Window_Selectable.prototype);
 Window_ShopBuy.prototype.constructor = Window_ShopBuy;
 
 Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods) {
-    var width = this.windowWidth();
+    const width = this.windowWidth();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this._shopGoods = shopGoods;
     this._money = 0;
@@ -2970,7 +2970,7 @@ Window_ShopBuy.prototype.makeItemList = function () {
     this._data = [];
     this._price = [];
     this._shopGoods.forEach(function (goods) {
-        var item = null;
+        let item = null;
         switch (goods[0]) {
             case 0:
                 item = $dataItems[goods[1]];
@@ -2990,9 +2990,9 @@ Window_ShopBuy.prototype.makeItemList = function () {
 };
 
 Window_ShopBuy.prototype.drawItem = function (index) {
-    var item = this._data[index];
-    var rect = this.itemRect(index);
-    var priceWidth = 96;
+    const item = this._data[index];
+    const rect = this.itemRect(index);
+    const priceWidth = 96;
     rect.width -= this.textPadding();
     this.changePaintOpacity(this.isEnabled(item));
     this.drawItemName(item, rect.x, rect.y, rect.width - priceWidth);
@@ -3047,7 +3047,7 @@ Window_ShopNumber.prototype = Object.create(Window_Selectable.prototype);
 Window_ShopNumber.prototype.constructor = Window_ShopNumber;
 
 Window_ShopNumber.prototype.initialize = function (x, y, height) {
-    var width = this.windowWidth();
+    const width = this.windowWidth();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this._item = null;
     this._max = 1;
@@ -3081,14 +3081,14 @@ Window_ShopNumber.prototype.setCurrencyUnit = function (currencyUnit) {
 };
 
 Window_ShopNumber.prototype.createButtons = function () {
-    var bitmap = ImageManager.loadSystem('ButtonSet');
-    var buttonWidth = 48;
-    var buttonHeight = 48;
+    const bitmap = ImageManager.loadSystem('ButtonSet');
+    const buttonWidth = 48;
+    const buttonHeight = 48;
     this._buttons = [];
-    for (var i = 0; i < 5; i++) {
-        var button = new Sprite_Button();
-        var x = buttonWidth * i;
-        var w = buttonWidth * (i === 4 ? 2 : 1);
+    for (let i = 0; i < 5; i++) {
+        const button = new Sprite_Button();
+        const x = buttonWidth * i;
+        const w = buttonWidth * (i === 4 ? 2 : 1);
         button.bitmap = bitmap;
         button.setColdFrame(x, 0, w, buttonHeight);
         button.setHotFrame(x, buttonHeight, w, buttonHeight);
@@ -3104,15 +3104,15 @@ Window_ShopNumber.prototype.createButtons = function () {
 };
 
 Window_ShopNumber.prototype.placeButtons = function () {
-    var numButtons = this._buttons.length;
-    var spacing = 16;
-    var totalWidth = -spacing;
-    for (var i = 0; i < numButtons; i++) {
+    const numButtons = this._buttons.length;
+    const spacing = 16;
+    let totalWidth = -spacing;
+    for (let i = 0; i < numButtons; i++) {
         totalWidth += this._buttons[i].width + spacing;
     }
-    var x = (this.width - totalWidth) / 2;
-    for (var j = 0; j < numButtons; j++) {
-        var button = this._buttons[j];
+    let x = (this.width - totalWidth) / 2;
+    for (let i = 0; i < numButtons; i++) {
+        const button = this._buttons[i];
         button.x = x;
         button.y = this.buttonY();
         x += button.width + spacing;
@@ -3130,13 +3130,13 @@ Window_ShopNumber.prototype.updateButtonsVisibility = function () {
 Window_ShopNumber.prototype.updateButtonsVisiblity = Window_ShopNumber.prototype.updateButtonsVisibility;
 
 Window_ShopNumber.prototype.showButtons = function () {
-    for (var i = 0; i < this._buttons.length; i++) {
+    for (let i = 0; i < this._buttons.length; i++) {
         this._buttons[i].visible = true;
     }
 };
 
 Window_ShopNumber.prototype.hideButtons = function () {
-    for (var i = 0; i < this._buttons.length; i++) {
+    for (let i = 0; i < this._buttons.length; i++) {
         this._buttons[i].visible = false;
     }
 };
@@ -3150,25 +3150,25 @@ Window_ShopNumber.prototype.refresh = function () {
 };
 
 Window_ShopNumber.prototype.drawMultiplicationSign = function () {
-    var sign = '\u00d7';
-    var width = this.textWidth(sign);
-    var x = this.cursorX() - width * 2;
-    var y = this.itemY();
+    const sign = '\u00d7';
+    const width = this.textWidth(sign);
+    const x = this.cursorX() - width * 2;
+    const y = this.itemY();
     this.resetTextColor();
     this.drawText(sign, x, y, width);
 };
 
 Window_ShopNumber.prototype.drawNumber = function () {
-    var x = this.cursorX();
-    var y = this.itemY();
-    var width = this.cursorWidth() - this.textPadding();
+    const x = this.cursorX();
+    const y = this.itemY();
+    const width = this.cursorWidth() - this.textPadding();
     this.resetTextColor();
     this.drawText(this._number, x, y, width, 'right');
 };
 
 Window_ShopNumber.prototype.drawTotalPrice = function () {
-    var total = this._price * this._number;
-    var width = this.contentsWidth() - this.textPadding();
+    const total = this._price * this._number;
+    const width = this.contentsWidth() - this.textPadding();
     this.drawCurrencyValue(total, this._currencyUnit, 0, this.priceY(), width);
 };
 
@@ -3185,7 +3185,7 @@ Window_ShopNumber.prototype.buttonY = function () {
 };
 
 Window_ShopNumber.prototype.cursorWidth = function () {
-    var digitWidth = this.textWidth('0');
+    const digitWidth = this.textWidth('0');
     return this.maxDigits() * digitWidth + this.textPadding() * 2;
 };
 
@@ -3227,7 +3227,7 @@ Window_ShopNumber.prototype.processNumberChange = function () {
 };
 
 Window_ShopNumber.prototype.changeNumber = function (amount) {
-    var lastNumber = this._number;
+    const lastNumber = this._number;
     this._number = (this._number + amount).clamp(1, this._max);
     if (this._number !== lastNumber) {
         SoundManager.playCursor();
@@ -3283,7 +3283,7 @@ Window_ShopStatus.prototype.initialize = function (x, y, width, height) {
 Window_ShopStatus.prototype.refresh = function () {
     this.contents.clear();
     if (this._item) {
-        var x = this.textPadding();
+        const x = this.textPadding();
         this.drawPossession(x, 0);
         if (this.isEquipItem()) {
             this.drawEquipInfo(x, this.lineHeight() * 2);
@@ -3301,8 +3301,8 @@ Window_ShopStatus.prototype.isEquipItem = function () {
 };
 
 Window_ShopStatus.prototype.drawPossession = function (x, y) {
-    var width = this.contents.width - this.textPadding() - x;
-    var possessionWidth = this.textWidth('0000');
+    const width = this.contents.width - this.textPadding() - x;
+    const possessionWidth = this.textWidth('0000');
     this.changeTextColor(this.systemColor());
     this.drawText(TextManager.possession, x, y, width - possessionWidth);
     this.resetTextColor();
@@ -3310,15 +3310,15 @@ Window_ShopStatus.prototype.drawPossession = function (x, y) {
 };
 
 Window_ShopStatus.prototype.drawEquipInfo = function (x, y) {
-    var members = this.statusMembers();
-    for (var i = 0; i < members.length; i++) {
+    const members = this.statusMembers();
+    for (let i = 0; i < members.length; i++) {
         this.drawActorEquipInfo(x, y + this.lineHeight() * (i * 2.4), members[i]);
     }
 };
 
 Window_ShopStatus.prototype.statusMembers = function () {
-    var start = this._pageIndex * this.pageSize();
-    var end = start + this.pageSize();
+    const start = this._pageIndex * this.pageSize();
+    const end = start + this.pageSize();
     return $gameParty.members().slice(start, end);
 };
 
@@ -3331,11 +3331,11 @@ Window_ShopStatus.prototype.maxPages = function () {
 };
 
 Window_ShopStatus.prototype.drawActorEquipInfo = function (x, y, actor) {
-    var enabled = actor.canEquip(this._item);
+    const enabled = actor.canEquip(this._item);
     this.changePaintOpacity(enabled);
     this.resetTextColor();
     this.drawText(actor.name(), x, y, 168);
-    var item1 = this.currentEquippedItem(actor, this._item.etypeId);
+    const item1 = this.currentEquippedItem(actor, this._item.etypeId);
     if (enabled) {
         this.drawActorParamChange(x, y, actor, item1);
     }
@@ -3344,9 +3344,9 @@ Window_ShopStatus.prototype.drawActorEquipInfo = function (x, y, actor) {
 };
 
 Window_ShopStatus.prototype.drawActorParamChange = function (x, y, actor, item1) {
-    var width = this.contents.width - this.textPadding() - x;
-    var paramId = this.paramId();
-    var change = this._item.params[paramId] - (item1 ? item1.params[paramId] : 0);
+    const width = this.contents.width - this.textPadding() - x;
+    const paramId = this.paramId();
+    const change = this._item.params[paramId] - (item1 ? item1.params[paramId] : 0);
     this.changeTextColor(this.paramchangeTextColor(change));
     this.drawText((change > 0 ? '+' : '') + change, x, y, width, 'right');
 };
@@ -3356,21 +3356,21 @@ Window_ShopStatus.prototype.paramId = function () {
 };
 
 Window_ShopStatus.prototype.currentEquippedItem = function (actor, etypeId) {
-    var list = [];
-    var equips = actor.equips();
-    var slots = actor.equipSlots();
-    for (var i = 0; i < slots.length; i++) {
+    const list = [];
+    const equips = actor.equips();
+    const slots = actor.equipSlots();
+    for (let i = 0; i < slots.length; i++) {
         if (slots[i] === etypeId) {
             list.push(equips[i]);
         }
     }
-    var paramId = this.paramId();
-    var worstParam = Number.MAX_VALUE;
-    var worstItem = null;
-    for (var j = 0; j < list.length; j++) {
-        if (list[j] && list[j].params[paramId] < worstParam) {
-            worstParam = list[j].params[paramId];
-            worstItem = list[j];
+    const paramId = this.paramId();
+    let worstParam = Number.MAX_VALUE;
+    let worstItem = null;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i] && list[i].params[paramId] < worstParam) {
+            worstParam = list[i].params[paramId];
+            worstItem = list[i];
         }
     }
     return worstItem;
@@ -3402,8 +3402,8 @@ Window_ShopStatus.prototype.isPageChangeRequested = function () {
 };
 
 Window_ShopStatus.prototype.isTouchedInsideFrame = function () {
-    var x = this.canvasToLocalX(TouchInput.x);
-    var y = this.canvasToLocalY(TouchInput.y);
+    const x = this.canvasToLocalX(TouchInput.x);
+    const y = this.canvasToLocalY(TouchInput.y);
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
 };
 
@@ -3426,10 +3426,10 @@ Window_NameEdit.prototype = Object.create(Window_Base.prototype);
 Window_NameEdit.prototype.constructor = Window_NameEdit;
 
 Window_NameEdit.prototype.initialize = function (actor, maxLength) {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
-    var x = (Graphics.boxWidth - width) / 2;
-    var y = (Graphics.boxHeight - (height + this.fittingHeight(9) + 8)) / 2;
+    const width = this.windowWidth();
+    const height = this.windowHeight();
+    const x = (Graphics.boxWidth - width) / 2;
+    const y = (Graphics.boxHeight - (height + this.fittingHeight(9) + 8)) / 2;
     Window_Base.prototype.initialize.call(this, x, y, width, height);
     this._actor = actor;
     this._name = actor.name().slice(0, this._maxLength);
@@ -3487,13 +3487,13 @@ Window_NameEdit.prototype.faceWidth = function () {
 };
 
 Window_NameEdit.prototype.charWidth = function () {
-    var text = $gameSystem.isJapanese() ? '\uff21' : 'A';
+    const text = $gameSystem.isJapanese() ? '\uff21' : 'A';
     return this.textWidth(text);
 };
 
 Window_NameEdit.prototype.left = function () {
-    var nameCenter = (this.contentsWidth() + this.faceWidth()) / 2;
-    var nameWidth = (this._maxLength + 1) * this.charWidth();
+    const nameCenter = (this.contentsWidth() + this.faceWidth()) / 2;
+    const nameWidth = (this._maxLength + 1) * this.charWidth();
     return Math.min(nameCenter - nameWidth / 2, this.contentsWidth() - nameWidth);
 };
 
@@ -3507,7 +3507,7 @@ Window_NameEdit.prototype.itemRect = function (index) {
 };
 
 Window_NameEdit.prototype.underlineRect = function (index) {
-    var rect = this.itemRect(index);
+    const rect = this.itemRect(index);
     rect.x++;
     rect.y += rect.height - 4;
     rect.width -= 2;
@@ -3520,15 +3520,15 @@ Window_NameEdit.prototype.underlineColor = function () {
 };
 
 Window_NameEdit.prototype.drawUnderline = function (index) {
-    var rect = this.underlineRect(index);
-    var color = this.underlineColor();
+    const rect = this.underlineRect(index);
+    const color = this.underlineColor();
     this.contents.paintOpacity = 48;
     this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
     this.contents.paintOpacity = 255;
 };
 
 Window_NameEdit.prototype.drawChar = function (index) {
-    var rect = this.itemRect(index);
+    const rect = this.itemRect(index);
     this.resetTextColor();
     this.drawText(this._name[index] || '', rect.x, rect.y);
 };
@@ -3536,13 +3536,13 @@ Window_NameEdit.prototype.drawChar = function (index) {
 Window_NameEdit.prototype.refresh = function () {
     this.contents.clear();
     this.drawActorFace(this._actor, 0, 0);
-    for (var i = 0; i < this._maxLength; i++) {
+    for (let i = 0; i < this._maxLength; i++) {
         this.drawUnderline(i);
     }
-    for (var j = 0; j < this._name.length; j++) {
-        this.drawChar(j);
+    for (let i = 0; i < this._name.length; i++) {
+        this.drawChar(i);
     }
-    var rect = this.itemRect(this._index);
+    const rect = this.itemRect(this._index);
     this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
 };
 
@@ -3619,10 +3619,10 @@ Window_NameInput.JAPAN3 =
         '／', '＝', '＠', '＜', '＞', '：', '；', '　', 'かな', '決定'];
 
 Window_NameInput.prototype.initialize = function (editWindow) {
-    var x = editWindow.x;
-    var y = editWindow.y + editWindow.height + 8;
-    var width = editWindow.width;
-    var height = this.windowHeight();
+    const x = editWindow.x;
+    const y = editWindow.y + editWindow.height + 8;
+    const width = editWindow.width;
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this._editWindow = editWindow;
     this._page = 0;
@@ -3679,11 +3679,11 @@ Window_NameInput.prototype.itemRect = function (index) {
 };
 
 Window_NameInput.prototype.refresh = function () {
-    var table = this.table();
+    const table = this.table();
     this.contents.clear();
     this.resetTextColor();
-    for (var i = 0; i < 90; i++) {
-        var rect = this.itemRect(i);
+    for (let i = 0; i < 90; i++) {
+        const rect = this.itemRect(i);
         rect.x += 3;
         rect.width -= 6;
         this.drawText(table[this._page][i], rect.x, rect.y, rect.width, 'center');
@@ -3691,7 +3691,7 @@ Window_NameInput.prototype.refresh = function () {
 };
 
 Window_NameInput.prototype.updateCursor = function () {
-    var rect = this.itemRect(this._index);
+    const rect = this.itemRect(this._index);
     this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
 };
 
@@ -3738,7 +3738,7 @@ Window_NameInput.prototype.cursorPageup = function () {
 };
 
 Window_NameInput.prototype.processCursorMove = function () {
-    var lastPage = this._page;
+    const lastPage = this._page;
     Window_Selectable.prototype.processCursorMove.call(this);
     this.updateCursor();
     if (this._page !== lastPage) {
@@ -3847,8 +3847,8 @@ Window_ChoiceList.prototype.selectDefault = function () {
 };
 
 Window_ChoiceList.prototype.updatePlacement = function () {
-    var positionType = $gameMessage.choicePositionType();
-    var messageY = this._messageWindow.y;
+    const positionType = $gameMessage.choicePositionType();
+    const messageY = this._messageWindow.y;
     this.width = this.windowWidth();
     this.height = this.windowHeight();
     switch (positionType) {
@@ -3875,17 +3875,17 @@ Window_ChoiceList.prototype.updateBackground = function () {
 };
 
 Window_ChoiceList.prototype.windowWidth = function () {
-    var width = this.maxChoiceWidth() + this.padding * 2;
+    const width = this.maxChoiceWidth() + this.padding * 2;
     return Math.min(width, Graphics.boxWidth);
 };
 
 Window_ChoiceList.prototype.numVisibleRows = function () {
-    var messageY = this._messageWindow.y;
-    var messageHeight = this._messageWindow.height;
-    var centerY = Graphics.boxHeight / 2;
-    var choices = $gameMessage.choices();
-    var numLines = choices.length;
-    var maxLines = 8;
+    const messageY = this._messageWindow.y;
+    const messageHeight = this._messageWindow.height;
+    const centerY = Graphics.boxHeight / 2;
+    const choices = $gameMessage.choices();
+    let numLines = choices.length;
+    let maxLines = 8;
     if (messageY < centerY && messageY + messageHeight > centerY) {
         maxLines = 4;
     }
@@ -3896,10 +3896,10 @@ Window_ChoiceList.prototype.numVisibleRows = function () {
 };
 
 Window_ChoiceList.prototype.maxChoiceWidth = function () {
-    var maxWidth = 96;
-    var choices = $gameMessage.choices();
-    for (var i = 0; i < choices.length; i++) {
-        var choiceWidth = this.textWidthEx(choices[i]) + this.textPadding() * 2;
+    let maxWidth = 96;
+    const choices = $gameMessage.choices();
+    for (let i = 0; i < choices.length; i++) {
+        const choiceWidth = this.textWidthEx(choices[i]) + this.textPadding() * 2;
         if (maxWidth < choiceWidth) {
             maxWidth = choiceWidth;
         }
@@ -3916,14 +3916,14 @@ Window_ChoiceList.prototype.contentsHeight = function () {
 };
 
 Window_ChoiceList.prototype.makeCommandList = function () {
-    var choices = $gameMessage.choices();
-    for (var i = 0; i < choices.length; i++) {
+    const choices = $gameMessage.choices();
+    for (let i = 0; i < choices.length; i++) {
         this.addCommand(choices[i], 'choice');
     }
 };
 
 Window_ChoiceList.prototype.drawItem = function (index) {
-    var rect = this.itemRectForText(index);
+    const rect = this.itemRectForText(index);
     this.drawTextEx(this.commandName(index), rect.x, rect.y);
 };
 
@@ -3984,8 +3984,8 @@ Window_NumberInput.prototype.start = function () {
 };
 
 Window_NumberInput.prototype.updatePlacement = function () {
-    var messageY = this._messageWindow.y;
-    var spacing = 8;
+    const messageY = this._messageWindow.y;
+    const spacing = 8;
     this.width = this.windowWidth();
     this.height = this.windowHeight();
     this.x = (Graphics.boxWidth - this.width) / 2;
@@ -4021,14 +4021,14 @@ Window_NumberInput.prototype.itemWidth = function () {
 };
 
 Window_NumberInput.prototype.createButtons = function () {
-    var bitmap = ImageManager.loadSystem('ButtonSet');
-    var buttonWidth = 48;
-    var buttonHeight = 48;
+    const bitmap = ImageManager.loadSystem('ButtonSet');
+    const buttonWidth = 48;
+    const buttonHeight = 48;
     this._buttons = [];
-    for (var i = 0; i < 3; i++) {
-        var button = new Sprite_Button();
-        var x = buttonWidth * [1, 2, 4][i];
-        var w = buttonWidth * (i === 2 ? 2 : 1);
+    for (let i = 0; i < 3; i++) {
+        const button = new Sprite_Button();
+        const x = buttonWidth * [1, 2, 4][i];
+        const w = buttonWidth * (i === 2 ? 2 : 1);
         button.bitmap = bitmap;
         button.setColdFrame(x, 0, w, buttonHeight);
         button.setHotFrame(x, buttonHeight, w, buttonHeight);
@@ -4042,15 +4042,15 @@ Window_NumberInput.prototype.createButtons = function () {
 };
 
 Window_NumberInput.prototype.placeButtons = function () {
-    var numButtons = this._buttons.length;
-    var spacing = 16;
-    var totalWidth = -spacing;
-    for (var i = 0; i < numButtons; i++) {
+    const numButtons = this._buttons.length;
+    const spacing = 16;
+    let totalWidth = -spacing;
+    for (let i = 0; i < numButtons; i++) {
         totalWidth += this._buttons[i].width + spacing;
     }
-    var x = (this.width - totalWidth) / 2;
-    for (var j = 0; j < numButtons; j++) {
-        var button = this._buttons[j];
+    let x = (this.width - totalWidth) / 2;
+    for (let i = 0; i < numButtons; i++) {
+        const button = this._buttons[i];
         button.x = x;
         button.y = this.buttonY();
         x += button.width + spacing;
@@ -4068,19 +4068,19 @@ Window_NumberInput.prototype.updateButtonsVisibility = function () {
 Window_NumberInput.prototype.updateButtonsVisiblity = Window_NumberInput.prototype.updateButtonsVisibility;
 
 Window_NumberInput.prototype.showButtons = function () {
-    for (var i = 0; i < this._buttons.length; i++) {
+    for (let i = 0; i < this._buttons.length; i++) {
         this._buttons[i].visible = true;
     }
 };
 
 Window_NumberInput.prototype.hideButtons = function () {
-    for (var i = 0; i < this._buttons.length; i++) {
+    for (let i = 0; i < this._buttons.length; i++) {
         this._buttons[i].visible = false;
     }
 };
 
 Window_NumberInput.prototype.buttonY = function () {
-    var spacing = 8;
+    const spacing = 8;
     if (this._messageWindow.y >= Graphics.boxHeight / 2) {
         return 0 - this._buttons[0].height - spacing;
     } else {
@@ -4104,9 +4104,9 @@ Window_NumberInput.prototype.processDigitChange = function () {
 };
 
 Window_NumberInput.prototype.changeDigit = function (up) {
-    var index = this.index();
-    var place = Math.pow(10, this._maxDigits - 1 - index);
-    var n = Math.floor(this._number / place) % 10;
+    const index = this.index();
+    const place = Math.pow(10, this._maxDigits - 1 - index);
+    let n = Math.floor(this._number / place) % 10;
     this._number -= n * place;
     if (up) {
         n = (n + 1) % 10;
@@ -4144,10 +4144,10 @@ Window_NumberInput.prototype.processOk = function () {
 };
 
 Window_NumberInput.prototype.drawItem = function (index) {
-    var rect = this.itemRect(index);
-    var align = 'center';
-    var s = this._number.padZero(this._maxDigits);
-    var c = s.slice(index, index + 1);
+    const rect = this.itemRect(index);
+    const align = 'center';
+    const s = this._number.padZero(this._maxDigits);
+    const c = s.slice(index, index + 1);
     this.resetTextColor();
     this.drawText(c, rect.x, rect.y, rect.width, align);
 };
@@ -4179,8 +4179,8 @@ Window_EventItem.prototype.constructor = Window_EventItem;
 
 Window_EventItem.prototype.initialize = function (messageWindow) {
     this._messageWindow = messageWindow;
-    var width = Graphics.boxWidth;
-    var height = this.windowHeight();
+    const width = Graphics.boxWidth;
+    const height = this.windowHeight();
     Window_ItemList.prototype.initialize.call(this, 0, 0, width, height);
     this.openness = 0;
     this.deactivate();
@@ -4213,7 +4213,7 @@ Window_EventItem.prototype.updatePlacement = function () {
 };
 
 Window_EventItem.prototype.includes = function (item) {
-    var itypeId = $gameMessage.itemChoiceItypeId();
+    const itypeId = $gameMessage.itemChoiceItypeId();
     return DataManager.isItem(item) && item.itypeId === itypeId;
 };
 
@@ -4222,8 +4222,8 @@ Window_EventItem.prototype.isEnabled = function (item) {
 };
 
 Window_EventItem.prototype.onOk = function () {
-    var item = this.item();
-    var itemId = item ? item.id : 0;
+    const item = this.item();
+    const itemId = item ? item.id : 0;
     $gameVariables.setValue($gameMessage.itemChoiceVariableId(), itemId);
     this._messageWindow.terminateMessage();
     this.close();
@@ -4248,9 +4248,9 @@ Window_Message.prototype = Object.create(Window_Base.prototype);
 Window_Message.prototype.constructor = Window_Message;
 
 Window_Message.prototype.initialize = function () {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
-    var x = (Graphics.boxWidth - width) / 2;
+    const width = this.windowWidth();
+    const height = this.windowHeight();
+    const x = (Graphics.boxWidth - width) / 2;
     Window_Base.prototype.initialize.call(this, x, 0, width, height);
     this.openness = 0;
     this.initMembers();
@@ -4579,8 +4579,8 @@ Window_ScrollText.prototype = Object.create(Window_Base.prototype);
 Window_ScrollText.prototype.constructor = Window_ScrollText;
 
 Window_ScrollText.prototype.initialize = function () {
-    var width = Graphics.boxWidth;
-    var height = Graphics.boxHeight;
+    const width = Graphics.boxWidth;
+    const height = Graphics.boxHeight;
     Window_Base.prototype.initialize.call(this, 0, 0, width, height);
     this.opacity = 0;
     this.hide();
@@ -4607,7 +4607,7 @@ Window_ScrollText.prototype.startMessage = function () {
 };
 
 Window_ScrollText.prototype.refresh = function () {
-    var textState = { index: 0 };
+    const textState = { index: 0 };
     textState.text = this.convertEscapeCharacters(this._text);
     this.resetFontSettings();
     this._allTextHeight = this.calcTextHeight(textState, true);
@@ -4628,7 +4628,7 @@ Window_ScrollText.prototype.updateMessage = function () {
 };
 
 Window_ScrollText.prototype.scrollSpeed = function () {
-    var speed = $gameMessage.scrollSpeed() / 2;
+    let speed = $gameMessage.scrollSpeed() / 2;
     if (this.isFastForward()) {
         speed *= this.fastForwardRate();
     }
@@ -4667,8 +4667,8 @@ Window_MapName.prototype = Object.create(Window_Base.prototype);
 Window_MapName.prototype.constructor = Window_MapName;
 
 Window_MapName.prototype.initialize = function () {
-    var wight = this.windowWidth();
-    var height = this.windowHeight();
+    const wight = this.windowWidth();
+    const height = this.windowHeight();
     Window_Base.prototype.initialize.call(this, 0, 0, wight, height);
     this.opacity = 0;
     this.contentsOpacity = 0;
@@ -4714,15 +4714,15 @@ Window_MapName.prototype.close = function () {
 Window_MapName.prototype.refresh = function () {
     this.contents.clear();
     if ($gameMap.displayName()) {
-        var width = this.contentsWidth();
+        const width = this.contentsWidth();
         this.drawBackground(0, 0, width, this.lineHeight());
         this.drawText($gameMap.displayName(), 0, 0, width, 'center');
     }
 };
 
 Window_MapName.prototype.drawBackground = function (x, y, width, height) {
-    var color1 = this.dimColor1();
-    var color2 = this.dimColor2();
+    const color1 = this.dimColor1();
+    const color2 = this.dimColor2();
     this.contents.gradientFillRect(x, y, width / 2, height, color2, color1);
     this.contents.gradientFillRect(x + width / 2, y, width / 2, height, color1, color2);
 };
@@ -4741,8 +4741,8 @@ Window_BattleLog.prototype = Object.create(Window_Selectable.prototype);
 Window_BattleLog.prototype.constructor = Window_BattleLog;
 
 Window_BattleLog.prototype.initialize = function () {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, 0, 0, width, height);
     this.opacity = 0;
     this._lines = [];
@@ -4817,7 +4817,7 @@ Window_BattleLog.prototype.updateWaitCount = function () {
 };
 
 Window_BattleLog.prototype.updateWaitMode = function () {
-    var waiting = false;
+    let waiting = false;
     switch (this._waitMode) {
         case 'effect':
             waiting = this._spriteset.isEffecting();
@@ -4838,7 +4838,7 @@ Window_BattleLog.prototype.setWaitMode = function (waitMode) {
 
 Window_BattleLog.prototype.callNextMethod = function () {
     if (this._methods.length > 0) {
-        var method = this._methods.shift();
+        const method = this._methods.shift();
         if (method.name && this[method.name]) {
             this[method.name].apply(this, method.params);
         } else {
@@ -4853,7 +4853,7 @@ Window_BattleLog.prototype.isFastForward = function () {
 };
 
 Window_BattleLog.prototype.push = function (methodName) {
-    var methodArgs = Array.prototype.slice.call(arguments, 1);
+    const methodArgs = Array.prototype.slice.call(arguments, 1);
     this._methods.push({ name: methodName, params: methodArgs });
 };
 
@@ -4886,14 +4886,14 @@ Window_BattleLog.prototype.pushBaseLine = function () {
 };
 
 Window_BattleLog.prototype.popBaseLine = function () {
-    var baseLine = this._baseLineStack.pop();
+    const baseLine = this._baseLineStack.pop();
     while (this._lines.length > baseLine) {
         this._lines.pop();
     }
 };
 
 Window_BattleLog.prototype.waitForNewLine = function () {
-    var baseLine = 0;
+    let baseLine = 0;
     if (this._baseLineStack.length > 0) {
         baseLine = this._baseLineStack[this._baseLineStack.length - 1];
     }
@@ -4980,10 +4980,10 @@ Window_BattleLog.prototype.showEnemyAttackAnimation = function (subject, targets
 };
 
 Window_BattleLog.prototype.showNormalAnimation = function (targets, animationId, mirror) {
-    var animation = $dataAnimations[animationId];
+    const animation = $dataAnimations[animationId];
     if (animation) {
-        var delay = this.animationBaseDelay();
-        var nextDelay = this.animationNextDelay();
+        let delay = this.animationBaseDelay();
+        const nextDelay = this.animationNextDelay();
         targets.forEach(function (target) {
             target.startAnimation(animationId, mirror, delay);
             delay += nextDelay;
@@ -5002,14 +5002,14 @@ Window_BattleLog.prototype.animationNextDelay = function () {
 Window_BattleLog.prototype.refresh = function () {
     this.drawBackground();
     this.contents.clear();
-    for (var i = 0; i < this._lines.length; i++) {
+    for (let i = 0; i < this._lines.length; i++) {
         this.drawLineText(i);
     }
 };
 
 Window_BattleLog.prototype.drawBackground = function () {
-    var rect = this.backRect();
-    var color = this.backColor();
+    const rect = this.backRect();
+    const color = this.backColor();
     this._backBitmap.clear();
     this._backBitmap.paintOpacity = this.backPaintOpacity();
     this._backBitmap.fillRect(rect.x, rect.y, rect.width, rect.height, color);
@@ -5034,7 +5034,7 @@ Window_BattleLog.prototype.backPaintOpacity = function () {
 };
 
 Window_BattleLog.prototype.drawLineText = function (index) {
-    var rect = this.itemRectForText(index);
+    const rect = this.itemRectForText(index);
     this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
     this.drawTextEx(this._lines[index], rect.x, rect.y, rect.width);
 };
@@ -5044,7 +5044,7 @@ Window_BattleLog.prototype.startTurn = function () {
 };
 
 Window_BattleLog.prototype.startAction = function (subject, action, targets) {
-    var item = action.item();
+    const item = action.item();
     this.push('performActionStart', subject, action);
     this.push('waitForMovement');
     this.push('performAction', subject, action);
@@ -5059,7 +5059,7 @@ Window_BattleLog.prototype.endAction = function (subject) {
 };
 
 Window_BattleLog.prototype.displayCurrentState = function (subject) {
-    var stateText = subject.mostImportantStateText();
+    const stateText = subject.mostImportantStateText();
     if (stateText) {
         this.push('addText', subject.name() + stateText);
         this.push('wait');
@@ -5072,7 +5072,7 @@ Window_BattleLog.prototype.displayRegeneration = function (subject) {
 };
 
 Window_BattleLog.prototype.displayAction = function (subject, item) {
-    var numMethods = this._methods.length;
+    const numMethods = this._methods.length;
     if (DataManager.isSkill(item)) {
         if (item.message1) {
             this.push('addText', subject.name() + item.message1.format(item.name));
@@ -5099,7 +5099,7 @@ Window_BattleLog.prototype.displayReflection = function (target) {
 };
 
 Window_BattleLog.prototype.displaySubstitute = function (substitute, target) {
-    var substName = substitute.name();
+    const substName = substitute.name();
     this.push('performSubstitute', substitute, target);
     this.push('addText', TextManager.substitute.format(substName, target.name()));
 };
@@ -5147,7 +5147,7 @@ Window_BattleLog.prototype.displayDamage = function (target) {
 };
 
 Window_BattleLog.prototype.displayMiss = function (target) {
-    var fmt;
+    let fmt;
     if (target.result().physical) {
         fmt = target.isActor() ? TextManager.actorNoHit : TextManager.enemyNoHit;
         this.push('performMiss', target);
@@ -5158,7 +5158,7 @@ Window_BattleLog.prototype.displayMiss = function (target) {
 };
 
 Window_BattleLog.prototype.displayEvasion = function (target) {
-    var fmt;
+    let fmt;
     if (target.result().physical) {
         fmt = TextManager.evasion;
         this.push('performEvasion', target);
@@ -5223,7 +5223,7 @@ Window_BattleLog.prototype.displayChangedStates = function (target) {
 
 Window_BattleLog.prototype.displayAddedStates = function (target) {
     target.result().addedStateObjects().forEach(function (state) {
-        var stateMsg = target.isActor() ? state.message1 : state.message2;
+        const stateMsg = target.isActor() ? state.message1 : state.message2;
         if (state.id === target.deathStateId()) {
             this.push('performCollapse', target);
         }
@@ -5247,7 +5247,7 @@ Window_BattleLog.prototype.displayRemovedStates = function (target) {
 };
 
 Window_BattleLog.prototype.displayChangedBuffs = function (target) {
-    var result = target.result();
+    const result = target.result();
     this.displayBuffs(target, result.addedBuffs, TextManager.buffAdd);
     this.displayBuffs(target, result.addedDebuffs, TextManager.debuffAdd);
     this.displayBuffs(target, result.removedBuffs, TextManager.buffRemove);
@@ -5262,10 +5262,10 @@ Window_BattleLog.prototype.displayBuffs = function (target, buffs, fmt) {
 };
 
 Window_BattleLog.prototype.makeHpDamageText = function (target) {
-    var result = target.result();
-    var damage = result.hpDamage;
-    var isActor = target.isActor();
-    var fmt;
+    const result = target.result();
+    const damage = result.hpDamage;
+    const isActor = target.isActor();
+    let fmt;
     if (damage > 0 && result.drain) {
         fmt = isActor ? TextManager.actorDrain : TextManager.enemyDrain;
         return fmt.format(target.name(), TextManager.hp, damage);
@@ -5282,10 +5282,10 @@ Window_BattleLog.prototype.makeHpDamageText = function (target) {
 };
 
 Window_BattleLog.prototype.makeMpDamageText = function (target) {
-    var result = target.result();
-    var damage = result.mpDamage;
-    var isActor = target.isActor();
-    var fmt;
+    const result = target.result();
+    const damage = result.mpDamage;
+    const isActor = target.isActor();
+    let fmt;
     if (damage > 0 && result.drain) {
         fmt = isActor ? TextManager.actorDrain : TextManager.enemyDrain;
         return fmt.format(target.name(), TextManager.mp, damage);
@@ -5301,10 +5301,10 @@ Window_BattleLog.prototype.makeMpDamageText = function (target) {
 };
 
 Window_BattleLog.prototype.makeTpDamageText = function (target) {
-    var result = target.result();
-    var damage = result.tpDamage;
-    var isActor = target.isActor();
-    var fmt;
+    const result = target.result();
+    const damage = result.tpDamage;
+    const isActor = target.isActor();
+    let fmt;
     if (damage > 0) {
         fmt = isActor ? TextManager.actorLoss : TextManager.enemyLoss;
         return fmt.format(target.name(), TextManager.tp, damage);
@@ -5329,7 +5329,7 @@ Window_PartyCommand.prototype = Object.create(Window_Command.prototype);
 Window_PartyCommand.prototype.constructor = Window_PartyCommand;
 
 Window_PartyCommand.prototype.initialize = function () {
-    var y = Graphics.boxHeight - this.windowHeight();
+    const y = Graphics.boxHeight - this.windowHeight();
     Window_Command.prototype.initialize.call(this, 0, y);
     this.openness = 0;
     this.deactivate();
@@ -5370,7 +5370,7 @@ Window_ActorCommand.prototype = Object.create(Window_Command.prototype);
 Window_ActorCommand.prototype.constructor = Window_ActorCommand;
 
 Window_ActorCommand.prototype.initialize = function () {
-    var y = Graphics.boxHeight - this.windowHeight();
+    const y = Graphics.boxHeight - this.windowHeight();
     Window_Command.prototype.initialize.call(this, 0, y);
     this.openness = 0;
     this.deactivate();
@@ -5399,12 +5399,12 @@ Window_ActorCommand.prototype.addAttackCommand = function () {
 };
 
 Window_ActorCommand.prototype.addSkillCommands = function () {
-    var skillTypes = this._actor.addedSkillTypes();
+    const skillTypes = this._actor.addedSkillTypes();
     skillTypes.sort(function (a, b) {
         return a - b;
     });
     skillTypes.forEach(function (stypeId) {
-        var name = $dataSystem.skillTypes[stypeId];
+        const name = $dataSystem.skillTypes[stypeId];
         this.addCommand(name, 'skill', true, stypeId);
     }, this);
 };
@@ -5441,10 +5441,10 @@ Window_ActorCommand.prototype.processOk = function () {
 Window_ActorCommand.prototype.selectLast = function () {
     this.select(0);
     if (this._actor && ConfigManager.commandRemember) {
-        var symbol = this._actor.lastCommandSymbol();
+        const symbol = this._actor.lastCommandSymbol();
         this.selectSymbol(symbol);
         if (symbol === 'skill') {
-            var skill = this._actor.lastBattleSkill();
+            const skill = this._actor.lastBattleSkill();
             if (skill) {
                 this.selectExt(skill.stypeId);
             }
@@ -5465,10 +5465,10 @@ Window_BattleStatus.prototype = Object.create(Window_Selectable.prototype);
 Window_BattleStatus.prototype.constructor = Window_BattleStatus;
 
 Window_BattleStatus.prototype.initialize = function () {
-    var width = this.windowWidth();
-    var height = this.windowHeight();
-    var x = Graphics.boxWidth - width;
-    var y = Graphics.boxHeight - height;
+    const width = this.windowWidth();
+    const height = this.windowHeight();
+    const x = Graphics.boxWidth - width;
+    const y = Graphics.boxHeight - height;
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this.refresh();
     this.openness = 0;
@@ -5496,19 +5496,19 @@ Window_BattleStatus.prototype.refresh = function () {
 };
 
 Window_BattleStatus.prototype.drawItem = function (index) {
-    var actor = $gameParty.battleMembers()[index];
+    const actor = $gameParty.battleMembers()[index];
     this.drawBasicArea(this.basicAreaRect(index), actor);
     this.drawGaugeArea(this.gaugeAreaRect(index), actor);
 };
 
 Window_BattleStatus.prototype.basicAreaRect = function (index) {
-    var rect = this.itemRectForText(index);
+    const rect = this.itemRectForText(index);
     rect.width -= this.gaugeAreaWidth() + 15;
     return rect;
 };
 
 Window_BattleStatus.prototype.gaugeAreaRect = function (index) {
-    var rect = this.itemRectForText(index);
+    const rect = this.itemRectForText(index);
     rect.x += rect.width - this.gaugeAreaWidth();
     rect.width = this.gaugeAreaWidth();
     return rect;
@@ -5595,8 +5595,8 @@ Window_BattleEnemy.prototype.constructor = Window_BattleEnemy;
 
 Window_BattleEnemy.prototype.initialize = function (x, y) {
     this._enemies = [];
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this.refresh();
     this.hide();
@@ -5627,14 +5627,14 @@ Window_BattleEnemy.prototype.enemy = function () {
 };
 
 Window_BattleEnemy.prototype.enemyIndex = function () {
-    var enemy = this.enemy();
+    const enemy = this.enemy();
     return enemy ? enemy.index() : -1;
 };
 
 Window_BattleEnemy.prototype.drawItem = function (index) {
     this.resetTextColor();
-    var name = this._enemies[index].name();
-    var rect = this.itemRectForText(index);
+    const name = this._enemies[index].name();
+    const rect = this.itemRectForText(index);
     this.drawText(name, rect.x, rect.y, rect.width);
 };
 
@@ -5827,8 +5827,8 @@ Window_DebugRange.lastIndex = 0;
 Window_DebugRange.prototype.initialize = function (x, y) {
     this._maxSwitches = Math.ceil(($dataSystem.switches.length - 1) / 10);
     this._maxVariables = Math.ceil(($dataSystem.variables.length - 1) / 10);
-    var width = this.windowWidth();
-    var height = this.windowHeight();
+    const width = this.windowWidth();
+    const height = this.windowHeight();
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this.refresh();
     this.setTopRow(Window_DebugRange.lastTopRow);
@@ -5861,7 +5861,7 @@ Window_DebugRange.prototype.mode = function () {
 };
 
 Window_DebugRange.prototype.topId = function () {
-    var index = this.index();
+    const index = this.index();
     if (index < this._maxSwitches) {
         return index * 10 + 1;
     } else {
@@ -5875,9 +5875,9 @@ Window_DebugRange.prototype.refresh = function () {
 };
 
 Window_DebugRange.prototype.drawItem = function (index) {
-    var rect = this.itemRectForText(index);
-    var start;
-    var text;
+    const rect = this.itemRectForText(index);
+    let start;
+    let text;
     if (index < this._maxSwitches) {
         start = index * 10 + 1;
         text = 'S';
@@ -5885,7 +5885,7 @@ Window_DebugRange.prototype.drawItem = function (index) {
         start = (index - this._maxSwitches) * 10 + 1;
         text = 'V';
     }
-    var end = start + 9;
+    const end = start + 9;
     text += ' [' + start.padZero(4) + '-' + end.padZero(4) + ']';
     this.drawText(text, rect.x, rect.y, rect.width);
 };
@@ -5918,7 +5918,7 @@ Window_DebugEdit.prototype = Object.create(Window_Selectable.prototype);
 Window_DebugEdit.prototype.constructor = Window_DebugEdit;
 
 Window_DebugEdit.prototype.initialize = function (x, y, width) {
-    var height = this.fittingHeight(10);
+    const height = this.fittingHeight(10);
     Window_Selectable.prototype.initialize.call(this, x, y, width, height);
     this._mode = 'switch';
     this._topId = 1;
@@ -5935,13 +5935,13 @@ Window_DebugEdit.prototype.refresh = function () {
 };
 
 Window_DebugEdit.prototype.drawItem = function (index) {
-    var dataId = this._topId + index;
-    var idText = dataId.padZero(4) + ':';
-    var idWidth = this.textWidth(idText);
-    var statusWidth = this.textWidth('-00000000');
-    var name = this.itemName(dataId);
-    var status = this.itemStatus(dataId);
-    var rect = this.itemRectForText(index);
+    const dataId = this._topId + index;
+    const idText = dataId.padZero(4) + ':';
+    const idWidth = this.textWidth(idText);
+    const statusWidth = this.textWidth('-00000000');
+    const name = this.itemName(dataId);
+    const status = this.itemStatus(dataId);
+    const rect = this.itemRectForText(index);
     this.resetTextColor();
     this.drawText(idText, rect.x, rect.y, rect.width);
     rect.x += idWidth;
@@ -5997,7 +5997,7 @@ Window_DebugEdit.prototype.update = function () {
 
 Window_DebugEdit.prototype.updateSwitch = function () {
     if (Input.isRepeated('ok')) {
-        var switchId = this.currentId();
+        const switchId = this.currentId();
         SoundManager.playCursor();
         $gameSwitches.setValue(switchId, !$gameSwitches.value(switchId));
         this.redrawCurrentItem();
@@ -6005,8 +6005,8 @@ Window_DebugEdit.prototype.updateSwitch = function () {
 };
 
 Window_DebugEdit.prototype.updateVariable = function () {
-    var variableId = this.currentId();
-    var value = $gameVariables.value(variableId);
+    const variableId = this.currentId();
+    let value = $gameVariables.value(variableId);
     if (typeof value === 'number') {
         if (Input.isRepeated('right')) {
             value++;

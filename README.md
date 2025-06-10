@@ -1,6 +1,6 @@
 # RPGMaker MV Game Engine 1.6.2.1
 
-This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.3](https://github.com/pixijs/pixi.js/releases/tag/v5.3.3)
+This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https://github.com/pixijs/pixi.js/releases/tag/v5.3.12)
 
 ## Features
 
@@ -25,7 +25,6 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.3](https:
 
 ## Further Work
 
-- Cleanup of Javascript (using let/const)
 - Add updates to plugins
 - Investigate if garbage collection needs to run (possibly do this during scene changes)
 - Check for any memory leaks

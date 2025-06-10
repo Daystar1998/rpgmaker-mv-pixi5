@@ -64,11 +64,11 @@ DataManager._databaseFiles = [
 ];
 
 DataManager.loadDatabase = function () {
-    var test = this.isBattleTest() || this.isEventTest();
-    var prefix = test ? 'Test_' : '';
-    for (var i = 0; i < this._databaseFiles.length; i++) {
-        var name = this._databaseFiles[i].name;
-        var src = this._databaseFiles[i].src;
+    const test = this.isBattleTest() || this.isEventTest();
+    const prefix = test ? 'Test_' : '';
+    for (let i = 0; i < this._databaseFiles.length; i++) {
+        const name = this._databaseFiles[i].name;
+        const src = this._databaseFiles[i].src;
         this.loadDataFile(name, prefix + src);
     }
     if (this.isEventTest()) {
@@ -77,8 +77,8 @@ DataManager.loadDatabase = function () {
 };
 
 DataManager.loadDataFile = function (name, src) {
-    var xhr = new XMLHttpRequest();
-    var url = CS_URL.MapURL('data/' + src);
+    const xhr = new XMLHttpRequest();
+    const url = CS_URL.MapURL('data/' + src);
     xhr.open('GET', CS_URL.MapURL(url));
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
@@ -96,7 +96,7 @@ DataManager.loadDataFile = function (name, src) {
 
 DataManager.isDatabaseLoaded = function () {
     this.checkError();
-    for (var i = 0; i < this._databaseFiles.length; i++) {
+    for (let i = 0; i < this._databaseFiles.length; i++) {
         if (!window[this._databaseFiles[i].name]) {
             return false;
         }
@@ -106,7 +106,7 @@ DataManager.isDatabaseLoaded = function () {
 
 DataManager.loadMapData = function (mapId) {
     if (mapId > 0) {
-        var filename = 'Map%1.json'.format(mapId.padZero(3));
+        const filename = 'Map%1.json'.format(mapId.padZero(3));
         this._mapLoader = ResourceHandler.createLoader('data/' + filename, this.loadDataFile.bind(this, '$dataMap', filename));
         this.loadDataFile('$dataMap', filename);
     } else {
@@ -129,7 +129,7 @@ DataManager.isMapLoaded = function () {
 };
 
 DataManager.onLoad = function (object) {
-    var array;
+    let array;
     if (object === $dataMap) {
         this.extractMetadata(object);
         array = object.events;
@@ -137,8 +137,8 @@ DataManager.onLoad = function (object) {
         array = object;
     }
     if (Array.isArray(array)) {
-        for (var i = 0; i < array.length; i++) {
-            var data = array[i];
+        for (let i = 0; i < array.length; i++) {
+            const data = array[i];
             if (data && data.note !== undefined) {
                 this.extractMetadata(data);
             }
@@ -152,10 +152,10 @@ DataManager.onLoad = function (object) {
 };
 
 DataManager.extractMetadata = function (data) {
-    var re = /<([^<>:]+)(:?)([^>]*)>/g;
+    const re = /<([^<>:]+)(:?)([^>]*)>/g;
     data.meta = {};
     for (; ;) {
-        var match = re.exec(data.note);
+        const match = re.exec(data.note);
         if (match) {
             if (match[2] === ':') {
                 data.meta[match[1]] = match[3];
@@ -240,7 +240,7 @@ DataManager.setupEventTest = function () {
 };
 
 DataManager.loadGlobalInfo = function () {
-    var json;
+    let json;
     try {
         json = StorageManager.load(0);
     } catch (e) {
@@ -248,8 +248,8 @@ DataManager.loadGlobalInfo = function () {
         return [];
     }
     if (json) {
-        var globalInfo = JSON.parse(json);
-        for (var i = 1; i <= this.maxSavefiles(); i++) {
+        const globalInfo = JSON.parse(json);
+        for (let i = 1; i <= this.maxSavefiles(); i++) {
             if (!StorageManager.exists(i)) {
                 delete globalInfo[i];
             }
@@ -265,12 +265,12 @@ DataManager.saveGlobalInfo = function (info) {
 };
 
 DataManager.isThisGameFile = function (savefileId) {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     if (globalInfo && globalInfo[savefileId]) {
         if (StorageManager.isLocalMode()) {
             return true;
         } else {
-            var savefile = globalInfo[savefileId];
+            const savefile = globalInfo[savefileId];
             return (savefile.globalId === this._globalId &&
                 savefile.title === $dataSystem.gameTitle);
         }
@@ -280,9 +280,9 @@ DataManager.isThisGameFile = function (savefileId) {
 };
 
 DataManager.isAnySavefileExists = function () {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     if (globalInfo) {
-        for (var i = 1; i < globalInfo.length; i++) {
+        for (let i = 1; i < globalInfo.length; i++) {
             if (this.isThisGameFile(i)) {
                 return true;
             }
@@ -292,11 +292,11 @@ DataManager.isAnySavefileExists = function () {
 };
 
 DataManager.latestSavefileId = function () {
-    var globalInfo = this.loadGlobalInfo();
-    var savefileId = 1;
-    var timestamp = 0;
+    const globalInfo = this.loadGlobalInfo();
+    let savefileId = 1;
+    let timestamp = 0;
     if (globalInfo) {
-        for (var i = 1; i < globalInfo.length; i++) {
+        for (let i = 1; i < globalInfo.length; i++) {
             if (this.isThisGameFile(i) && globalInfo[i].timestamp > timestamp) {
                 timestamp = globalInfo[i].timestamp;
                 savefileId = i;
@@ -307,11 +307,11 @@ DataManager.latestSavefileId = function () {
 };
 
 DataManager.loadAllSavefileImages = function () {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     if (globalInfo) {
-        for (var i = 1; i < globalInfo.length; i++) {
+        for (let i = 1; i < globalInfo.length; i++) {
             if (this.isThisGameFile(i)) {
-                var info = globalInfo[i];
+                const info = globalInfo[i];
                 this.loadSavefileImages(info);
             }
         }
@@ -320,13 +320,13 @@ DataManager.loadAllSavefileImages = function () {
 
 DataManager.loadSavefileImages = function (info) {
     if (info.characters) {
-        for (var i = 0; i < info.characters.length; i++) {
+        for (let i = 0; i < info.characters.length; i++) {
             ImageManager.reserveCharacter(info.characters[i][0]);
         }
     }
     if (info.faces) {
-        for (var j = 0; j < info.faces.length; j++) {
-            ImageManager.reserveFace(info.faces[j][0]);
+        for (let i = 0; i < info.faces.length; i++) {
+            ImageManager.reserveFace(info.faces[i][0]);
         }
     }
 };
@@ -360,7 +360,7 @@ DataManager.loadGame = function (savefileId) {
 };
 
 DataManager.loadSavefileInfo = function (savefileId) {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     return (globalInfo && globalInfo[savefileId]) ? globalInfo[savefileId] : null;
 };
 
@@ -369,22 +369,22 @@ DataManager.lastAccessedSavefileId = function () {
 };
 
 DataManager.saveGameWithoutRescue = function (savefileId) {
-    var json = JsonEx.stringify(this.makeSaveContents());
+    const json = JsonEx.stringify(this.makeSaveContents());
     if (json.length >= 200000) {
         console.warn('Save data too big!');
     }
     StorageManager.save(savefileId, json);
     this._lastAccessedId = savefileId;
-    var globalInfo = this.loadGlobalInfo() || [];
+    const globalInfo = this.loadGlobalInfo() || [];
     globalInfo[savefileId] = this.makeSavefileInfo();
     this.saveGlobalInfo(globalInfo);
     return true;
 };
 
 DataManager.loadGameWithoutRescue = function (savefileId) {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     if (this.isThisGameFile(savefileId)) {
-        var json = StorageManager.load(savefileId);
+        const json = StorageManager.load(savefileId);
         this.createGameObjects();
         this.extractSaveContents(JsonEx.parse(json));
         this._lastAccessedId = savefileId;
@@ -395,15 +395,15 @@ DataManager.loadGameWithoutRescue = function (savefileId) {
 };
 
 DataManager.selectSavefileForNewGame = function () {
-    var globalInfo = this.loadGlobalInfo();
+    const globalInfo = this.loadGlobalInfo();
     this._lastAccessedId = 1;
     if (globalInfo) {
-        var numSavefiles = Math.max(0, globalInfo.length - 1);
+        const numSavefiles = Math.max(0, globalInfo.length - 1);
         if (numSavefiles < this.maxSavefiles()) {
             this._lastAccessedId = numSavefiles + 1;
         } else {
-            var timestamp = Number.MAX_VALUE;
-            for (var i = 1; i < globalInfo.length; i++) {
+            let timestamp = Number.MAX_VALUE;
+            for (let i = 1; i < globalInfo.length; i++) {
                 if (!globalInfo[i]) {
                     this._lastAccessedId = i;
                     break;
@@ -418,7 +418,7 @@ DataManager.selectSavefileForNewGame = function () {
 };
 
 DataManager.makeSavefileInfo = function () {
-    var info = {};
+    const info = {};
     info.globalId = this._globalId;
     info.title = $dataSystem.gameTitle;
     info.characters = $gameParty.charactersForSavefile();
@@ -430,7 +430,7 @@ DataManager.makeSavefileInfo = function () {
 
 DataManager.makeSaveContents = function () {
     // A save data does not contain $gameTemp, $gameMessage, and $gameTroop.
-    var contents = {};
+    const contents = {};
     contents.system = $gameSystem;
     contents.screen = $gameScreen;
     contents.timer = $gameTimer;
@@ -510,8 +510,8 @@ Object.defineProperty(ConfigManager, 'seVolume', {
 });
 
 ConfigManager.load = function () {
-    var json;
-    var config = {};
+    let json;
+    let config = {};
     try {
         json = StorageManager.load(-1);
     } catch (e) {
@@ -528,7 +528,7 @@ ConfigManager.save = function () {
 };
 
 ConfigManager.makeData = function () {
-    var config = {};
+    const config = {};
     config.alwaysDash = this.alwaysDash;
     config.commandRemember = this.commandRemember;
     config.bgmVolume = this.bgmVolume;
@@ -552,7 +552,7 @@ ConfigManager.readFlag = function (config, name) {
 };
 
 ConfigManager.readVolume = function (config, name) {
-    var value = config[name];
+    const value = config[name];
     if (value !== undefined) {
         return Number(value).clamp(0, 100);
     } else {
@@ -603,14 +603,14 @@ StorageManager.remove = function (savefileId) {
 
 StorageManager.backup = function (savefileId) {
     if (this.exists(savefileId)) {
-        var data;
-        var compressed;
+        let data;
+        let compressed;
         if (this.isLocalMode()) {
             data = this.loadFromLocalFile(savefileId);
             compressed = LZString.compressToBase64(data);
-            var fs = require('fs');
-            var dirPath = this.localFileDirectoryPath();
-            var filePath = this.localFilePath(savefileId) + ".bak";
+            const fs = require('fs');
+            const dirPath = this.localFileDirectoryPath();
+            const filePath = this.localFilePath(savefileId) + ".bak";
             if (!fs.existsSync(dirPath)) {
                 fs.mkdirSync(dirPath);
             }
@@ -618,7 +618,7 @@ StorageManager.backup = function (savefileId) {
         } else {
             data = this.loadFromWebStorage(savefileId);
             compressed = LZString.compressToBase64(data);
-            var key = this.webStorageKey(savefileId) + "bak";
+            const key = this.webStorageKey(savefileId) + "bak";
             localStorage.setItem(key, compressed);
         }
     }
@@ -635,12 +635,12 @@ StorageManager.backupExists = function (savefileId) {
 StorageManager.cleanBackup = function (savefileId) {
     if (this.backupExists(savefileId)) {
         if (this.isLocalMode()) {
-            var fs = require('fs');
-            var dirPath = this.localFileDirectoryPath();
-            var filePath = this.localFilePath(savefileId);
+            const fs = require('fs');
+            const dirPath = this.localFileDirectoryPath();
+            const filePath = this.localFilePath(savefileId);
             fs.unlinkSync(filePath + ".bak");
         } else {
-            var key = this.webStorageKey(savefileId);
+            const key = this.webStorageKey(savefileId);
             localStorage.removeItem(key + "bak");
         }
     }
@@ -648,14 +648,14 @@ StorageManager.cleanBackup = function (savefileId) {
 
 StorageManager.restoreBackup = function (savefileId) {
     if (this.backupExists(savefileId)) {
-        var data;
-        var compressed;
+        let data;
+        let compressed;
         if (this.isLocalMode()) {
             data = this.loadFromLocalBackupFile(savefileId);
             compressed = LZString.compressToBase64(data);
-            var fs = require('fs');
-            var dirPath = this.localFileDirectoryPath();
-            var filePath = this.localFilePath(savefileId);
+            const fs = require('fs');
+            const dirPath = this.localFileDirectoryPath();
+            const filePath = this.localFilePath(savefileId);
             if (!fs.existsSync(dirPath)) {
                 fs.mkdirSync(dirPath);
             }
@@ -664,7 +664,7 @@ StorageManager.restoreBackup = function (savefileId) {
         } else {
             data = this.loadFromWebStorageBackup(savefileId);
             compressed = LZString.compressToBase64(data);
-            var key = this.webStorageKey(savefileId);
+            const key = this.webStorageKey(savefileId);
             localStorage.setItem(key, compressed);
             localStorage.removeItem(key + "bak");
         }
@@ -676,10 +676,10 @@ StorageManager.isLocalMode = function () {
 };
 
 StorageManager.saveToLocalFile = function (savefileId, json) {
-    var data = LZString.compressToBase64(json);
-    var fs = require('fs');
-    var dirPath = this.localFileDirectoryPath();
-    var filePath = this.localFilePath(savefileId);
+    const data = LZString.compressToBase64(json);
+    const fs = require('fs');
+    const dirPath = this.localFileDirectoryPath();
+    const filePath = this.localFilePath(savefileId);
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
     }
@@ -687,9 +687,9 @@ StorageManager.saveToLocalFile = function (savefileId, json) {
 };
 
 StorageManager.loadFromLocalFile = function (savefileId) {
-    var data = null;
-    var fs = require('fs');
-    var filePath = this.localFilePath(savefileId);
+    let data = null;
+    const fs = require('fs');
+    const filePath = this.localFilePath(savefileId);
     if (fs.existsSync(filePath)) {
         data = fs.readFileSync(filePath, { encoding: 'utf8' });
     }
@@ -697,9 +697,9 @@ StorageManager.loadFromLocalFile = function (savefileId) {
 };
 
 StorageManager.loadFromLocalBackupFile = function (savefileId) {
-    var data = null;
-    var fs = require('fs');
-    var filePath = this.localFilePath(savefileId) + ".bak";
+    let data = null;
+    const fs = require('fs');
+    const filePath = this.localFilePath(savefileId) + ".bak";
     if (fs.existsSync(filePath)) {
         data = fs.readFileSync(filePath, { encoding: 'utf8' });
     }
@@ -707,65 +707,65 @@ StorageManager.loadFromLocalBackupFile = function (savefileId) {
 };
 
 StorageManager.localFileBackupExists = function (savefileId) {
-    var fs = require('fs');
+    const fs = require('fs');
     return fs.existsSync(this.localFilePath(savefileId) + ".bak");
 };
 
 StorageManager.localFileExists = function (savefileId) {
-    var fs = require('fs');
+    const fs = require('fs');
     return fs.existsSync(this.localFilePath(savefileId));
 };
 
 StorageManager.removeLocalFile = function (savefileId) {
-    var fs = require('fs');
-    var filePath = this.localFilePath(savefileId);
+    const fs = require('fs');
+    const filePath = this.localFilePath(savefileId);
     if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
     }
 };
 
 StorageManager.saveToWebStorage = function (savefileId, json) {
-    var key = this.webStorageKey(savefileId);
-    var data = LZString.compressToBase64(json);
+    const key = this.webStorageKey(savefileId);
+    const data = LZString.compressToBase64(json);
     localStorage.setItem(key, data);
 };
 
 StorageManager.loadFromWebStorage = function (savefileId) {
-    var key = this.webStorageKey(savefileId);
-    var data = localStorage.getItem(key);
+    const key = this.webStorageKey(savefileId);
+    const data = localStorage.getItem(key);
     return LZString.decompressFromBase64(data);
 };
 
 StorageManager.loadFromWebStorageBackup = function (savefileId) {
-    var key = this.webStorageKey(savefileId) + "bak";
-    var data = localStorage.getItem(key);
+    const key = this.webStorageKey(savefileId) + "bak";
+    const data = localStorage.getItem(key);
     return LZString.decompressFromBase64(data);
 };
 
 StorageManager.webStorageBackupExists = function (savefileId) {
-    var key = this.webStorageKey(savefileId) + "bak";
+    const key = this.webStorageKey(savefileId) + "bak";
     return !!localStorage.getItem(key);
 };
 
 StorageManager.webStorageExists = function (savefileId) {
-    var key = this.webStorageKey(savefileId);
+    const key = this.webStorageKey(savefileId);
     return !!localStorage.getItem(key);
 };
 
 StorageManager.removeWebStorage = function (savefileId) {
-    var key = this.webStorageKey(savefileId);
+    const key = this.webStorageKey(savefileId);
     localStorage.removeItem(key);
 };
 
 StorageManager.localFileDirectoryPath = function () {
-    var path = require('path');
+    const path = require('path');
 
-    var base = path.dirname(process.mainModule.filename);
+    const base = path.dirname(process.mainModule.filename);
     return path.join(base, 'save/');
 };
 
 StorageManager.localFilePath = function (savefileId) {
-    var name;
+    let name;
     if (savefileId < 0) {
         name = 'config.rpgsave';
     } else if (savefileId === 0) {
@@ -863,8 +863,8 @@ ImageManager.loadTitle2 = function (filename, hue) {
 
 ImageManager.loadBitmap = function (folder, filename, hue, smooth) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
-        var bitmap = this.loadNormalBitmap(path, hue || 0);
+        const path = folder + encodeURIComponent(filename) + '.png';
+        const bitmap = this.loadNormalBitmap(path, hue || 0);
         bitmap.smooth = smooth;
         return bitmap;
     } else {
@@ -873,7 +873,7 @@ ImageManager.loadBitmap = function (folder, filename, hue, smooth) {
 };
 
 ImageManager.loadEmptyBitmap = function () {
-    var empty = this._imageCache.get('empty');
+    let empty = this._imageCache.get('empty');
     if (!empty) {
         empty = new Bitmap();
         this._imageCache.add('empty', empty);
@@ -884,8 +884,8 @@ ImageManager.loadEmptyBitmap = function () {
 };
 
 ImageManager.loadNormalBitmap = function (path, hue) {
-    var key = this._generateCacheKey(path, hue);
-    var bitmap = this._imageCache.get(key);
+    const key = this._generateCacheKey(path, hue);
+    let bitmap = this._imageCache.get(key);
     if (!bitmap) {
         bitmap = Bitmap.load(decodeURIComponent(path));
         bitmap.addLoadListener(function () {
@@ -908,12 +908,12 @@ ImageManager.isReady = function () {
 };
 
 ImageManager.isObjectCharacter = function (filename) {
-    var sign = filename.match(/^[\!\$]+/);
+    const sign = filename.match(/^[\!\$]+/);
     return sign && sign[0].contains('!');
 };
 
 ImageManager.isBigCharacter = function (filename) {
-    var sign = filename.match(/^[\!\$]+/);
+    const sign = filename.match(/^[\!\$]+/);
     return sign && sign[0].contains('$');
 };
 
@@ -980,8 +980,8 @@ ImageManager.reserveTitle2 = function (filename, hue, reservationId) {
 
 ImageManager.reserveBitmap = function (folder, filename, hue, smooth, reservationId) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
-        var bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId);
+        const path = folder + encodeURIComponent(filename) + '.png';
+        const bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId);
         bitmap.smooth = smooth;
         return bitmap;
     } else {
@@ -990,7 +990,7 @@ ImageManager.reserveBitmap = function (folder, filename, hue, smooth, reservatio
 };
 
 ImageManager.reserveNormalBitmap = function (path, hue, reservationId) {
-    var bitmap = this.loadNormalBitmap(path, hue);
+    const bitmap = this.loadNormalBitmap(path, hue);
     this._imageCache.reserve(this._generateCacheKey(path, hue), bitmap, reservationId);
 
     return bitmap;
@@ -1063,8 +1063,8 @@ ImageManager.requestTitle2 = function (filename, hue) {
 
 ImageManager.requestBitmap = function (folder, filename, hue, smooth) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
-        var bitmap = this.requestNormalBitmap(path, hue || 0);
+        const path = folder + encodeURIComponent(filename) + '.png';
+        const bitmap = this.requestNormalBitmap(path, hue || 0);
         bitmap.smooth = smooth;
         return bitmap;
     } else {
@@ -1073,8 +1073,8 @@ ImageManager.requestBitmap = function (folder, filename, hue, smooth) {
 };
 
 ImageManager.requestNormalBitmap = function (path, hue) {
-    var key = this._generateCacheKey(path, hue);
-    var bitmap = this._imageCache.get(key);
+    const key = this._generateCacheKey(path, hue);
+    let bitmap = this._imageCache.get(key);
     if (!bitmap) {
         bitmap = Bitmap.request(path);
         bitmap.addLoadListener(function () {
@@ -1199,8 +1199,8 @@ AudioManager.playBgm = function (bgm, pos) {
 };
 
 AudioManager.playEncryptedBgm = function (bgm, pos) {
-    var ext = this.audioFileExt();
-    var url = this._path + 'bgm/' + encodeURIComponent(bgm.name) + ext;
+    const ext = this.audioFileExt();
+    let url = this._path + 'bgm/' + encodeURIComponent(bgm.name) + ext;
     url = Decrypter.extToEncryptExt(url);
     Decrypter.decryptHTML5Audio(url, bgm, pos);
 };
@@ -1371,7 +1371,7 @@ AudioManager.playSe = function (se) {
         this._seBuffers = this._seBuffers.filter(function (audio) {
             return audio.isPlaying();
         });
-        var buffer = this.createBuffer('se', se.name);
+        const buffer = this.createBuffer('se', se.name);
         this.updateSeParameters(buffer, se);
         buffer.play(false);
         this._seBuffers.push(buffer);
@@ -1392,8 +1392,8 @@ AudioManager.stopSe = function () {
 AudioManager.playStaticSe = function (se) {
     if (se.name) {
         this.loadStaticSe(se);
-        for (var i = 0; i < this._staticBuffers.length; i++) {
-            var buffer = this._staticBuffers[i];
+        for (let i = 0; i < this._staticBuffers.length; i++) {
+            const buffer = this._staticBuffers[i];
             if (buffer._reservedSeName === se.name) {
                 buffer.stop();
                 this.updateSeParameters(buffer, se);
@@ -1406,7 +1406,7 @@ AudioManager.playStaticSe = function (se) {
 
 AudioManager.loadStaticSe = function (se) {
     if (se.name && !this.isStaticSe(se)) {
-        var buffer = this.createBuffer('se', se.name);
+        const buffer = this.createBuffer('se', se.name);
         buffer._reservedSeName = se.name;
         this._staticBuffers.push(buffer);
         if (this.shouldUseHtml5Audio()) {
@@ -1416,8 +1416,8 @@ AudioManager.loadStaticSe = function (se) {
 };
 
 AudioManager.isStaticSe = function (se) {
-    for (var i = 0; i < this._staticBuffers.length; i++) {
-        var buffer = this._staticBuffers[i];
+    for (let i = 0; i < this._staticBuffers.length; i++) {
+        const buffer = this._staticBuffers[i];
         if (buffer._reservedSeName === se.name) {
             return true;
         }
@@ -1434,7 +1434,7 @@ AudioManager.stopAll = function () {
 
 AudioManager.saveBgm = function () {
     if (this._currentBgm) {
-        var bgm = this._currentBgm;
+        const bgm = this._currentBgm;
         return {
             name: bgm.name,
             volume: bgm.volume,
@@ -1449,7 +1449,7 @@ AudioManager.saveBgm = function () {
 
 AudioManager.saveBgs = function () {
     if (this._currentBgs) {
-        var bgs = this._currentBgs;
+        const bgs = this._currentBgs;
         return {
             name: bgs.name,
             volume: bgs.volume,
@@ -1467,8 +1467,8 @@ AudioManager.makeEmptyAudioObject = function () {
 };
 
 AudioManager.createBuffer = function (folder, name) {
-    var ext = this.audioFileExt();
-    var url = CS_URL.MapURL(this._path + folder + '/' + encodeURIComponent(name) + ext);
+    const ext = this.audioFileExt();
+    const url = CS_URL.MapURL(this._path + folder + '/' + encodeURIComponent(name) + ext);
     if (this.shouldUseHtml5Audio() && folder === 'bgm') {
         if (this._blobUrl) Html5Audio.setup(this._blobUrl);
         else Html5Audio.setup(url);
@@ -1823,7 +1823,7 @@ SceneManager.initialize = function () {
 };
 
 SceneManager.initGraphics = function () {
-    var type = this.preferableRendererType();
+    const type = this.preferableRendererType();
     Graphics.initialize(this._screenWidth, this._screenHeight, type);
     Graphics.boxWidth = this._boxWidth;
     Graphics.boxHeight = this._boxHeight;
@@ -1863,7 +1863,7 @@ SceneManager.checkFileAccess = function () {
 };
 
 SceneManager.initAudio = function () {
-    var noAudio = Utils.isOptionValid('noaudio');
+    const noAudio = Utils.isOptionValid('noaudio');
     if (!WebAudio.initialize(noAudio) && !noAudio) {
         throw new Error('Your browser does not support Web Audio API.');
     }
@@ -1877,17 +1877,16 @@ SceneManager.initInput = function () {
 SceneManager.initNwjs = function () {
     try {
         if (Utils.isNwjs()) {
-            var gui = require('nw.gui');
-            var win = gui.Window.get();
+            const gui = require('nw.gui');
+            const win = gui.Window.get();
             if (process.platform === 'darwin' && !win.menu) {
-                var menubar = new gui.Menu({ type: 'menubar' });
-                var option = { hideEdit: true, hideWindow: true };
+                const menubar = new gui.Menu({ type: 'menubar' });
+                const option = { hideEdit: true, hideWindow: true };
                 menubar.createMacBuiltin('Game', option);
                 win.menu = menubar;
             }
         }
-    } catch (ex)
-    {
+    } catch (e) {
         Utils.isNwjs = function () { return false; };
     }
 };
@@ -1982,8 +1981,8 @@ SceneManager.updateMain = function () {
         this.changeScene();
         this.updateScene();
     } else {
-        var newTime = this._getTimeInMsWithoutMobileSafari();
-        var fTime = (newTime - this._currentTime) / 1000;
+        const newTime = this._getTimeInMsWithoutMobileSafari();
+        let fTime = (newTime - this._currentTime) / 1000;
         if (fTime > 0.25) fTime = 0.25;
         this._currentTime = newTime;
         this._accumulator += fTime;
@@ -2346,9 +2345,9 @@ BattleManager.clearActor = function () {
 };
 
 BattleManager.changeActor = function (newActorIndex, lastActorActionState) {
-    var lastActor = this.actor();
+    const lastActor = this.actor();
     this._actorIndex = newActorIndex;
-    var newActor = this.actor();
+    const newActor = this.actor();
     if (lastActor) {
         lastActor.setActionState(lastActorActionState);
     }
@@ -2439,8 +2438,8 @@ BattleManager.updateTurn = function () {
 };
 
 BattleManager.processTurn = function () {
-    var subject = this._subject;
-    var action = subject.currentAction();
+    const subject = this._subject;
+    const action = subject.currentAction();
     if (action) {
         action.prepare();
         if (action.isValid()) {
@@ -2482,7 +2481,7 @@ BattleManager.updateTurnEnd = function () {
 
 BattleManager.getNextSubject = function () {
     for (; ;) {
-        var battler = this._actionBattlers.shift();
+        const battler = this._actionBattlers.shift();
         if (!battler) {
             return null;
         }
@@ -2497,7 +2496,7 @@ BattleManager.allBattleMembers = function () {
 };
 
 BattleManager.makeActionOrders = function () {
-    var battlers = [];
+    let battlers = [];
     if (!this._surprise) {
         battlers = battlers.concat($gameParty.members());
     }
@@ -2514,9 +2513,9 @@ BattleManager.makeActionOrders = function () {
 };
 
 BattleManager.startAction = function () {
-    var subject = this._subject;
-    var action = subject.currentAction();
-    var targets = action.makeTargets();
+    const subject = this._subject;
+    const action = subject.currentAction();
+    const targets = action.makeTargets();
     this._phase = 'action';
     this._action = action;
     this._targets = targets;
@@ -2527,7 +2526,7 @@ BattleManager.startAction = function () {
 };
 
 BattleManager.updateAction = function () {
-    var target = this._targets.shift();
+    const target = this._targets.shift();
     if (target) {
         this.invokeAction(this._subject, target);
     } else {
@@ -2555,13 +2554,13 @@ BattleManager.invokeAction = function (subject, target) {
 };
 
 BattleManager.invokeNormalAction = function (subject, target) {
-    var realTarget = this.applySubstitute(target);
+    const realTarget = this.applySubstitute(target);
     this._action.apply(realTarget);
     this._logWindow.displayActionResults(subject, realTarget);
 };
 
 BattleManager.invokeCounterAttack = function (subject, target) {
-    var action = new Game_Action(target);
+    const action = new Game_Action(target);
     action.setAttack();
     action.apply(subject);
     this._logWindow.displayCounter(target);
@@ -2577,7 +2576,7 @@ BattleManager.invokeMagicReflection = function (subject, target) {
 
 BattleManager.applySubstitute = function (target) {
     if (this.checkSubstitute(target)) {
-        var substitute = target.friendsUnit().substituteBattler();
+        const substitute = target.friendsUnit().substituteBattler();
         if (substitute && target !== substitute) {
             this._logWindow.displaySubstitute(substitute, target);
             return substitute;
@@ -2596,7 +2595,7 @@ BattleManager.isActionForced = function () {
 
 BattleManager.forceAction = function (battler) {
     this._actionForcedBattler = battler;
-    var index = this._actionBattlers.indexOf(battler);
+    const index = this._actionBattlers.indexOf(battler);
     if (index >= 0) {
         this._actionBattlers.splice(index, 1);
     }
@@ -2655,7 +2654,7 @@ BattleManager.processVictory = function () {
 BattleManager.processEscape = function () {
     $gameParty.performEscape();
     SoundManager.playEscape();
-    var success = this._preemptive ? true : (Math.random() < this._escapeRatio);
+    const success = this._preemptive ? true : (Math.random() < this._escapeRatio);
     if (success) {
         this.displayEscapeSuccessMessage();
         this._escaped = true;
@@ -2746,22 +2745,22 @@ BattleManager.displayRewards = function () {
 };
 
 BattleManager.displayExp = function () {
-    var exp = this._rewards.exp;
+    const exp = this._rewards.exp;
     if (exp > 0) {
-        var text = TextManager.obtainExp.format(exp, TextManager.exp);
+        const text = TextManager.obtainExp.format(exp, TextManager.exp);
         $gameMessage.add('\\.' + text);
     }
 };
 
 BattleManager.displayGold = function () {
-    var gold = this._rewards.gold;
+    const gold = this._rewards.gold;
     if (gold > 0) {
         $gameMessage.add('\\.' + TextManager.obtainGold.format(gold));
     }
 };
 
 BattleManager.displayDropItems = function () {
-    var items = this._rewards.items;
+    const items = this._rewards.items;
     if (items.length > 0) {
         $gameMessage.newPage();
         items.forEach(function (item) {
@@ -2777,7 +2776,7 @@ BattleManager.gainRewards = function () {
 };
 
 BattleManager.gainExp = function () {
-    var exp = this._rewards.exp;
+    const exp = this._rewards.exp;
     $gameParty.allMembers().forEach(function (actor) {
         actor.gainExp(exp);
     });
@@ -2788,7 +2787,7 @@ BattleManager.gainGold = function () {
 };
 
 BattleManager.gainDropItems = function () {
-    var items = this._rewards.items;
+    const items = this._rewards.items;
     items.forEach(function (item) {
         $gameParty.gainItem(item, 1);
     });
@@ -2819,7 +2818,7 @@ PluginManager.setup = function (plugins) {
 };
 
 PluginManager.checkErrors = function () {
-    var url = this._errorUrls.shift();
+    const url = this._errorUrls.shift();
     if (url) {
         throw new Error('Failed to load: ' + url);
     }
@@ -2834,8 +2833,8 @@ PluginManager.setParameters = function (name, parameters) {
 };
 
 PluginManager.loadScript = function (name) {
-    var url = CS_URL.MapURL(this._path + name);
-    var script = document.createElement('script');
+    const url = CS_URL.MapURL(this._path + name);
+    const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = url;
     script.async = false;

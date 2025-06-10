@@ -1,6 +1,7 @@
 //=============================================================================
 // rpg_core.js v1.6.2.2
 //=============================================================================
+/*jshint esversion: 6 */
 
 //-----------------------------------------------------------------------------
 /**
@@ -40,11 +41,10 @@ Number.prototype.mod = function (n) {
  * Replaces %1, %2 and so on in the string to the arguments.
  *
  * @method String.prototype.format
- * @param {Any} ...args The objects to format
+ * @param {Array<any>} args The objects to format
  * @return {String} A formatted string
  */
-String.prototype.format = function () {
-    var args = arguments;
+String.prototype.format = function (...args) {
     return this.replace(/%([0-9]+)/g, function (s, n) {
         return args[Number(n) - 1];
     });
@@ -58,7 +58,7 @@ String.prototype.format = function () {
  * @return {String} A string with leading zeros
  */
 String.prototype.padZero = function (length) {
-    var s = this;
+    let s = this;
     while (s.length < length) {
         s = '0' + s;
     }
@@ -90,7 +90,7 @@ Object.defineProperties(Array.prototype, {
             if (!array || this.length !== array.length) {
                 return false;
             }
-            for (var i = 0; i < this.length; i++) {
+            for (let i = 0; i < this.length; i++) {
                 if (this[i] instanceof Array && array[i] instanceof Array) {
                     if (!this[i].equals(array[i])) {
                         return false;
@@ -191,9 +191,9 @@ Utils.RPGMAKER_VERSION = "1.6.2.2";
  * @return {Boolean} True if the option is in the query string
  */
 Utils.isOptionValid = function (name) {
-    if (location.search.slice(1).split('&').contains(name)) { return 1; }
-    if (typeof nw !== "undefined" && nw.App.argv.length > 0 && nw.App.argv[0].split('&').contains(name)) { return 1; }
-    return 0;
+    if (location.search.slice(1).split('&').contains(name)) { return true; }
+    if (typeof nw !== "undefined" && nw.App.argv.length > 0 && nw.App.argv[0].split('&').contains(name)) { return true; }
+    return false;
 };
 
 /**
@@ -215,7 +215,7 @@ Utils.isNwjs = function () {
  * @return {Boolean} True if the platform is a mobile device
  */
 Utils.isMobileDevice = function () {
-    var r = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    const r = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     if (!!navigator.userAgent.match(r)) {
         Utils.isMobileDevice = function () { return true; };
         return true;
@@ -233,7 +233,7 @@ Utils.isMobileDevice = function () {
  * @return {Boolean} True if the browser is Mobile Safari
  */
 Utils.isMobileSafari = function () {
-    var agent = navigator.userAgent;
+    const agent = navigator.userAgent;
     if (!!(agent.match(/iPhone|iPad|iPod/) && agent.match(/AppleWebKit/) &&
         !agent.match('CriOS'))) {
         Utils.isMobileSafari = function () { return true; };
@@ -251,7 +251,7 @@ Utils.isMobileSafari = function () {
  * @return {Boolean} True if the browser is Android Chrome
  */
 Utils.isAndroidChrome = function () {
-    var agent = navigator.userAgent;
+    const agent = navigator.userAgent;
     return !!(agent.match(/Android/) && agent.match(/Chrome/));
 };
 
@@ -263,9 +263,9 @@ Utils.isAndroidChrome = function () {
  * @return {Boolean} True if the browser can read files in the game folder
  */
 Utils.canReadGameFiles = function () {
-    var scripts = document.getElementsByTagName('script');
-    var lastScript = scripts[scripts.length - 1];
-    var xhr = new XMLHttpRequest();
+    const scripts = document.getElementsByTagName('script');
+    const lastScript = scripts[scripts.length - 1];
+    const xhr = new XMLHttpRequest();
     try {
         xhr.open('GET', CS_URL.MapURL(lastScript.src));
         xhr.overrideMimeType('text/javascript');
@@ -312,8 +312,8 @@ Utils.isSupportPassiveEvent = function () {
     }
     // test support passive event
     // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
-    var passive = false;
-    var options = Object.defineProperty({}, "passive", {
+    let passive = false;
+    const options = Object.defineProperty({}, "passive", {
         get: function () { passive = true; }
     });
     window.addEventListener("test", null, options);
@@ -380,7 +380,7 @@ CacheEntry.prototype.setTimeToLive = function (ticks, seconds) {
 };
 
 CacheEntry.prototype.isStillAlive = function () {
-    var cache = this.cache;
+    const cache = this.cache;
     return ((this.ttlTicks === 0) || (this.touchTicks + this.ttlTicks < cache.updateTicks)) &&
         ((this.ttlSeconds === 0) || (this.touchSeconds + this.ttlSeconds < cache.updateSeconds));
 };
@@ -390,7 +390,7 @@ CacheEntry.prototype.isStillAlive = function () {
  * if resource was already freed by TTL, put it in cache again
  */
 CacheEntry.prototype.touch = function () {
-    var cache = this.cache;
+    const cache = this.cache;
     if (this.cached) {
         this.touchTicks = cache.updateTicks;
         this.touchSeconds = cache.updateSeconds;
@@ -421,19 +421,19 @@ function CacheMap(manager) {
  * checks ttl of all elements and removes dead ones
  */
 CacheMap.prototype.checkTTL = function () {
-    var cache = this._inner;
-    var temp = this._lastRemovedEntries;
+    const cache = this._inner;
+    let temp = this._lastRemovedEntries;
     if (!temp) {
         temp = [];
         this._lastRemovedEntries = temp;
     }
-    for (var key in cache) {
-        var entry = cache[key];
+    for (let key in cache) {
+        const entry = cache[key];
         if (!entry.isStillAlive()) {
             temp.push(entry);
         }
     }
-    for (var i = 0; i < temp.length; i++) {
+    for (let i = 0; i < temp.length; i++) {
         temp[i].free(true);
     }
     temp.length = 0;
@@ -445,7 +445,7 @@ CacheMap.prototype.checkTTL = function () {
  * @returns {*|null}
  */
 CacheMap.prototype.getItem = function (key) {
-    var entry = this._inner[key];
+    const entry = this._inner[key];
     if (entry) {
         return entry.item;
     }
@@ -453,8 +453,8 @@ CacheMap.prototype.getItem = function (key) {
 };
 
 CacheMap.prototype.clear = function () {
-    var keys = Object.keys(this._inner);
-    for (var i = 0; i < keys.length; i++) {
+    const keys = Object.keys(this._inner);
+    for (let i = 0; i < keys.length; i++) {
         this._inner[keys[i]].free();
     }
 };
@@ -494,7 +494,7 @@ ImageCache.prototype.add = function (key, value) {
 
 ImageCache.prototype.get = function (key) {
     if (this._items[key]) {
-        var item = this._items[key];
+        const item = this._items[key];
         item.touch = Date.now();
         return item.bitmap;
     }
@@ -515,7 +515,7 @@ ImageCache.prototype.reserve = function (key, value, reservationId) {
 };
 
 ImageCache.prototype.releaseReservation = function (reservationId) {
-    var items = this._items;
+    const items = this._items;
 
     Object.keys(items)
         .map(function (key) { return items[key]; })
@@ -527,8 +527,8 @@ ImageCache.prototype.releaseReservation = function (reservationId) {
 };
 
 ImageCache.prototype._truncateCache = function () {
-    var items = this._items;
-    var sizeLeft = ImageCache.limit;
+    const items = this._items;
+    let sizeLeft = ImageCache.limit;
 
     Object.keys(items).map(function (key) {
         return items[key];
@@ -536,7 +536,7 @@ ImageCache.prototype._truncateCache = function () {
         return b.touch - a.touch;
     }).forEach(function (item) {
         if (sizeLeft > 0 || this._mustBeHeld(item)) {
-            var bitmap = item.bitmap;
+            const bitmap = item.bitmap;
             sizeLeft -= bitmap.width * bitmap.height;
         } else {
             delete items[item.key];
@@ -556,15 +556,15 @@ ImageCache.prototype._mustBeHeld = function (item) {
 };
 
 ImageCache.prototype.isReady = function () {
-    var items = this._items;
+    const items = this._items;
     return !Object.keys(items).some(function (key) {
         return !items[key].bitmap.isRequestOnly() && !items[key].bitmap.isReady();
     });
 };
 
 ImageCache.prototype.getErrorBitmap = function () {
-    var items = this._items;
-    var bitmap = null;
+    const items = this._items;
+    let bitmap = null;
     if (Object.keys(items).some(function (key) {
         if (items[key].bitmap.isError()) {
             bitmap = items[key].bitmap;
@@ -595,7 +595,7 @@ RequestQueue.prototype.enqueue = function (key, value) {
 RequestQueue.prototype.update = function () {
     if (this._queue.length === 0) return;
 
-    var top = this._queue[0];
+    const top = this._queue[0];
     if (top.value.isRequestReady()) {
         this._queue.shift();
         if (this._queue.length !== 0) {
@@ -607,8 +607,8 @@ RequestQueue.prototype.update = function () {
 };
 
 RequestQueue.prototype.raisePriority = function (key) {
-    for (var n = 0; n < this._queue.length; n++) {
-        var item = this._queue[n];
+    for (let n = 0; n < this._queue.length; n++) {
+        const item = this._queue[n];
         if (item.key === key) {
             this._queue.splice(n, 1);
             this._queue.unshift(item);
@@ -770,8 +770,8 @@ Bitmap.prototype._createCanvas = function (width, height) {
     this.__canvas.height = Math.max(height || 0, 1);
 
     if (this._image) {
-        var w = Math.max(this._image.width || 0, 1);
-        var h = Math.max(this._image.height || 0, 1);
+        const w = Math.max(this._image.width || 0, 1);
+        const h = Math.max(this._image.height || 0, 1);
         this.__canvas.width = w;
         this.__canvas.height = h;
         this._createBaseTexture(this._canvas);
@@ -832,7 +832,7 @@ Object.defineProperties(Bitmap.prototype, {
 });
 
 Bitmap.prototype._renewCanvas = function () {
-    var newImage = this._image;
+    const newImage = this._image;
     if (newImage && this.__canvas && (this.__canvas.width < newImage.width || this.__canvas.height < newImage.height)) {
         this._createCanvas();
     }
@@ -915,7 +915,7 @@ Bitmap.prototype.initialize = function (width, height) {
  * @return Bitmap
  */
 Bitmap.load = function (url) {
-    var bitmap = Object.create(Bitmap.prototype);
+    const bitmap = Object.create(Bitmap.prototype);
     bitmap._defer = true;
     bitmap.initialize();
 
@@ -934,15 +934,15 @@ Bitmap.load = function (url) {
  * @return Bitmap
  */
 Bitmap.snap = function (stage) {
-    var width = Graphics.width;
-    var height = Graphics.height;
-    var bitmap = new Bitmap(width, height);
-    var context = bitmap._context;
-    var renderTexture = PIXI.RenderTexture.create(width, height);
+    const width = Graphics.width;
+    const height = Graphics.height;
+    const bitmap = new Bitmap(width, height);
+    const context = bitmap._context;
+    const renderTexture = PIXI.RenderTexture.create(width, height);
     if (stage) {
         Graphics._renderer.render(stage, renderTexture);
         stage.worldTransform.identity();
-        var canvas = null;
+        let canvas = null;
         if (Graphics.isWebGL()) {
             canvas = Graphics._renderer.extract.canvas(renderTexture);
         } else {
@@ -1206,9 +1206,9 @@ Bitmap.prototype.bltImage = function (source, sx, sy, sw, sh, dx, dy, dw, dh) {
  * @return {String} The pixel color (hex format)
  */
 Bitmap.prototype.getPixel = function (x, y) {
-    var data = this._context.getImageData(x, y, 1, 1).data;
-    var result = '#';
-    for (var i = 0; i < 3; i++) {
+    const data = this._context.getImageData(x, y, 1, 1).data;
+    let result = '#';
+    for (let i = 0; i < 3; i++) {
         result += data[i].toString(16).padZero(2);
     }
     return result;
@@ -1223,7 +1223,7 @@ Bitmap.prototype.getPixel = function (x, y) {
  * @return {String} The alpha value
  */
 Bitmap.prototype.getAlphaPixel = function (x, y) {
-    var data = this._context.getImageData(x, y, 1, 1).data;
+    const data = this._context.getImageData(x, y, 1, 1).data;
     return data[3];
 };
 
@@ -1261,7 +1261,7 @@ Bitmap.prototype.clear = function () {
  * @param {String} color The color of the rectangle in CSS format
  */
 Bitmap.prototype.fillRect = function (x, y, width, height, color) {
-    var context = this._context;
+    const context = this._context;
     context.save();
     context.fillStyle = color;
     context.fillRect(x, y, width, height);
@@ -1293,8 +1293,8 @@ Bitmap.prototype.fillAll = function (color) {
  */
 Bitmap.prototype.gradientFillRect = function (x, y, width, height, color1,
     color2, vertical) {
-    var context = this._context;
-    var grad;
+    const context = this._context;
+    let grad;
     if (vertical) {
         grad = context.createLinearGradient(x, y, x, y + height);
     } else {
@@ -1319,7 +1319,7 @@ Bitmap.prototype.gradientFillRect = function (x, y, width, height, color1,
  * @param {String} color The color of the circle in CSS format
  */
 Bitmap.prototype.drawCircle = function (x, y, radius, color) {
-    var context = this._context;
+    const context = this._context;
     context.save();
     context.fillStyle = color;
     context.beginPath();
@@ -1344,10 +1344,10 @@ Bitmap.prototype.drawText = function (text, x, y, maxWidth, lineHeight, align) {
     // Note: Firefox has a bug with textBaseline: Bug 737852
     //       So we use 'alphabetic' here.
     if (text !== undefined) {
-        var tx = x;
-        var ty = y + lineHeight - (lineHeight - this.fontSize * 0.7) / 2;
-        var context = this._context;
-        var alpha = context.globalAlpha;
+        let tx = x;
+        const ty = y + lineHeight - (lineHeight - this.fontSize * 0.7) / 2;
+        const context = this._context;
+        const alpha = context.globalAlpha;
         maxWidth = maxWidth || 0xffffffff;
         if (align === 'center') {
             tx += maxWidth / 2;
@@ -1376,10 +1376,10 @@ Bitmap.prototype.drawText = function (text, x, y, maxWidth, lineHeight, align) {
  * @return {Number} The width of the text in pixels
  */
 Bitmap.prototype.measureTextWidth = function (text) {
-    var context = this._context;
+    const context = this._context;
     context.save();
     context.font = this._makeFontNameText();
-    var width = context.measureText(text).width;
+    const width = context.measureText(text).width;
     context.restore();
     return width;
 };
@@ -1394,10 +1394,10 @@ Bitmap.prototype.measureTextWidth = function (text) {
  */
 Bitmap.prototype.adjustTone = function (r, g, b) {
     if ((r || g || b) && this.width > 0 && this.height > 0) {
-        var context = this._context;
-        var imageData = context.getImageData(0, 0, this.width, this.height);
-        var pixels = imageData.data;
-        for (var i = 0; i < pixels.length; i += 4) {
+        const context = this._context;
+        const imageData = context.getImageData(0, 0, this.width, this.height);
+        const pixels = imageData.data;
+        for (let i = 0; i < pixels.length; i += 4) {
             pixels[i + 0] += r;
             pixels[i + 1] += g;
             pixels[i + 2] += b;
@@ -1415,12 +1415,12 @@ Bitmap.prototype.adjustTone = function (r, g, b) {
  */
 Bitmap.prototype.rotateHue = function (offset) {
     function rgbToHsl(r, g, b) {
-        var c_min = Math.min(r, g, b);
-        var c_max = Math.max(r, g, b);
-        var h = 0;
-        var s = 0;
-        var l = (c_min + c_max) / 2;
-        var delta = c_max - c_min;
+        const c_min = Math.min(r, g, b);
+        const c_max = Math.max(r, g, b);
+        let h = 0;
+        let s = 0;
+        const l = (c_min + c_max) / 2;
+        const delta = c_max - c_min;
 
         if (delta > 0) {
             if (r === c_max) {
@@ -1436,11 +1436,11 @@ Bitmap.prototype.rotateHue = function (offset) {
     }
 
     function hslToRgb(h, s, l) {
-        var c = (255 - Math.abs(2 * l - 255)) * s;
-        var x = c * (1 - Math.abs((h / 60) % 2 - 1));
-        var m = l - c / 2;
-        var cm = c + m;
-        var xm = x + m;
+        const c = (255 - Math.abs(2 * l - 255)) * s;
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = l - c / 2;
+        const cm = c + m;
+        const xm = x + m;
 
         if (h < 60) {
             return [cm, xm, m];
@@ -1459,15 +1459,15 @@ Bitmap.prototype.rotateHue = function (offset) {
 
     if (offset && this.width > 0 && this.height > 0) {
         offset = ((offset % 360) + 360) % 360;
-        var context = this._context;
-        var imageData = context.getImageData(0, 0, this.width, this.height);
-        var pixels = imageData.data;
-        for (var i = 0; i < pixels.length; i += 4) {
-            var hsl = rgbToHsl(pixels[i + 0], pixels[i + 1], pixels[i + 2]);
-            var h = (hsl[0] + offset) % 360;
-            var s = hsl[1];
-            var l = hsl[2];
-            var rgb = hslToRgb(h, s, l);
+        const context = this._context;
+        const imageData = context.getImageData(0, 0, this.width, this.height);
+        const pixels = imageData.data;
+        for (let i = 0; i < pixels.length; i += 4) {
+            const hsl = rgbToHsl(pixels[i + 0], pixels[i + 1], pixels[i + 2]);
+            const h = (hsl[0] + offset) % 360;
+            const s = hsl[1];
+            const l = hsl[2];
+            const rgb = hslToRgb(h, s, l);
             pixels[i + 0] = rgb[0];
             pixels[i + 1] = rgb[1];
             pixels[i + 2] = rgb[2];
@@ -1483,13 +1483,13 @@ Bitmap.prototype.rotateHue = function (offset) {
  * @method blur
  */
 Bitmap.prototype.blur = function () {
-    for (var i = 0; i < 2; i++) {
-        var w = this.width;
-        var h = this.height;
-        var canvas = this._canvas;
-        var context = this._context;
-        var tempCanvas = document.createElement('canvas');
-        var tempContext = tempCanvas.getContext('2d');
+    for (let i = 0; i < 2; i++) {
+        const w = this.width;
+        const h = this.height;
+        const canvas = this._canvas;
+        const context = this._context;
+        const tempCanvas = document.createElement('canvas');
+        const tempContext = tempCanvas.getContext('2d');
         tempCanvas.width = w + 2;
         tempCanvas.height = h + 2;
         tempContext.drawImage(canvas, 0, 0, w, h, 1, 1, w, h);
@@ -1502,8 +1502,8 @@ Bitmap.prototype.blur = function () {
         context.fillRect(0, 0, w, h);
         context.globalCompositeOperation = 'lighter';
         context.globalAlpha = 1 / 9;
-        for (var y = 0; y < 3; y++) {
-            for (var x = 0; x < 3; x++) {
+        for (let y = 0; y < 3; y++) {
+            for (let x = 0; x < 3; x++) {
                 context.drawImage(tempCanvas, x, y, w, h, 0, 0, w, h);
             }
         }
@@ -1544,7 +1544,7 @@ Bitmap.prototype._makeFontNameText = function () {
  * @private
  */
 Bitmap.prototype._drawTextOutline = function (text, tx, ty, maxWidth) {
-    var context = this._context;
+    const context = this._context;
     context.strokeStyle = this.outlineColor;
     context.lineWidth = this.outlineWidth;
     context.lineJoin = 'round';
@@ -1560,7 +1560,7 @@ Bitmap.prototype._drawTextOutline = function (text, tx, ty, maxWidth) {
  * @private
  */
 Bitmap.prototype._drawTextBody = function (text, tx, ty, maxWidth) {
-    var context = this._context;
+    const context = this._context;
     context.fillStyle = this.textColor;
     context.fillText(text, tx, ty, maxWidth);
 };
@@ -1631,7 +1631,7 @@ Bitmap.prototype.decode = function () {
  */
 Bitmap.prototype._callLoadListeners = function () {
     while (this._loadListeners.length > 0) {
-        var listener = this._loadListeners.shift();
+        const listener = this._loadListeners.shift();
         listener(this);
     }
 };
@@ -1666,7 +1666,7 @@ Bitmap.prototype.checkDirty = function () {
 };
 
 Bitmap.request = function (url) {
-    var bitmap = Object.create(Bitmap.prototype);
+    const bitmap = Object.create(Bitmap.prototype);
     bitmap._defer = true;
     bitmap.initialize();
 
@@ -1887,14 +1887,14 @@ Graphics.tickEnd = function () {
  */
 Graphics.render = function (stage) {
     if (this._skipCount === 0) {
-        var startTime = Date.now();
+        const startTime = Date.now();
         if (stage) {
             this._renderer.render(stage);
             // No need to flush here, let PixiJS5 handle it
         }
         this.callGC();
-        var endTime = Date.now();
-        var elapsed = endTime - startTime;
+        const endTime = Date.now();
+        const elapsed = endTime - startTime;
         this._skipCount = Math.min(Math.floor(elapsed / 15), this._maxSkip);
         this._rendered = true;
     } else {
@@ -1924,7 +1924,7 @@ Graphics.isWebGL = function () {
  */
 Graphics.hasWebGL = function () {
     try {
-        var canvas = document.createElement('canvas');
+        const canvas = document.createElement('canvas');
         return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
     } catch (e) {
         return false;
@@ -2007,7 +2007,7 @@ Graphics.endLoading = function () {
 Graphics.printLoadingError = function (url) {
     if (this._errorPrinter && !this._errorShowed) {
         this._errorPrinter.innerHTML = this._makeErrorHtml('Loading Error', 'Failed to load: ' + url);
-        var button = document.createElement('button');
+        const button = document.createElement('button');
         button.innerHTML = 'Retry';
         button.style.fontSize = '24px';
         button.style.color = '#ffffff';
@@ -2086,9 +2086,9 @@ Graphics.hideFps = function () {
  * @param {String} url The url of the font file
  */
 Graphics.loadFont = function (name, url) {
-    var style = document.createElement('style');
-    var head = document.getElementsByTagName('head');
-    var rule = '@font-face { font-family: "' + name + '"; src: url("' + url + '"); }';
+    const style = document.createElement('style');
+    const head = document.getElementsByTagName('head');
+    const rule = '@font-face { font-family: "' + name + '"; src: url("' + url + '"); }';
     style.type = 'text/css';
     head.item(0).appendChild(style);
     style.sheet.insertRule(rule, 0);
@@ -2114,13 +2114,12 @@ Graphics.isFontLoaded = function (name) {
         if (!this._hiddenCanvas) {
             this._hiddenCanvas = document.createElement('canvas');
         }
-        var context = this._hiddenCanvas.getContext('2d');
-        var text = 'abcdefghijklmnopqrstuvwxyz';
-        var width1, width2;
+        const context = this._hiddenCanvas.getContext('2d');
+        const text = 'abcdefghijklmnopqrstuvwxyz';
         context.font = '40px ' + name + ', sans-serif';
-        width1 = context.measureText(text).width;
+        const width1 = context.measureText(text).width;
         context.font = '40px sans-serif';
-        width2 = context.measureText(text).width;
+        const width2 = context.measureText(text).width;
         return width1 !== width2;
     }
 };
@@ -2202,7 +2201,7 @@ Graphics.setVideoVolume = function (value) {
  */
 Graphics.pageToCanvasX = function (x) {
     if (this._canvas) {
-        var left = this._canvas.offsetLeft;
+        const left = this._canvas.offsetLeft;
         return Math.round((x - left) / this._realScale);
     } else {
         return 0;
@@ -2220,7 +2219,7 @@ Graphics.pageToCanvasX = function (x) {
  */
 Graphics.pageToCanvasY = function (y) {
     if (this._canvas) {
-        var top = this._canvas.offsetTop;
+        const top = this._canvas.offsetTop;
         return Math.round((y - top) / this._realScale);
     } else {
         return 0;
@@ -2385,8 +2384,8 @@ Graphics._updateAllElements = function () {
  */
 Graphics._updateRealScale = function () {
     if (this._stretchEnabled) {
-        var h = window.innerWidth / this._width;
-        var v = window.innerHeight / this._height;
+        let h = window.innerWidth / this._width;
+        let v = window.innerHeight / this._height;
         if (h >= 1 && h - 0.01 <= 1) h = 1;
         if (v >= 1 && v - 0.01 <= 1) v = 1;
         this._realScale = Math.min(h, v);
@@ -2423,25 +2422,24 @@ Graphics._defaultStretchMode = function () {
  * @private
  */
 Graphics._testCanvasBlendModes = function () {
-    var canvas, context, imageData1, imageData2;
-    canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     canvas.width = 1;
     canvas.height = 1;
-    context = canvas.getContext('2d');
+    const context = canvas.getContext('2d');
     context.globalCompositeOperation = 'source-over';
     context.fillStyle = 'white';
     context.fillRect(0, 0, 1, 1);
     context.globalCompositeOperation = 'difference';
     context.fillStyle = 'white';
     context.fillRect(0, 0, 1, 1);
-    imageData1 = context.getImageData(0, 0, 1, 1);
+    const imageData1 = context.getImageData(0, 0, 1, 1);
     context.globalCompositeOperation = 'source-over';
     context.fillStyle = 'black';
     context.fillRect(0, 0, 1, 1);
     context.globalCompositeOperation = 'saturation';
     context.fillStyle = 'white';
     context.fillRect(0, 0, 1, 1);
-    imageData2 = context.getImageData(0, 0, 1, 1);
+    const imageData2 = context.getImageData(0, 0, 1, 1);
     this._canUseDifferenceBlend = imageData1.data[0] === 0;
     this._canUseSaturationBlend = imageData2.data[0] === 0;
 };
@@ -2452,8 +2450,8 @@ Graphics._testCanvasBlendModes = function () {
  * @private
  */
 Graphics._modifyExistingElements = function () {
-    var elements = document.getElementsByTagName('*');
-    for (var i = 0; i < elements.length; i++) {
+    const elements = document.getElementsByTagName('*');
+    for (let i = 0; i < elements.length; i++) {
         if (elements[i].style.zIndex > 0) {
             elements[i].style.zIndex = 0;
         }
@@ -2569,7 +2567,7 @@ Graphics._updateUpperCanvas = function () {
  * @private
  */
 Graphics._clearUpperCanvas = function () {
-    var context = this._upperCanvas.getContext('2d');
+    const context = this._upperCanvas.getContext('2d');
     context.clearRect(0, 0, this._width, this._height);
 };
 
@@ -2581,10 +2579,10 @@ Graphics._clearUpperCanvas = function () {
 Graphics._paintUpperCanvas = function () {
     this._clearUpperCanvas();
     if (this._loadingImage && this._loadingCount >= 20) {
-        var context = this._upperCanvas.getContext('2d');
-        var dx = (this._width - this._loadingImage.width) / 2;
-        var dy = (this._height - this._loadingImage.height) / 2;
-        var alpha = ((this._loadingCount - 20) / 30).clamp(0, 1);
+        const context = this._upperCanvas.getContext('2d');
+        const dx = (this._width - this._loadingImage.width) / 2;
+        const dy = (this._height - this._loadingImage.height) / 2;
+        const alpha = ((this._loadingCount - 20) / 30).clamp(0, 1);
         context.save();
         context.globalAlpha = alpha;
         context.drawImage(this._loadingImage, dx, dy);
@@ -2608,7 +2606,7 @@ Graphics._createRenderer = function () {
     PIXI.settings.ROUND_PIXELS = true;
     PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 
-    var options = {
+    const options = {
         view: this._canvas,
         width: this._width,
         height: this._height,
@@ -2639,7 +2637,7 @@ Graphics._updateRenderer = function () {
  * @private
  */
 Graphics._createFPSMeter = function () {
-    var options = { graph: 1, decimals: 0, theme: 'transparent', toggleOn: null };
+    const options = { graph: 1, decimals: 0, theme: 'transparent', toggleOn: null };
     this._fpsMeter = new FPSMeter(options);
     this._fpsMeter.hide();
 };
@@ -2650,7 +2648,7 @@ Graphics._createFPSMeter = function () {
  * @private
  */
 Graphics._createModeBox = function () {
-    var box = document.createElement('div');
+    const box = document.createElement('div');
     box.id = 'modeTextBack';
     box.style.position = 'absolute';
     box.style.left = '5px';
@@ -2661,7 +2659,7 @@ Graphics._createModeBox = function () {
     box.style.zIndex = 9;
     box.style.opacity = 0;
 
-    var text = document.createElement('div');
+    const text = document.createElement('div');
     text.id = 'modeText';
     text.style.position = 'absolute';
     text.style.left = '0px';
@@ -2696,8 +2694,8 @@ Graphics._createGameFontLoader = function () {
  * @private
  */
 Graphics._createFontLoader = function (name) {
-    var div = document.createElement('div');
-    var text = document.createTextNode('.');
+    const div = document.createElement('div');
+    const text = document.createTextNode('.');
     div.style.fontFamily = name;
     div.style.fontSize = '0px';
     div.style.color = 'transparent';
@@ -2718,8 +2716,8 @@ Graphics._createFontLoader = function (name) {
  * @private
  */
 Graphics._centerElement = function (element) {
-    var width = element.width * this._realScale;
-    var height = element.height * this._realScale;
+    const width = element.width * this._realScale;
+    const height = element.height * this._realScale;
     element.style.position = 'absolute';
     element.style.margin = 'auto';
     element.style.top = 0;
@@ -2736,7 +2734,7 @@ Graphics._centerElement = function (element) {
  * @private
  */
 Graphics._disableTextSelection = function () {
-    var body = document.body;
+    const body = document.body;
     body.style.userSelect = 'none';
     body.style.webkitUserSelect = 'none';
     body.style.msUserSelect = 'none';
@@ -2749,9 +2747,9 @@ Graphics._disableTextSelection = function () {
  * @private
  */
 Graphics._disableContextMenu = function () {
-    var elements = document.body.getElementsByTagName('*');
-    var oncontextmenu = function () { return false; };
-    for (var i = 0; i < elements.length; i++) {
+    const elements = document.body.getElementsByTagName('*');
+    const oncontextmenu = function () { return false; };
+    for (let i = 0; i < elements.length; i++) {
         elements[i].oncontextmenu = oncontextmenu;
     }
 };
@@ -2945,7 +2943,7 @@ Graphics._isFullScreen = function () {
  * @private
  */
 Graphics._requestFullScreen = function () {
-    var element = document.body;
+    const element = document.body;
     if (element.requestFullScreen) {
         element.requestFullScreen();
     } else if (element.mozRequestFullScreen) {
@@ -3103,7 +3101,7 @@ Input.update = function () {
     } else {
         this._latestButton = null;
     }
-    for (var name in this._currentState) {
+    for (let name in this._currentState) {
         if (this._currentState[name] && !this._previousState[name]) {
             this._latestButton = name;
             this._pressedTime = 0;
@@ -3231,10 +3229,10 @@ Object.defineProperty(Input, 'date', {
  */
 Input._wrapNwjsAlert = function () {
     if (Utils.isNwjs()) {
-        var _alert = window.alert;
+        const _alert = window.alert;
         window.alert = function () {
-            var gui = require('nw.gui');
-            var win = gui.Window.get();
+            const gui = require('nw.gui');
+            const win = gui.Window.get();
             _alert.apply(this, arguments);
             win.focus();
             Input.clear();
@@ -3266,7 +3264,7 @@ Input._onKeyDown = function (event) {
     if (event.keyCode === 144) {    // Numlock
         this.clear();
     }
-    var buttonName = this.keyMapper[event.keyCode];
+    const buttonName = this.keyMapper[event.keyCode];
     if (ResourceHandler.exists() && buttonName === 'ok') {
         ResourceHandler.retry();
     } else if (buttonName) {
@@ -3301,7 +3299,7 @@ Input._shouldPreventDefault = function (keyCode) {
  * @private
  */
 Input._onKeyUp = function (event) {
-    var buttonName = this.keyMapper[event.keyCode];
+    const buttonName = this.keyMapper[event.keyCode];
     if (buttonName) {
         this._currentState[buttonName] = false;
     }
@@ -3326,10 +3324,10 @@ Input._onLostFocus = function () {
  */
 Input._pollGamepads = function () {
     if (navigator.getGamepads) {
-        var gamepads = navigator.getGamepads();
+        const gamepads = navigator.getGamepads();
         if (gamepads) {
-            for (var i = 0; i < gamepads.length; i++) {
-                var gamepad = gamepads[i];
+            for (let i = 0; i < gamepads.length; i++) {
+                const gamepad = gamepads[i];
                 if (gamepad && gamepad.connected) {
                     this._updateGamepadState(gamepad);
                 }
@@ -3346,16 +3344,16 @@ Input._pollGamepads = function () {
  * @private
  */
 Input._updateGamepadState = function (gamepad) {
-    var lastState = this._gamepadStates[gamepad.index] || [];
-    var newState = [];
-    var buttons = gamepad.buttons;
-    var axes = gamepad.axes;
-    var threshold = 0.5;
+    const lastState = this._gamepadStates[gamepad.index] || [];
+    const newState = [];
+    const buttons = gamepad.buttons;
+    const axes = gamepad.axes;
+    const threshold = 0.5;
     newState[12] = false;
     newState[13] = false;
     newState[14] = false;
     newState[15] = false;
-    for (var i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i++) {
         newState[i] = buttons[i].pressed;
     }
     if (axes[1] < -threshold) {
@@ -3368,9 +3366,9 @@ Input._updateGamepadState = function (gamepad) {
     } else if (axes[0] > threshold) {
         newState[15] = true;    // right
     }
-    for (var j = 0; j < newState.length; j++) {
+    for (let j = 0; j < newState.length; j++) {
         if (newState[j] !== lastState[j]) {
-            var buttonName = this.gamepadMapper[j];
+            const buttonName = this.gamepadMapper[j];
             if (buttonName) {
                 this._currentState[buttonName] = newState[j];
             }
@@ -3385,8 +3383,8 @@ Input._updateGamepadState = function (gamepad) {
  * @private
  */
 Input._updateDirection = function () {
-    var x = this._signX();
-    var y = this._signY();
+    let x = this._signX();
+    let y = this._signY();
 
     this._dir8 = this._makeNumpadDirection(x, y);
 
@@ -3411,7 +3409,7 @@ Input._updateDirection = function () {
  * @private
  */
 Input._signX = function () {
-    var x = 0;
+    let x = 0;
 
     if (this.isPressed('left')) {
         x--;
@@ -3428,7 +3426,7 @@ Input._signX = function () {
  * @private
  */
 Input._signY = function () {
-    var y = 0;
+    let y = 0;
 
     if (this.isPressed('up')) {
         y--;
@@ -3713,7 +3711,7 @@ Object.defineProperty(TouchInput, 'date', {
  * @private
  */
 TouchInput._setupEventHandlers = function () {
-    var isSupportPassive = Utils.isSupportPassiveEvent();
+    const isSupportPassive = Utils.isSupportPassiveEvent();
     document.addEventListener('mousedown', this._onMouseDown.bind(this));
     document.addEventListener('mousemove', this._onMouseMove.bind(this));
     document.addEventListener('mouseup', this._onMouseUp.bind(this));
@@ -3748,8 +3746,8 @@ TouchInput._onMouseDown = function (event) {
  * @private
  */
 TouchInput._onLeftButtonDown = function (event) {
-    var x = Graphics.pageToCanvasX(event.pageX);
-    var y = Graphics.pageToCanvasY(event.pageY);
+    const x = Graphics.pageToCanvasX(event.pageX);
+    const y = Graphics.pageToCanvasY(event.pageY);
     if (Graphics.isInsideCanvas(x, y)) {
         this._mousePressed = true;
         this._pressedTime = 0;
@@ -3773,8 +3771,8 @@ TouchInput._onMiddleButtonDown = function (event) {
  * @private
  */
 TouchInput._onRightButtonDown = function (event) {
-    var x = Graphics.pageToCanvasX(event.pageX);
-    var y = Graphics.pageToCanvasY(event.pageY);
+    const x = Graphics.pageToCanvasX(event.pageX);
+    const y = Graphics.pageToCanvasY(event.pageY);
     if (Graphics.isInsideCanvas(x, y)) {
         this._onCancel(x, y);
     }
@@ -3788,8 +3786,8 @@ TouchInput._onRightButtonDown = function (event) {
  */
 TouchInput._onMouseMove = function (event) {
     if (this._mousePressed) {
-        var x = Graphics.pageToCanvasX(event.pageX);
-        var y = Graphics.pageToCanvasY(event.pageY);
+        const x = Graphics.pageToCanvasX(event.pageX);
+        const y = Graphics.pageToCanvasY(event.pageY);
         this._onMove(x, y);
     }
 };
@@ -3802,8 +3800,8 @@ TouchInput._onMouseMove = function (event) {
  */
 TouchInput._onMouseUp = function (event) {
     if (event.button === 0) {
-        var x = Graphics.pageToCanvasX(event.pageX);
-        var y = Graphics.pageToCanvasY(event.pageY);
+        const x = Graphics.pageToCanvasX(event.pageX);
+        const y = Graphics.pageToCanvasY(event.pageY);
         this._mousePressed = false;
         this._onRelease(x, y);
     }
@@ -3828,10 +3826,10 @@ TouchInput._onWheel = function (event) {
  * @private
  */
 TouchInput._onTouchStart = function (event) {
-    for (var i = 0; i < event.changedTouches.length; i++) {
-        var touch = event.changedTouches[i];
-        var x = Graphics.pageToCanvasX(touch.pageX);
-        var y = Graphics.pageToCanvasY(touch.pageY);
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        const x = Graphics.pageToCanvasX(touch.pageX);
+        const y = Graphics.pageToCanvasY(touch.pageY);
         if (Graphics.isInsideCanvas(x, y)) {
             this._screenPressed = true;
             this._pressedTime = 0;
@@ -3855,10 +3853,10 @@ TouchInput._onTouchStart = function (event) {
  * @private
  */
 TouchInput._onTouchMove = function (event) {
-    for (var i = 0; i < event.changedTouches.length; i++) {
-        var touch = event.changedTouches[i];
-        var x = Graphics.pageToCanvasX(touch.pageX);
-        var y = Graphics.pageToCanvasY(touch.pageY);
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        const x = Graphics.pageToCanvasX(touch.pageX);
+        const y = Graphics.pageToCanvasY(touch.pageY);
         this._onMove(x, y);
     }
 };
@@ -3870,10 +3868,10 @@ TouchInput._onTouchMove = function (event) {
  * @private
  */
 TouchInput._onTouchEnd = function (event) {
-    for (var i = 0; i < event.changedTouches.length; i++) {
-        var touch = event.changedTouches[i];
-        var x = Graphics.pageToCanvasX(touch.pageX);
-        var y = Graphics.pageToCanvasY(touch.pageY);
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        const x = Graphics.pageToCanvasX(touch.pageX);
+        const y = Graphics.pageToCanvasY(touch.pageY);
         this._screenPressed = false;
         this._onRelease(x, y);
     }
@@ -3897,8 +3895,8 @@ TouchInput._onTouchCancel = function (event) {
  */
 TouchInput._onPointerDown = function (event) {
     if (event.pointerType === 'touch' && !event.isPrimary) {
-        var x = Graphics.pageToCanvasX(event.pageX);
-        var y = Graphics.pageToCanvasY(event.pageY);
+        const x = Graphics.pageToCanvasX(event.pageX);
+        const y = Graphics.pageToCanvasY(event.pageY);
         if (Graphics.isInsideCanvas(x, y)) {
             // For Microsoft Edge
             this._onCancel(x, y);
@@ -3978,7 +3976,7 @@ Sprite.prototype.constructor = Sprite;
 Sprite.voidFilter = new PIXI.filters.AlphaFilter();
 
 Sprite.prototype.initialize = function (bitmap) {
-    var texture = new PIXI.Texture(new PIXI.BaseTexture());
+    const texture = new PIXI.Texture(new PIXI.BaseTexture());
 
     PIXI.picture.Sprite.call(this, texture);
 
@@ -4028,7 +4026,7 @@ Object.defineProperty(Sprite.prototype, 'bitmap', {
                 this._refreshFrame = false;
                 try {
                     this.texture.frame = Rectangle.emptyRectangle;
-                } catch (ex) { }
+                } catch (e) { }
             }
         }
     },
@@ -4121,7 +4119,7 @@ Sprite.prototype.move = function (x, y) {
  */
 Sprite.prototype.setFrame = function (x, y, width, height) {
     this._refreshFrame = false;
-    var frame = this._frame;
+    const frame = this._frame;
     if (x !== frame.x || y !== frame.y ||
         width !== frame.width || height !== frame.height) {
         frame.x = x;
@@ -4205,16 +4203,16 @@ Sprite.prototype._onBitmapLoad = function (bitmapLoaded) {
  * @private
  */
 Sprite.prototype._refresh = function () {
-    var frameX = Math.floor(this._frame.x);
-    var frameY = Math.floor(this._frame.y);
-    var frameW = Math.floor(this._frame.width);
-    var frameH = Math.floor(this._frame.height);
-    var bitmapW = this._bitmap ? this._bitmap.width : 0;
-    var bitmapH = this._bitmap ? this._bitmap.height : 0;
-    var realX = frameX.clamp(0, bitmapW);
-    var realY = frameY.clamp(0, bitmapH);
-    var realW = (frameW - realX + frameX).clamp(0, bitmapW - realX);
-    var realH = (frameH - realY + frameY).clamp(0, bitmapH - realY);
+    const frameX = Math.floor(this._frame.x);
+    const frameY = Math.floor(this._frame.y);
+    const frameW = Math.floor(this._frame.width);
+    const frameH = Math.floor(this._frame.height);
+    const bitmapW = this._bitmap ? this._bitmap.width : 0;
+    const bitmapH = this._bitmap ? this._bitmap.height : 0;
+    const realX = frameX.clamp(0, bitmapW);
+    const realY = frameY.clamp(0, bitmapH);
+    const realW = (frameW - realX + frameX).clamp(0, bitmapW - realX);
+    const realH = (frameH - realY + frameY).clamp(0, bitmapH - realY);
 
     this._realFrame.x = realX;
     this._realFrame.y = realY;
@@ -4232,7 +4230,7 @@ Sprite.prototype._refresh = function () {
             this.texture.frame = new Rectangle(0, 0, realW, realH);
         } else {
             if (this._bitmap) {
-                let oldTexture = this.texture.baseTexture;
+                const oldTexture = this.texture.baseTexture;
                 this.texture.baseTexture = this._bitmap.baseTexture;
                 if (oldTexture && oldTexture.dispose && oldTexture !== this.texture.baseTexture) {
                     oldTexture.dispose();
@@ -4270,7 +4268,7 @@ Sprite.prototype._isInBitmapRect = function (x, y, w, h) {
  * @private
  */
 Sprite.prototype._needsTint = function () {
-    var tone = this._colorTone;
+    const tone = this._colorTone;
     return tone[0] || tone[1] || tone[2] || tone[3] || this._blendColor[3] > 0;
 };
 
@@ -4307,23 +4305,23 @@ Sprite.prototype._createTinter = function (w, h) {
  * @private
  */
 Sprite.prototype._executeTint = function (x, y, w, h) {
-    var context = this._context;
-    var tone = this._colorTone;
-    var color = this._blendColor;
+    const context = this._context;
+    const tone = this._colorTone;
+    const color = this._blendColor;
 
     context.globalCompositeOperation = 'copy';
     context.drawImage(this._bitmap.canvas, x, y, w, h, 0, 0, w, h);
 
     if (Graphics.canUseSaturationBlend()) {
-        var gray = Math.max(0, tone[3]);
+        const gray = Math.max(0, tone[3]);
         context.globalCompositeOperation = 'saturation';
         context.fillStyle = 'rgba(255,255,255,' + gray / 255 + ')';
         context.fillRect(0, 0, w, h);
     }
 
-    var r1 = Math.max(0, tone[0]);
-    var g1 = Math.max(0, tone[1]);
-    var b1 = Math.max(0, tone[2]);
+    const r1 = Math.max(0, tone[0]);
+    const g1 = Math.max(0, tone[1]);
+    const b1 = Math.max(0, tone[2]);
     context.globalCompositeOperation = 'lighter';
     context.fillStyle = Utils.rgbToCssColor(r1, g1, b1);
     context.fillRect(0, 0, w, h);
@@ -4333,9 +4331,9 @@ Sprite.prototype._executeTint = function (x, y, w, h) {
         context.fillStyle = 'white';
         context.fillRect(0, 0, w, h);
 
-        var r2 = Math.max(0, -tone[0]);
-        var g2 = Math.max(0, -tone[1]);
-        var b2 = Math.max(0, -tone[2]);
+        const r2 = Math.max(0, -tone[0]);
+        const g2 = Math.max(0, -tone[1]);
+        const b2 = Math.max(0, -tone[2]);
         context.globalCompositeOperation = 'lighter';
         context.fillStyle = Utils.rgbToCssColor(r2, g2, b2);
         context.fillRect(0, 0, w, h);
@@ -4345,10 +4343,10 @@ Sprite.prototype._executeTint = function (x, y, w, h) {
         context.fillRect(0, 0, w, h);
     }
 
-    var r3 = Math.max(0, color[0]);
-    var g3 = Math.max(0, color[1]);
-    var b3 = Math.max(0, color[2]);
-    var a3 = Math.max(0, color[3]);
+    const r3 = Math.max(0, color[0]);
+    const g3 = Math.max(0, color[1]);
+    const b3 = Math.max(0, color[2]);
+    const a3 = Math.max(0, color[3]);
     context.globalCompositeOperation = 'source-atop';
     context.fillStyle = Utils.rgbToCssColor(r3, g3, b3);
     context.globalAlpha = a3 / 255;
@@ -4678,7 +4676,7 @@ Tilemap.prototype.setData = function (width, height, data) {
  * @return {Boolean} True if the tilemap is ready
  */
 Tilemap.prototype.isReady = function () {
-    for (var i = 0; i < this.bitmaps.length; i++) {
+    for (let i = 0; i < this.bitmaps.length; i++) {
         if (this.bitmaps[i] && !this.bitmaps[i].isReady()) {
             return false;
         }
@@ -4699,7 +4697,7 @@ Tilemap.prototype.update = function () {
             child.update();
         }
     });
-    for (var i = 0; i < this.bitmaps.length; i++) {
+    for (let i = 0; i < this.bitmaps.length; i++) {
         if (this.bitmaps[i]) {
             this.bitmaps[i].touch();
         }
@@ -4729,17 +4727,14 @@ Tilemap.prototype.refreshTileset = function () {
  * @private
  */
 Tilemap.prototype.updateTransform = function () {
-    var ox;
-    var oy;
+    let ox = this.origin.x;
+    let oy = this.origin.y;
     if (this.roundPixels) {
         ox = Math.floor(this.origin.x);
         oy = Math.floor(this.origin.y);
-    } else {
-        ox = this.origin.x;
-        oy = this.origin.y;
     }
-    var startX = Math.floor((ox - this._margin) / this._tileWidth);
-    var startY = Math.floor((oy - this._margin) / this._tileHeight);
+    const startX = Math.floor((ox - this._margin) / this._tileWidth);
+    const startY = Math.floor((oy - this._margin) / this._tileHeight);
     this._updateLayerPositions(startX, startY);
     if (this._needsRepaint || this._lastAnimationFrame !== this.animationFrame ||
         this._lastStartX !== startX || this._lastStartY !== startY) {
@@ -4759,13 +4754,13 @@ Tilemap.prototype.updateTransform = function () {
  * @private
  */
 Tilemap.prototype._createLayers = function () {
-    var width = this._width;
-    var height = this._height;
-    var margin = this._margin;
-    var tileCols = Math.ceil(width / this._tileWidth) + 1;
-    var tileRows = Math.ceil(height / this._tileHeight) + 1;
-    var layerWidth = tileCols * this._tileWidth;
-    var layerHeight = tileRows * this._tileHeight;
+    const width = this._width;
+    const height = this._height;
+    const margin = this._margin;
+    const tileCols = Math.ceil(width / this._tileWidth) + 1;
+    const tileRows = Math.ceil(height / this._tileHeight) + 1;
+    const layerWidth = tileCols * this._tileWidth;
+    const layerHeight = tileRows * this._tileHeight;
     this._lowerBitmap = new Bitmap(layerWidth, layerHeight);
     this._upperBitmap = new Bitmap(layerWidth, layerHeight);
     this._layerWidth = layerWidth;
@@ -4793,7 +4788,7 @@ Tilemap.prototype._createLayers = function () {
     this._upperLayer.move(-margin, -margin, width, height);
     this._upperLayer.z = 4;
 
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
         this._lowerLayer.addChild(new Sprite(this._lowerBitmap));
         this._upperLayer.addChild(new Sprite(this._upperBitmap));
     }
@@ -4809,18 +4804,18 @@ Tilemap.prototype._createLayers = function () {
  * @private
  */
 Tilemap.prototype._updateLayerPositions = function (startX, startY) {
-    var m = this._margin;
-    var ox = Math.floor(this.origin.x);
-    var oy = Math.floor(this.origin.y);
-    var x2 = (ox - m).mod(this._layerWidth);
-    var y2 = (oy - m).mod(this._layerHeight);
-    var w1 = this._layerWidth - x2;
-    var h1 = this._layerHeight - y2;
-    var w2 = this._width - w1;
-    var h2 = this._height - h1;
+    const m = this._margin;
+    const ox = Math.floor(this.origin.x);
+    const oy = Math.floor(this.origin.y);
+    const x2 = (ox - m).mod(this._layerWidth);
+    const y2 = (oy - m).mod(this._layerHeight);
+    const w1 = this._layerWidth - x2;
+    const h1 = this._layerHeight - y2;
+    const w2 = this._width - w1;
+    const h2 = this._height - h1;
 
-    for (var i = 0; i < 2; i++) {
-        var children;
+    for (let i = 0; i < 2; i++) {
+        let children;
         if (i === 0) {
             children = this._lowerLayer.children;
         } else {
@@ -4844,10 +4839,10 @@ Tilemap.prototype._updateLayerPositions = function (startX, startY) {
  * @private
  */
 Tilemap.prototype._paintAllTiles = function (startX, startY) {
-    var tileCols = Math.ceil(this._width / this._tileWidth) + 1;
-    var tileRows = Math.ceil(this._height / this._tileHeight) + 1;
-    for (var y = 0; y < tileRows; y++) {
-        for (var x = 0; x < tileCols; x++) {
+    const tileCols = Math.ceil(this._width / this._tileWidth) + 1;
+    const tileRows = Math.ceil(this._height / this._tileHeight) + 1;
+    for (let y = 0; y < tileRows; y++) {
+        for (let x = 0; x < tileCols; x++) {
             this._paintTiles(startX, startY, x, y);
         }
     }
@@ -4932,7 +4927,7 @@ Tilemap.prototype._paintTiles = function (startX, startY, x, y) {
         this._writeLastTiles(0, lx, ly, lowerTiles);
     }
 
-    var lastUpperTiles = this._readLastTiles(1, lx, ly);
+    const lastUpperTiles = this._readLastTiles(1, lx, ly);
     if (!upperTiles.equals(lastUpperTiles)) {
         this._upperBitmap.clearRect(dx, dy, this._tileWidth, this._tileHeight);
         for (let i = 0; i < upperTiles.length; i++) {
@@ -4950,11 +4945,11 @@ Tilemap.prototype._paintTiles = function (startX, startY, x, y) {
  * @private
  */
 Tilemap.prototype._readLastTiles = function (i, x, y) {
-    var array1 = this._lastTiles[i];
+    const array1 = this._lastTiles[i];
     if (array1) {
-        var array2 = array1[y];
+        const array2 = array1[y];
         if (array2) {
-            var tiles = array2[x];
+            const tiles = array2[x];
             if (tiles) {
                 return tiles;
             }
@@ -4972,11 +4967,11 @@ Tilemap.prototype._readLastTiles = function (i, x, y) {
  * @private
  */
 Tilemap.prototype._writeLastTiles = function (i, x, y, tiles) {
-    var array1 = this._lastTiles[i];
+    let array1 = this._lastTiles[i];
     if (!array1) {
         array1 = this._lastTiles[i] = [];
     }
-    var array2 = array1[y];
+    let array2 = array1[y];
     if (!array2) {
         array2 = array1[y] = [];
     }
@@ -5010,7 +5005,7 @@ Tilemap.prototype._drawTile = function (layer, tileId, dx, dy) {
  * @private
  */
 Tilemap.prototype._drawNormalTile = function (bitmap, tileId, dx, dy) {
-    var setNumber = 0;
+    let setNumber = 0;
 
     if (Tilemap.isTileA5(tileId)) {
         setNumber = 4;
@@ -5018,12 +5013,12 @@ Tilemap.prototype._drawNormalTile = function (bitmap, tileId, dx, dy) {
         setNumber = 5 + Math.floor(tileId / 256);
     }
 
-    var w = this._tileWidth;
-    var h = this._tileHeight;
-    var sx = (Math.floor(tileId / 128) % 2 * 8 + tileId % 8) * w;
-    var sy = (Math.floor(tileId % 256 / 8) % 16) * h;
+    const w = this._tileWidth;
+    const h = this._tileHeight;
+    const sx = (Math.floor(tileId / 128) % 2 * 8 + tileId % 8) * w;
+    const sy = (Math.floor(tileId % 256 / 8) % 16) * h;
 
-    var source = this.bitmaps[setNumber];
+    const source = this.bitmaps[setNumber];
     if (source) {
         bitmap.bltImage(source, sx, sy, w, h, dx, dy, w, h);
     }
@@ -5038,18 +5033,18 @@ Tilemap.prototype._drawNormalTile = function (bitmap, tileId, dx, dy) {
  * @private
  */
 Tilemap.prototype._drawAutotile = function (bitmap, tileId, dx, dy) {
-    var autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
-    var kind = Tilemap.getAutotileKind(tileId);
-    var shape = Tilemap.getAutotileShape(tileId);
-    var tx = kind % 8;
-    var ty = Math.floor(kind / 8);
-    var bx = 0;
-    var by = 0;
-    var setNumber = 0;
-    var isTable = false;
+    let autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
+    const kind = Tilemap.getAutotileKind(tileId);
+    const shape = Tilemap.getAutotileShape(tileId);
+    const tx = kind % 8;
+    const ty = Math.floor(kind / 8);
+    let bx = 0;
+    let by = 0;
+    let setNumber = 0;
+    let isTable = false;
 
     if (Tilemap.isTileA1(tileId)) {
-        var waterSurfaceIndex = [0, 1, 2, 1][this.animationFrame % 4];
+        const waterSurfaceIndex = [0, 1, 2, 1][this.animationFrame % 4];
         setNumber = 0;
         if (kind === 0) {
             bx = waterSurfaceIndex * 2;
@@ -5094,27 +5089,27 @@ Tilemap.prototype._drawAutotile = function (bitmap, tileId, dx, dy) {
         }
     }
 
-    var table = autotileTable[shape];
-    var source = this.bitmaps[setNumber];
+    const table = autotileTable[shape];
+    const source = this.bitmaps[setNumber];
 
     if (table && source) {
-        var w1 = this._tileWidth / 2;
-        var h1 = this._tileHeight / 2;
-        for (var i = 0; i < 4; i++) {
-            var qsx = table[i][0];
-            var qsy = table[i][1];
-            var sx1 = (bx * 2 + qsx) * w1;
-            var sy1 = (by * 2 + qsy) * h1;
-            var dx1 = dx + (i % 2) * w1;
-            var dy1 = dy + Math.floor(i / 2) * h1;
+        const w1 = this._tileWidth / 2;
+        const h1 = this._tileHeight / 2;
+        for (let i = 0; i < 4; i++) {
+            const qsx = table[i][0];
+            const qsy = table[i][1];
+            const sx1 = (bx * 2 + qsx) * w1;
+            const sy1 = (by * 2 + qsy) * h1;
+            const dx1 = dx + (i % 2) * w1;
+            let dy1 = dy + Math.floor(i / 2) * h1;
             if (isTable && (qsy === 1 || qsy === 5)) {
-                var qsx2 = qsx;
-                var qsy2 = 3;
+                let qsx2 = qsx;
+                const qsy2 = 3;
                 if (qsy === 1) {
                     qsx2 = [0, 3, 2, 1][qsx];
                 }
-                var sx2 = (bx * 2 + qsx2) * w1;
-                var sy2 = (by * 2 + qsy2) * h1;
+                const sx2 = (bx * 2 + qsx2) * w1;
+                const sy2 = (by * 2 + qsy2) * h1;
                 bitmap.bltImage(source, sx2, sy2, w1, h1, dx1, dy1, w1, h1);
                 dy1 += h1 / 2;
                 bitmap.bltImage(source, sx1, sy1, w1, h1 / 2, dx1, dy1, w1, h1 / 2);
@@ -5135,27 +5130,27 @@ Tilemap.prototype._drawAutotile = function (bitmap, tileId, dx, dy) {
  */
 Tilemap.prototype._drawTableEdge = function (bitmap, tileId, dx, dy) {
     if (Tilemap.isTileA2(tileId)) {
-        var autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
-        var kind = Tilemap.getAutotileKind(tileId);
-        var shape = Tilemap.getAutotileShape(tileId);
-        var tx = kind % 8;
-        var ty = Math.floor(kind / 8);
-        var setNumber = 1;
-        var bx = tx * 2;
-        var by = (ty - 2) * 3;
-        var table = autotileTable[shape];
+        const autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
+        const kind = Tilemap.getAutotileKind(tileId);
+        const shape = Tilemap.getAutotileShape(tileId);
+        const tx = kind % 8;
+        const ty = Math.floor(kind / 8);
+        const setNumber = 1;
+        const bx = tx * 2;
+        const by = (ty - 2) * 3;
+        const table = autotileTable[shape];
 
         if (table) {
-            var source = this.bitmaps[setNumber];
-            var w1 = this._tileWidth / 2;
-            var h1 = this._tileHeight / 2;
-            for (var i = 0; i < 2; i++) {
-                var qsx = table[2 + i][0];
-                var qsy = table[2 + i][1];
-                var sx1 = (bx * 2 + qsx) * w1;
-                var sy1 = (by * 2 + qsy) * h1 + h1 / 2;
-                var dx1 = dx + (i % 2) * w1;
-                var dy1 = dy + Math.floor(i / 2) * h1;
+            const source = this.bitmaps[setNumber];
+            const w1 = this._tileWidth / 2;
+            const h1 = this._tileHeight / 2;
+            for (let i = 0; i < 2; i++) {
+                const qsx = table[2 + i][0];
+                const qsy = table[2 + i][1];
+                const sx1 = (bx * 2 + qsx) * w1;
+                const sy1 = (by * 2 + qsy) * h1 + h1 / 2;
+                const dx1 = dx + (i % 2) * w1;
+                const dy1 = dy + Math.floor(i / 2) * h1;
                 bitmap.bltImage(source, sx1, sy1, w1, h1 / 2, dx1, dy1, w1, h1 / 2);
             }
         }
@@ -5172,13 +5167,13 @@ Tilemap.prototype._drawTableEdge = function (bitmap, tileId, dx, dy) {
  */
 Tilemap.prototype._drawShadow = function (bitmap, shadowBits, dx, dy) {
     if (shadowBits & 0x0f) {
-        var w1 = this._tileWidth / 2;
-        var h1 = this._tileHeight / 2;
-        var color = 'rgba(0,0,0,0.5)';
-        for (var i = 0; i < 4; i++) {
+        const w1 = this._tileWidth / 2;
+        const h1 = this._tileHeight / 2;
+        const color = 'rgba(0,0,0,0.5)';
+        for (let i = 0; i < 4; i++) {
             if (shadowBits & (1 << i)) {
-                var dx1 = dx + (i % 2) * w1;
-                var dy1 = dy + Math.floor(i / 2) * h1;
+                const dx1 = dx + (i % 2) * w1;
+                const dy1 = dy + Math.floor(i / 2) * h1;
                 bitmap.fillRect(dx1, dy1, w1, h1, color);
             }
         }
@@ -5195,8 +5190,8 @@ Tilemap.prototype._drawShadow = function (bitmap, shadowBits, dx, dy) {
  */
 Tilemap.prototype._readMapData = function (x, y, z) {
     if (this._mapData) {
-        var width = this._mapWidth;
-        var height = this._mapHeight;
+        const width = this._mapWidth;
+        const height = this._mapHeight;
         if (this.horizontalWrap) {
             x = x.mod(width);
         }
@@ -5510,7 +5505,7 @@ PIXI.tilemap.TileRenderer.DO_CLEAR = true;
  * @private
  */
 ShaderTilemap.prototype._hackRenderer = function (renderer) {
-    var af = this.animationFrame % 4;
+    let af = this.animationFrame % 4;
     if (af === 3) af = 1;
     renderer.plugins.tilemap.tileAnim[0] = af * this._tileWidth;
     renderer.plugins.tilemap.tileAnim[1] = (this.animationFrame % 3) * this._tileHeight;
@@ -5559,7 +5554,7 @@ ShaderTilemap.prototype.refresh = function () {
  * @method updateBitmaps
  */
 ShaderTilemap.prototype.refreshTileset = function () {
-    var bitmaps = this.bitmaps.map(function (x) { return x._baseTexture ? new PIXI.Texture(x._baseTexture) : x; });
+    const bitmaps = this.bitmaps.map(function (x) { return x._baseTexture ? new PIXI.Texture(x._baseTexture) : x; });
     this.lowerLayer.setBitmaps(bitmaps);
     this.upperLayer.setBitmaps(bitmaps);
 };
@@ -5763,16 +5758,17 @@ ShaderTilemap.prototype._drawNormalTile = function (layer, tileId, dx, dy) {
  * @private
  */
 ShaderTilemap.prototype._drawAutotile = function (layer, tileId, dx, dy) {
-    var autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
-    var kind = Tilemap.getAutotileKind(tileId);
-    var shape = Tilemap.getAutotileShape(tileId);
-    var tx = kind % 8;
-    var ty = Math.floor(kind / 8);
-    var bx = 0;
-    var by = 0;
-    var setNumber = 0;
-    var isTable = false;
-    var animX = 0, animY = 0;
+    let autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
+    const kind = Tilemap.getAutotileKind(tileId);
+    const shape = Tilemap.getAutotileShape(tileId);
+    const tx = kind % 8;
+    const ty = Math.floor(kind / 8);
+    let bx = 0;
+    let by = 0;
+    let setNumber = 0;
+    let isTable = false;
+    let animX = 0;
+    let animY = 0;
 
     if (Tilemap.isTileA1(tileId)) {
         setNumber = 0;
@@ -5819,25 +5815,25 @@ ShaderTilemap.prototype._drawAutotile = function (layer, tileId, dx, dy) {
         }
     }
 
-    var table = autotileTable[shape];
-    var w1 = this._tileWidth / 2;
-    var h1 = this._tileHeight / 2;
-    for (var i = 0; i < 4; i++) {
-        var qsx = table[i][0];
-        var qsy = table[i][1];
-        var sx1 = (bx * 2 + qsx) * w1;
-        var sy1 = (by * 2 + qsy) * h1;
-        var dx1 = dx + (i % 2) * w1;
-        var dy1 = dy + Math.floor(i / 2) * h1;
+    const table = autotileTable[shape];
+    const w1 = this._tileWidth / 2;
+    const h1 = this._tileHeight / 2;
+    for (let i = 0; i < 4; i++) {
+        const qsx = table[i][0];
+        const qsy = table[i][1];
+        const sx1 = (bx * 2 + qsx) * w1;
+        const sy1 = (by * 2 + qsy) * h1;
+        const dx1 = dx + (i % 2) * w1;
+        const dy1 = dy + Math.floor(i / 2) * h1;
         if (isTable && (qsy === 1 || qsy === 5)) {
-            var qsx2 = qsx;
-            var qsy2 = 3;
+            let qsx2 = qsx;
+            const qsy2 = 3;
             if (qsy === 1) {
                 //qsx2 = [0, 3, 2, 1][qsx];
                 qsx2 = (4 - qsx) % 4;
             }
-            var sx2 = (bx * 2 + qsx2) * w1;
-            var sy2 = (by * 2 + qsy2) * h1;
+            const sx2 = (bx * 2 + qsx2) * w1;
+            const sy2 = (by * 2 + qsy2) * h1;
             layer.addRect(setNumber, sx2, sy2, dx1, dy1, w1, h1, animX, animY);
             layer.addRect(setNumber, sx1, sy1, dx1, dy1 + h1 / 2, w1, h1 / 2, animX, animY);
         } else {
@@ -5856,24 +5852,24 @@ ShaderTilemap.prototype._drawAutotile = function (layer, tileId, dx, dy) {
  */
 ShaderTilemap.prototype._drawTableEdge = function (layer, tileId, dx, dy) {
     if (Tilemap.isTileA2(tileId)) {
-        var autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
-        var kind = Tilemap.getAutotileKind(tileId);
-        var shape = Tilemap.getAutotileShape(tileId);
-        var tx = kind % 8;
-        var ty = Math.floor(kind / 8);
-        var setNumber = 1;
-        var bx = tx * 2;
-        var by = (ty - 2) * 3;
-        var table = autotileTable[shape];
-        var w1 = this._tileWidth / 2;
-        var h1 = this._tileHeight / 2;
-        for (var i = 0; i < 2; i++) {
-            var qsx = table[2 + i][0];
-            var qsy = table[2 + i][1];
-            var sx1 = (bx * 2 + qsx) * w1;
-            var sy1 = (by * 2 + qsy) * h1 + h1 / 2;
-            var dx1 = dx + (i % 2) * w1;
-            var dy1 = dy + Math.floor(i / 2) * h1;
+        const autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
+        const kind = Tilemap.getAutotileKind(tileId);
+        const shape = Tilemap.getAutotileShape(tileId);
+        const tx = kind % 8;
+        const ty = Math.floor(kind / 8);
+        const setNumber = 1;
+        const bx = tx * 2;
+        const by = (ty - 2) * 3;
+        const table = autotileTable[shape];
+        const w1 = this._tileWidth / 2;
+        const h1 = this._tileHeight / 2;
+        for (let i = 0; i < 2; i++) {
+            const qsx = table[2 + i][0];
+            const qsy = table[2 + i][1];
+            const sx1 = (bx * 2 + qsx) * w1;
+            const sy1 = (by * 2 + qsy) * h1 + h1 / 2;
+            const dx1 = dx + (i % 2) * w1;
+            const dy1 = dy + Math.floor(i / 2) * h1;
             layer.addRect(setNumber, sx1, sy1, dx1, dy1, w1, h1 / 2);
         }
     }
@@ -5895,7 +5891,7 @@ ShaderTilemap.prototype._sortChildren = function () {
  * @private
  *//*
 ShaderTilemap.prototype._compareChildOrder = function (a, b) {
-    return a.z - b.z;
+   return a.z - b.z;
 };*/
 
 /**
@@ -5934,7 +5930,7 @@ TilingSprite.prototype = Object.create(PIXI.picture.TilingSprite.prototype);
 TilingSprite.prototype.constructor = TilingSprite;
 
 TilingSprite.prototype.initialize = function (bitmap) {
-    var texture = new PIXI.Texture(new PIXI.BaseTexture());
+    const texture = new PIXI.Texture(new PIXI.BaseTexture());
 
     PIXI.picture.TilingSprite.call(this, texture);
 
@@ -5988,7 +5984,7 @@ Object.defineProperty(TilingSprite.prototype, 'bitmap', {
             } else {
                 try {
                     this.texture.frame = Rectangle.emptyRectangle;
-                } catch (ex) { }
+                } catch (e) { }
             }
         }
     },
@@ -6083,7 +6079,7 @@ TilingSprite.prototype._onBitmapLoad = function () {
  * @private
  */
 TilingSprite.prototype._refresh = function () {
-    var frame = this._frame.clone();
+    const frame = this._frame.clone();
     if (frame.width === 0 && frame.height === 0 && this._bitmap) {
         frame.width = this._bitmap.width;
         frame.height = this._bitmap.height;
@@ -6229,9 +6225,9 @@ ScreenSprite.prototype.setColor = function (r, g, b) {
         this._blue = b;
         this._colorText = Utils.rgbToCssColor(r, g, b);
 
-        var graphics = this._graphics;
+        const graphics = this._graphics;
         graphics.clear();
-        var intColor = (r << 16) | (g << 8) | b;
+        const intColor = (r << 16) | (g << 8) | b;
         graphics.beginFill(intColor, 1);
         //whole screen with zoom. BWAHAHAHAHA
         graphics.drawRect(-Graphics.width * 5, -Graphics.height * 5, Graphics.width * 10, Graphics.height * 10);
@@ -6588,11 +6584,11 @@ Window.prototype.isClosed = function () {
  * @param {Number} height The height of the cursor
  */
 Window.prototype.setCursorRect = function (x, y, width, height) {
-    var cx = Math.floor(x || 0);
-    var cy = Math.floor(y || 0);
-    var cw = Math.floor(width || 0);
-    var ch = Math.floor(height || 0);
-    var rect = this._cursorRect;
+    const cx = Math.floor(x || 0);
+    const cy = Math.floor(y || 0);
+    const cw = Math.floor(width || 0);
+    const ch = Math.floor(height || 0);
+    const rect = this._cursorRect;
     if (rect.x !== cx || rect.y !== cy || rect.width !== cw || rect.height !== ch) {
         this._cursorRect.x = cx;
         this._cursorRect.y = cy;
@@ -6611,7 +6607,7 @@ Window.prototype.setCursorRect = function (x, y, width, height) {
  * @param {Number} b The blue value in the range (-255, 255)
  */
 Window.prototype.setTone = function (r, g, b) {
-    var tone = this._colorTone;
+    const tone = this._colorTone;
     if (r !== tone[0] || g !== tone[1] || b !== tone[2]) {
         this._colorTone = [r, g, b];
         this._refreshBack();
@@ -6626,7 +6622,7 @@ Window.prototype.setTone = function (r, g, b) {
  * @return {Object} The child that was added
  */
 Window.prototype.addChildToBack = function (child) {
-    var containerIndex = this.children.indexOf(this._windowSpriteContainer);
+    const containerIndex = this.children.indexOf(this._windowSpriteContainer);
     return this.addChildAt(child, containerIndex + 1);
 };
 
@@ -6694,24 +6690,24 @@ Window.prototype._refreshAllParts = function () {
  * @private
  */
 Window.prototype._refreshBack = function () {
-    var m = this._margin;
-    var w = this._width - m * 2;
-    var h = this._height - m * 2;
-    var bitmap = new Bitmap(w, h);
+    const m = this._margin;
+    const w = this._width - m * 2;
+    const h = this._height - m * 2;
+    const bitmap = new Bitmap(w, h);
 
     this._windowBackSprite.bitmap = bitmap;
     this._windowBackSprite.setFrame(0, 0, w, h);
     this._windowBackSprite.move(m, m);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var p = 96;
+        const p = 96;
         bitmap.blt(this._windowskin, 0, 0, p, p, 0, 0, w, h);
-        for (var y = 0; y < h; y += p) {
-            for (var x = 0; x < w; x += p) {
+        for (let y = 0; y < h; y += p) {
+            for (let x = 0; x < w; x += p) {
                 bitmap.blt(this._windowskin, 0, p, p, p, x, y, p, p);
             }
         }
-        var tone = this._colorTone;
+        const tone = this._colorTone;
         bitmap.adjustTone(tone[0], tone[1], tone[2]);
     }
 };
@@ -6721,18 +6717,18 @@ Window.prototype._refreshBack = function () {
  * @private
  */
 Window.prototype._refreshFrame = function () {
-    var w = this._width;
-    var h = this._height;
-    var m = 24;
-    var bitmap = new Bitmap(w, h);
+    const w = this._width;
+    const h = this._height;
+    const m = 24;
+    const bitmap = new Bitmap(w, h);
 
     this._windowFrameSprite.bitmap = bitmap;
     this._windowFrameSprite.setFrame(0, 0, w, h);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var skin = this._windowskin;
-        var p = 96;
-        var q = 96;
+        const skin = this._windowskin;
+        const p = 96;
+        const q = 96;
         bitmap.blt(skin, p + m, 0 + 0, p - m * 2, m, m, 0, w - m * 2, m);
         bitmap.blt(skin, p + m, 0 + q - m, p - m * 2, m, m, h - m, w - m * 2, m);
         bitmap.blt(skin, p + 0, 0 + m, m, p - m * 2, 0, m, m, h - m * 2);
@@ -6749,28 +6745,28 @@ Window.prototype._refreshFrame = function () {
  * @private
  */
 Window.prototype._refreshCursor = function () {
-    var pad = this._padding;
-    var x = this._cursorRect.x + pad - this.origin.x;
-    var y = this._cursorRect.y + pad - this.origin.y;
-    var w = this._cursorRect.width;
-    var h = this._cursorRect.height;
-    var m = 4;
-    var x2 = Math.max(x, pad);
-    var y2 = Math.max(y, pad);
-    var ox = x - x2;
-    var oy = y - y2;
-    var w2 = Math.min(w, this._width - pad - x2);
-    var h2 = Math.min(h, this._height - pad - y2);
-    var bitmap = new Bitmap(w2, h2);
+    const pad = this._padding;
+    const x = this._cursorRect.x + pad - this.origin.x;
+    const y = this._cursorRect.y + pad - this.origin.y;
+    const w = this._cursorRect.width;
+    const h = this._cursorRect.height;
+    const m = 4;
+    const x2 = Math.max(x, pad);
+    const y2 = Math.max(y, pad);
+    const ox = x - x2;
+    const oy = y - y2;
+    const w2 = Math.min(w, this._width - pad - x2);
+    const h2 = Math.min(h, this._height - pad - y2);
+    const bitmap = new Bitmap(w2, h2);
 
     this._windowCursorSprite.bitmap = bitmap;
     this._windowCursorSprite.setFrame(0, 0, w2, h2);
     this._windowCursorSprite.move(x2, y2);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var skin = this._windowskin;
-        var p = 96;
-        var q = 48;
+        const skin = this._windowskin;
+        const p = 96;
+        const q = 48;
         bitmap.blt(skin, p + m, p + m, q - m * 2, q - m * 2, ox + m, oy + m, w - m * 2, h - m * 2);
         bitmap.blt(skin, p + m, p + 0, q - m * 2, m, ox + m, oy + 0, w - m * 2, m);
         bitmap.blt(skin, p + m, p + q - m, q - m * 2, m, ox + m, oy + h - m, w - m * 2, m);
@@ -6796,12 +6792,12 @@ Window.prototype._refreshContents = function () {
  * @private
  */
 Window.prototype._refreshArrows = function () {
-    var w = this._width;
-    var h = this._height;
-    var p = 24;
-    var q = p / 2;
-    var sx = 96 + p;
-    var sy = 0 + p;
+    const w = this._width;
+    const h = this._height;
+    const p = 24;
+    const q = p / 2;
+    const sx = 96 + p;
+    const sy = 0 + p;
     this._downArrowSprite.bitmap = this._windowskin;
     this._downArrowSprite.anchor.x = 0.5;
     this._downArrowSprite.anchor.y = 0.5;
@@ -6819,9 +6815,9 @@ Window.prototype._refreshArrows = function () {
  * @private
  */
 Window.prototype._refreshPauseSign = function () {
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    const sx = 144;
+    const sy = 96;
+    const p = 24;
     this._windowPauseSignSprite.bitmap = this._windowskin;
     this._windowPauseSignSprite.anchor.x = 0.5;
     this._windowPauseSignSprite.anchor.y = 1;
@@ -6835,8 +6831,8 @@ Window.prototype._refreshPauseSign = function () {
  * @private
  */
 Window.prototype._updateCursor = function () {
-    var blinkCount = this._animationCount % 40;
-    var cursorOpacity = this.contentsOpacity;
+    const blinkCount = this._animationCount % 40;
+    let cursorOpacity = this.contentsOpacity;
     if (this.active) {
         if (blinkCount < 20) {
             cursorOpacity -= blinkCount * 8;
@@ -6853,8 +6849,8 @@ Window.prototype._updateCursor = function () {
  * @private
  */
 Window.prototype._updateContents = function () {
-    var w = this._width - this._padding * 2;
-    var h = this._height - this._padding * 2;
+    const w = this._width - this._padding * 2;
+    const h = this._height - this._padding * 2;
     if (w > 0 && h > 0) {
         this._windowContentsSprite.setFrame(this.origin.x, this.origin.y, w, h);
         this._windowContentsSprite.visible = this.isOpen();
@@ -6877,12 +6873,12 @@ Window.prototype._updateArrows = function () {
  * @private
  */
 Window.prototype._updatePauseSign = function () {
-    var sprite = this._windowPauseSignSprite;
-    var x = Math.floor(this._animationCount / 16) % 2;
-    var y = Math.floor(this._animationCount / 16 / 2) % 2;
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    const sprite = this._windowPauseSignSprite;
+    const x = Math.floor(this._animationCount / 16) % 2;
+    const y = Math.floor(this._animationCount / 16 / 2) % 2;
+    const sx = 144;
+    const sy = 96;
+    const p = 24;
     if (!this.pause) {
         sprite.alpha = 0;
     } else if (sprite.alpha < 1) {
@@ -7068,8 +7064,8 @@ WindowLayer.prototype._renderCanvas = function (renderer) {
     this._tempCanvas.width = Graphics.width;
     this._tempCanvas.height = Graphics.height;
 
-    var realCanvasContext = renderer.context;
-    var context = this._tempCanvas.getContext('2d');
+    const realCanvasContext = renderer.context;
+    const context = this._tempCanvas.getContext('2d');
 
     context.save();
     context.clearRect(0, 0, Graphics.width, Graphics.height);
@@ -7080,8 +7076,8 @@ WindowLayer.prototype._renderCanvas = function (renderer) {
 
     renderer.context = context;
 
-    for (var i = 0; i < this.children.length; i++) {
-        var child = this.children[i];
+    for (let i = 0; i < this.children.length; i++) {
+        const child = this.children[i];
         if (child._isWindow && child.visible && child.openness > 0) {
             this._canvasClearWindowRect(renderer, child);
             context.save();
@@ -7098,9 +7094,9 @@ WindowLayer.prototype._renderCanvas = function (renderer) {
     renderer.context.globalAlpha = 1;
     renderer.context.drawImage(this._tempCanvas, 0, 0);
 
-    for (var j = 0; j < this.children.length; j++) {
-        if (!this.children[j]._isWindow) {
-            this.children[j].renderCanvas(renderer);
+    for (let i = 0; i < this.children.length; i++) {
+        if (!this.children[i]._isWindow) {
+            this.children[i].renderCanvas(renderer);
         }
     }
 };
@@ -7111,10 +7107,10 @@ WindowLayer.prototype._renderCanvas = function (renderer) {
  * @private
  */
 WindowLayer.prototype._canvasClearWindowRect = function (renderSession, window) {
-    var rx = this.x + window.x;
-    var ry = this.y + window.y + window.height / 2 * (1 - window._openness / 255);
-    var rw = window.width;
-    var rh = window.height * window._openness / 255;
+    const rx = this.x + window.x;
+    const ry = this.y + window.y + window.height / 2 * (1 - window._openness / 255);
+    const rw = window.width;
+    const rh = window.height * window._openness / 255;
     renderSession.context.clearRect(rx, ry, rw, rh);
 };
 
@@ -7142,7 +7138,7 @@ WindowLayer.prototype.render = function (renderer) {
 WindowLayer.prototype._maskWindow = function (window, shift) {
     this._windowMask._currentBounds = null;
     this._windowMask.boundsDirty = true;
-    var rect = this._windowRect;
+    const rect = this._windowRect;
     rect.x = this.x + shift.x + window.x;
     rect.y = this.x + shift.y + window.y + window.height / 2 * (1 - window._openness / 255);
     rect.width = window.width;
@@ -7307,7 +7303,7 @@ Weather.prototype._updateDimmer = function () {
  * @private
  */
 Weather.prototype._updateAllSprites = function () {
-    var maxSprites = Math.floor(this.power * 10);
+    const maxSprites = Math.floor(this.power * 10);
     while (this._sprites.length < maxSprites) {
         this._addSprite();
     }
@@ -7326,7 +7322,7 @@ Weather.prototype._updateAllSprites = function () {
  * @private
  */
 Weather.prototype._addSprite = function () {
-    var sprite = new Sprite(this.viewport);
+    const sprite = new Sprite(this.viewport);
     sprite.opacity = 0;
     this._sprites.push(sprite);
     this.addChild(sprite);
@@ -7462,7 +7458,7 @@ ToneFilter.prototype.adjustTone = function (r, g, b) {
     b = (b || 0).clamp(-255, 255) / 255;
 
     if (r !== 0 || g !== 0 || b !== 0) {
-        var matrix = [
+        const matrix = [
             1, 0, 0, r, 0,
             0, 1, 0, g, 0,
             0, 0, 1, b, 0,
@@ -7527,11 +7523,11 @@ ToneSprite.prototype.setTone = function (r, g, b, gray) {
  */
 ToneSprite.prototype._renderCanvas = function (renderer) {
     if (this.visible) {
-        var context = renderer.context;
-        var t = this.worldTransform;
-        var r = renderer.resolution;
-        var width = Graphics.width;
-        var height = Graphics.height;
+        const context = renderer.context;
+        const t = this.worldTransform;
+        const r = renderer.resolution;
+        const width = Graphics.width;
+        const height = Graphics.height;
         context.save();
         context.setTransform(t.a, t.b, t.c, t.d, t.tx * r, t.ty * r);
         if (Graphics.canUseSaturationBlend() && this._gray > 0) {
@@ -7541,18 +7537,18 @@ ToneSprite.prototype._renderCanvas = function (renderer) {
             context.fillRect(0, 0, width, height);
         }
         context.globalAlpha = 1;
-        var r1 = Math.max(0, this._red);
-        var g1 = Math.max(0, this._green);
-        var b1 = Math.max(0, this._blue);
+        const r1 = Math.max(0, this._red);
+        const g1 = Math.max(0, this._green);
+        const b1 = Math.max(0, this._blue);
         if (r1 || g1 || b1) {
             context.globalCompositeOperation = 'lighter';
             context.fillStyle = Utils.rgbToCssColor(r1, g1, b1);
             context.fillRect(0, 0, width, height);
         }
         if (Graphics.canUseDifferenceBlend()) {
-            var r2 = Math.max(0, -this._red);
-            var g2 = Math.max(0, -this._green);
-            var b2 = Math.max(0, -this._blue);
+            const r2 = Math.max(0, -this._red);
+            const g2 = Math.max(0, -this._green);
+            const b2 = Math.max(0, -this._blue);
             if (r2 || g2 || b2) {
                 context.globalCompositeOperation = 'difference';
                 context.fillStyle = '#ffffff';
@@ -7754,7 +7750,7 @@ WebAudio._createContext = function () {
  * @private
  */
 WebAudio._detectCodecs = function () {
-    var audio = document.createElement('audio');
+    const audio = document.createElement('audio');
     if (audio.canPlayType) {
         this._canPlayOgg = audio.canPlayType('audio/ogg');
         this._canPlayM4a = audio.canPlayType('audio/mp4');
@@ -7767,7 +7763,7 @@ WebAudio._detectCodecs = function () {
  * @private
  */
 WebAudio._createMasterGainNode = function () {
-    var context = WebAudio._context;
+    const context = WebAudio._context;
     if (context) {
         this._masterGainNode = context.createGain();
         this._masterGainNode.gain.setValueAtTime(this._masterVolume, context.currentTime);
@@ -7781,8 +7777,8 @@ WebAudio._createMasterGainNode = function () {
  * @private
  */
 WebAudio._setupEventHandlers = function () {
-    var resumeHandler = function () {
-        var context = WebAudio._context;
+    const resumeHandler = function () {
+        const context = WebAudio._context;
         if (context && context.state === "suspended" && typeof context.resume === "function") {
             context.resume().then(function () {
                 WebAudio._onTouchStart();
@@ -7804,10 +7800,10 @@ WebAudio._setupEventHandlers = function () {
  * @private
  */
 WebAudio._onTouchStart = function () {
-    var context = WebAudio._context;
+    const context = WebAudio._context;
     if (context && !this._unlocked) {
         // Unlock Web Audio on iOS
-        var node = context.createBufferSource();
+        const node = context.createBufferSource();
         node.start(0);
         this._unlocked = true;
     }
@@ -7865,8 +7861,8 @@ WebAudio._shouldMuteOnHide = function () {
  */
 WebAudio._fadeIn = function (duration) {
     if (this._masterGainNode) {
-        var gain = this._masterGainNode.gain;
-        var currentTime = WebAudio._context.currentTime;
+        const gain = this._masterGainNode.gain;
+        const currentTime = WebAudio._context.currentTime;
         gain.setValueAtTime(0, currentTime);
         gain.linearRampToValueAtTime(this._masterVolume, currentTime + duration);
     }
@@ -7880,8 +7876,8 @@ WebAudio._fadeIn = function (duration) {
  */
 WebAudio._fadeOut = function (duration) {
     if (this._masterGainNode) {
-        var gain = this._masterGainNode.gain;
-        var currentTime = WebAudio._context.currentTime;
+        const gain = this._masterGainNode.gain;
+        const currentTime = WebAudio._context.currentTime;
         gain.setValueAtTime(this._masterVolume, currentTime);
         gain.linearRampToValueAtTime(0, currentTime + duration);
     }
@@ -8045,7 +8041,7 @@ WebAudio.prototype.stop = function () {
     this._removeNodes();
     if (this._stopListeners) {
         while (this._stopListeners.length > 0) {
-            var listener = this._stopListeners.shift();
+            const listener = this._stopListeners.shift();
             listener();
         }
     }
@@ -8060,8 +8056,8 @@ WebAudio.prototype.stop = function () {
 WebAudio.prototype.fadeIn = function (duration) {
     if (this.isReady()) {
         if (this._gainNode) {
-            var gain = this._gainNode.gain;
-            var currentTime = WebAudio._context.currentTime;
+            const gain = this._gainNode.gain;
+            const currentTime = WebAudio._context.currentTime;
             gain.setValueAtTime(0, currentTime);
             gain.linearRampToValueAtTime(this._volume, currentTime + duration);
         }
@@ -8080,8 +8076,8 @@ WebAudio.prototype.fadeIn = function (duration) {
  */
 WebAudio.prototype.fadeOut = function (duration) {
     if (this._gainNode) {
-        var gain = this._gainNode.gain;
-        var currentTime = WebAudio._context.currentTime;
+        const gain = this._gainNode.gain;
+        const currentTime = WebAudio._context.currentTime;
         gain.setValueAtTime(this._volume, currentTime);
         gain.linearRampToValueAtTime(0, currentTime + duration);
     }
@@ -8095,7 +8091,7 @@ WebAudio.prototype.fadeOut = function (duration) {
  */
 WebAudio.prototype.seek = function () {
     if (WebAudio._context) {
-        var pos = (WebAudio._context.currentTime - this._startTime) * this._pitch;
+        let pos = (WebAudio._context.currentTime - this._startTime) * this._pitch;
         if (this._loopLength > 0) {
             while (pos >= this._loopStart + this._loopLength) {
                 pos -= this._loopLength;
@@ -8134,7 +8130,7 @@ WebAudio.prototype.addStopListener = function (listener) {
  */
 WebAudio.prototype._load = function (url) {
     if (WebAudio._context) {
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         if (Decrypter.hasEncryptedAudio) url = Decrypter.extToEncryptExt(url);
         else url = CS_URL.MapURL(url);
         xhr.open('GET', CS_URL.MapURL(url));
@@ -8155,7 +8151,7 @@ WebAudio.prototype._load = function (url) {
  * @private
  */
 WebAudio.prototype._onXhrLoad = function (xhr) {
-    var array = xhr.response;
+    let array = xhr.response;
     if (Decrypter.hasEncryptedAudio) array = Decrypter.decryptArrayBuffer(array, "_onXhrLoad");
     this._readLoopComments(new Uint8Array(array));
     WebAudio._context.decodeAudioData(array, function (buffer) {
@@ -8199,7 +8195,7 @@ WebAudio.prototype._startPlaying = function (loop, offset) {
  * @private
  */
 WebAudio.prototype._createNodes = function () {
-    var context = WebAudio._context;
+    const context = WebAudio._context;
     this._sourceNode = context.createBufferSource();
     this._sourceNode.buffer = this._buffer;
     this._sourceNode.loopStart = this._loopStart;
@@ -8241,8 +8237,8 @@ WebAudio.prototype._removeNodes = function () {
  */
 WebAudio.prototype._createEndTimer = function () {
     if (this._sourceNode && !this._sourceNode.loop) {
-        var endTime = this._startTime + this._totalTime / this._pitch;
-        var delay = endTime - WebAudio._context.currentTime;
+        const endTime = this._startTime + this._totalTime / this._pitch;
+        const delay = endTime - WebAudio._context.currentTime;
         this._endTimer = setTimeout(function () {
             this.stop();
         }.bind(this), delay * 1000);
@@ -8266,8 +8262,8 @@ WebAudio.prototype._removeEndTimer = function () {
  */
 WebAudio.prototype._updatePanner = function () {
     if (this._pannerNode) {
-        var x = this._pan;
-        var z = 1 - Math.abs(x);
+        const x = this._pan;
+        const z = 1 - Math.abs(x);
         this._pannerNode.setPosition(x, 0, z);
     }
 };
@@ -8278,7 +8274,7 @@ WebAudio.prototype._updatePanner = function () {
  */
 WebAudio.prototype._onLoad = function () {
     while (this._loadListeners.length > 0) {
-        var listener = this._loadListeners.shift();
+        const listener = this._loadListeners.shift();
         listener();
     }
 };
@@ -8299,19 +8295,19 @@ WebAudio.prototype._readLoopComments = function (array) {
  * @private
  */
 WebAudio.prototype._readOgg = function (array) {
-    var index = 0;
+    let index = 0;
     while (index < array.length) {
         if (this._readFourCharacters(array, index) === 'OggS') {
             index += 26;
-            var vorbisHeaderFound = false;
-            var numSegments = array[index++];
-            var segments = [];
-            for (var i = 0; i < numSegments; i++) {
+            let vorbisHeaderFound = false;
+            const numSegments = array[index++];
+            const segments = [];
+            for (let i = 0; i < numSegments; i++) {
                 segments.push(array[index++]);
             }
-            for (i = 0; i < numSegments; i++) {
+            for (let i = 0; i < numSegments; i++) {
                 if (this._readFourCharacters(array, index + 1) === 'vorb') {
-                    var headerType = array[index];
+                    const headerType = array[index];
                     if (headerType === 1) {
                         this._sampleRate = this._readLittleEndian(array, index + 12);
                     } else if (headerType === 3) {
@@ -8337,10 +8333,10 @@ WebAudio.prototype._readOgg = function (array) {
  */
 WebAudio.prototype._readMp4 = function (array) {
     if (this._readFourCharacters(array, 4) === 'ftyp') {
-        var index = 0;
+        let index = 0;
         while (index < array.length) {
-            var size = this._readBigEndian(array, index);
-            var name = this._readFourCharacters(array, index + 4);
+            const size = this._readBigEndian(array, index);
+            const name = this._readFourCharacters(array, index + 4);
             if (name === 'moov') {
                 index += 8;
             } else {
@@ -8367,9 +8363,9 @@ WebAudio.prototype._readMp4 = function (array) {
  * @private
  */
 WebAudio.prototype._readMetaData = function (array, index, size) {
-    for (var i = index; i < index + size - 10; i++) {
+    for (let i = index; i < index + size - 10; i++) {
         if (this._readFourCharacters(array, i) === 'LOOP') {
-            var text = '';
+            let text = '';
             while (array[i] > 0) {
                 text += String.fromCharCode(array[i++]);
             }
@@ -8380,7 +8376,7 @@ WebAudio.prototype._readMetaData = function (array, index, size) {
                 this._loopLength = parseInt(RegExp.$1);
             }
             if (text === 'LOOPSTART' || text === 'LOOPLENGTH') {
-                var text2 = '';
+                let text2 = '';
                 i += 16;
                 while (array[i] > 0) {
                     text2 += String.fromCharCode(array[i++]);
@@ -8424,8 +8420,8 @@ WebAudio.prototype._readBigEndian = function (array, index) {
  * @private
  */
 WebAudio.prototype._readFourCharacters = function (array, index) {
-    var string = '';
-    for (var i = 0; i < 4; i++) {
+    let string = '';
+    for (let i = 0; i < 4; i++) {
         string += String.fromCharCode(array[index + i]);
     }
     return string;
@@ -8830,7 +8826,7 @@ Html5Audio._startPlaying = function (loop, offset) {
 Html5Audio._onLoad = function () {
     this._isLoading = false;
     while (this._loadListeners.length > 0) {
-        var listener = this._loadListeners.shift();
+        const listener = this._loadListeners.shift();
         listener();
     }
 };
@@ -8911,9 +8907,9 @@ JsonEx._generateId = function () {
  * @return {String} The JSON string
  */
 JsonEx.stringify = function (object) {
-    var circular = [];
+    const circular = [];
     JsonEx._id = 1;
-    var json = JSON.stringify(this._encode(object, circular, 0));
+    const json = JSON.stringify(this._encode(object, circular, 0));
     this._cleanMetadata(object);
     this._restoreCircularReference(circular);
 
@@ -8922,9 +8918,9 @@ JsonEx.stringify = function (object) {
 
 JsonEx._restoreCircularReference = function (circulars) {
     circulars.forEach(function (circular) {
-        var key = circular[0];
-        var value = circular[1];
-        var content = circular[2];
+        const key = circular[0];
+        const value = circular[1];
+        const content = circular[2];
 
         value[key] = content;
     });
@@ -8939,9 +8935,9 @@ JsonEx._restoreCircularReference = function (circulars) {
  * @return {Object} The reconstructed object
  */
 JsonEx.parse = function (json) {
-    var circular = [];
-    var registry = {};
-    var contents = this._decode(JSON.parse(json), circular, registry);
+    const circular = [];
+    const registry = {};
+    const contents = this._decode(JSON.parse(json), circular, registry);
     this._cleanMetadata(contents);
     this._linkCircularReference(contents, circular, registry);
 
@@ -8950,9 +8946,9 @@ JsonEx.parse = function (json) {
 
 JsonEx._linkCircularReference = function (contents, circulars, registry) {
     circulars.forEach(function (circular) {
-        var key = circular[0];
-        var value = circular[1];
-        var id = circular[2];
+        const key = circular[0];
+        const value = circular[1];
+        const id = circular[2];
 
         value[key] = registry[id];
     });
@@ -8966,7 +8962,7 @@ JsonEx._cleanMetadata = function (object) {
 
     if (typeof object === 'object') {
         Object.keys(object).forEach(function (key) {
-            var value = object[key];
+            const value = object[key];
             if (typeof value === 'object') {
                 JsonEx._cleanMetadata(value);
             }
@@ -9001,15 +8997,15 @@ JsonEx._encode = function (value, circular, depth) {
     if (++depth >= this.maxDepth) {
         throw new Error('Object too deep');
     }
-    var type = Object.prototype.toString.call(value);
+    const type = Object.prototype.toString.call(value);
     if (type === '[object Object]' || type === '[object Array]') {
         value['@c'] = JsonEx._generateId();
 
-        var constructorName = this._getConstructorName(value);
+        const constructorName = this._getConstructorName(value);
         if (constructorName !== 'Object' && constructorName !== 'Array') {
             value['@'] = constructorName;
         }
-        for (var key in value) {
+        for (let key in value) {
             if (value.hasOwnProperty(key) && !key.match(/^@./)) {
                 if (value[key] && typeof value[key] === 'object') {
                     if (value[key]['@c']) {
@@ -9048,21 +9044,21 @@ JsonEx._encode = function (value, circular, depth) {
  * @private
  */
 JsonEx._decode = function (value, circular, registry) {
-    var type = Object.prototype.toString.call(value);
+    const type = Object.prototype.toString.call(value);
     if (type === '[object Object]' || type === '[object Array]') {
         registry[value['@c']] = value;
 
         if (value['@']) {
-            var constructor = window[value['@']];
+            const constructor = window[value['@']];
             if (constructor) {
                 value = this._resetPrototype(value, constructor.prototype);
             }
         }
-        for (var key in value) {
+        for (let key in value) {
             if (value.hasOwnProperty(key)) {
                 if (value[key] && value[key]['@a']) {
                     //object is array wrapper
-                    var body = value[key]['@a'];
+                    const body = value[key]['@a'];
                     body['@c'] = value[key]['@c'];
                     value[key] = body;
                 }
@@ -9085,9 +9081,9 @@ JsonEx._decode = function (value, circular, registry) {
  * @private
  */
 JsonEx._getConstructorName = function (value) {
-    var name = value.constructor.name;
+    let name = value.constructor.name;
     if (name === undefined) {
-        var func = /^\s*function\s*([A-Za-z0-9_$]*)/;
+        const func = /^\s*function\s*([A-Za-z0-9_$]*)/;
         name = func.exec(value.constructor)[1];
     }
     return name;
@@ -9107,8 +9103,8 @@ JsonEx._resetPrototype = function (value, prototype) {
     } else if ('__proto__' in value) {
         value.__proto__ = prototype; // jshint ignore:line
     } else {
-        var newValue = Object.create(prototype);
-        for (var key in value) {
+        const newValue = Object.create(prototype);
+        for (let key in value) {
             if (value.hasOwnProperty(key)) {
                 newValue[key] = value[key];
             }
@@ -9138,7 +9134,7 @@ Decrypter.VER = "000301";
 Decrypter.REMAIN = "0000000000";
 
 Decrypter.checkImgIgnore = function (url) {
-    for (var cnt = 0; cnt < this._ignoreList.length; cnt++) {
+    for (let cnt = 0; cnt < this._ignoreList.length; cnt++) {
         const lc_url = url.toLowerCase();
         if (lc_url.endsWith(this._ignoreList[cnt])) return true;
     }
@@ -9173,15 +9169,15 @@ Decrypter.decryptImg = function (url, bitmap) {
 };
 
 Decrypter.decryptHTML5Audio = function (url, bgm, pos) {
-    var requestFile = new XMLHttpRequest();
+    const requestFile = new XMLHttpRequest();
     requestFile.open("GET", url);
     requestFile.responseType = "arraybuffer";
     requestFile.send();
 
     requestFile.onload = function () {
         if (this.status < Decrypter._xhrOk) {
-            var arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response, url);
-            var url = Decrypter.createBlobUrl(arrayBuffer);
+            const arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response, url);
+            const url = Decrypter.createBlobUrl(arrayBuffer);
             AudioManager.createDecryptBuffer(url, bgm, pos);
         }
     };
@@ -9193,25 +9189,24 @@ Decrypter.cutArrayHeader = function (arrayBuffer, length) {
 
 Decrypter.decryptArrayBuffer = function (arrayBuffer, url) {
     if (!arrayBuffer) return null;
-    var header = new Uint8Array(arrayBuffer, 0, this._headerlength);
+    const header = new Uint8Array(arrayBuffer, 0, this._headerlength);
 
-    var i;
-    var ref = this.SIGNATURE + this.VER + this.REMAIN;
-    var refBytes = new Uint8Array(16);
-    for (i = 0; i < this._headerlength; i++) {
+    const ref = this.SIGNATURE + this.VER + this.REMAIN;
+    const refBytes = new Uint8Array(16);
+    for (let i = 0; i < this._headerlength; i++) {
         refBytes[i] = parseInt("0x" + ref.substr(i * 2, 2), 16);
     }
-    for (i = 0; i < this._headerlength; i++) {
+    for (let i = 0; i < this._headerlength; i++) {
         if (header[i] !== refBytes[i]) {
             throw new Error("Header is wrong: " + url);
         }
     }
 
     arrayBuffer = this.cutArrayHeader(arrayBuffer, Decrypter._headerlength);
-    var view = new DataView(arrayBuffer);
+    const view = new DataView(arrayBuffer);
     this.readEncryptionkey();
     if (arrayBuffer) {
-        var byteArray = new Uint8Array(arrayBuffer);
+        const byteArray = new Uint8Array(arrayBuffer);
         for (i = 0; i < this._headerlength; i++) {
             byteArray[i] = byteArray[i] ^ parseInt(Decrypter._encryptionKey[i], 16);
             view.setUint8(i, byteArray[i]);
@@ -9222,7 +9217,7 @@ Decrypter.decryptArrayBuffer = function (arrayBuffer, url) {
 };
 
 Decrypter.createBlobUrl = function (arrayBuffer) {
-    var blob = new Blob([arrayBuffer]);
+    const blob = new Blob([arrayBuffer]);
     return window.URL.createObjectURL(blob);
 };
 
@@ -9238,7 +9233,7 @@ Decrypter.extToEncryptExt = function (url) {
         else if (ext === ".png" && Decrypter.hasEncryptedImages) newExt = ".rpgmvp";
 
         return CS_URL.MapURL(path.join(path.dirname(url), path.basename(url, ext) + newExt));
-    } catch (ex) {
+    } catch (e) {
         ext = url.split('.').pop();
         let encryptedExt = ext;
 
@@ -9270,8 +9265,8 @@ ResourceHandler._defaultRetryInterval = [500, 1000, 3000];
 
 ResourceHandler.createLoader = function (url, retryMethod, resignMethod, retryInterval) {
     retryInterval = retryInterval || this._defaultRetryInterval;
-    var reloaders = this._reloaders;
-    var retryCount = 0;
+    const reloaders = this._reloaders;
+    let retryCount = 0;
     return function () {
         if (retryCount < retryInterval.length) {
             setTimeout(retryMethod, retryInterval[retryCount]);
@@ -9334,7 +9329,7 @@ CS_URL.Initialize = function () {
         try {
             CS_URL.absolutePrefix = require('path').posix.dirname(window.location.pathname);
             platform = nw.process.platform;
-        } catch (ex) {
+        } catch (e) {
             CS_URL.MapURL = function (url) { return url; };
             Utils.isNwjs = function () { return false; };
             return;
@@ -9345,7 +9340,7 @@ CS_URL.Initialize = function () {
         else {
             CS_URL.InitializeMap(nw.__dirname, "/");
         }
-    } catch (ex) {
+    } catch (e) {
         CS_URL.MapURL = function (url) { return url; };
         return;
     }
@@ -9412,7 +9407,7 @@ CS_URL.MapURL = function (url) {
     const pathUtils = require('path').posix;
     try {
         item = new URL(item).pathname;
-    } catch (ex) {
+    } catch (e) {
     }
     if (!pathUtils.isAbsolute(item)) {
         item = pathUtils.join(CS_URL.absolutePrefix, item);

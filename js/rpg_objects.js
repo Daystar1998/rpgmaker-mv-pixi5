@@ -246,9 +246,9 @@ Game_System.prototype.playtime = function () {
 };
 
 Game_System.prototype.playtimeText = function () {
-    var hour = Math.floor(this.playtime() / 60 / 60);
-    var min = Math.floor(this.playtime() / 60) % 60;
-    var sec = this.playtime() % 60;
+    const hour = Math.floor(this.playtime() / 60 / 60);
+    const min = Math.floor(this.playtime() / 60) % 60;
+    const sec = this.playtime() % 60;
     return hour.padZero(2) + ':' + min.padZero(2) + ':' + sec.padZero(2);
 };
 
@@ -678,7 +678,7 @@ Game_Screen.prototype.weatherPower = function () {
 };
 
 Game_Screen.prototype.picture = function (pictureId) {
-    var realPictureId = this.realPictureId(pictureId);
+    const realPictureId = this.realPictureId(pictureId);
     return this._pictures[realPictureId];
 };
 
@@ -808,7 +808,7 @@ Game_Screen.prototype.update = function () {
 
 Game_Screen.prototype.updateFadeOut = function () {
     if (this._fadeOutDuration > 0) {
-        var d = this._fadeOutDuration;
+        const d = this._fadeOutDuration;
         this._brightness = (this._brightness * (d - 1)) / d;
         this._fadeOutDuration--;
     }
@@ -816,7 +816,7 @@ Game_Screen.prototype.updateFadeOut = function () {
 
 Game_Screen.prototype.updateFadeIn = function () {
     if (this._fadeInDuration > 0) {
-        var d = this._fadeInDuration;
+        const d = this._fadeInDuration;
         this._brightness = (this._brightness * (d - 1) + 255) / d;
         this._fadeInDuration--;
     }
@@ -824,8 +824,8 @@ Game_Screen.prototype.updateFadeIn = function () {
 
 Game_Screen.prototype.updateTone = function () {
     if (this._toneDuration > 0) {
-        var d = this._toneDuration;
-        for (var i = 0; i < 4; i++) {
+        const d = this._toneDuration;
+        for (let i = 0; i < 4; i++) {
             this._tone[i] = (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
         }
         this._toneDuration--;
@@ -834,7 +834,7 @@ Game_Screen.prototype.updateTone = function () {
 
 Game_Screen.prototype.updateFlash = function () {
     if (this._flashDuration > 0) {
-        var d = this._flashDuration;
+        const d = this._flashDuration;
         this._flashColor[3] *= (d - 1) / d;
         this._flashDuration--;
     }
@@ -842,7 +842,7 @@ Game_Screen.prototype.updateFlash = function () {
 
 Game_Screen.prototype.updateShake = function () {
     if (this._shakeDuration > 0 || this._shake !== 0) {
-        var delta = (this._shakePower * this._shakeSpeed * this._shakeDirection) / 10;
+        const delta = (this._shakePower * this._shakeSpeed * this._shakeDirection) / 10;
         if (this._shakeDuration <= 1 && this._shake * (this._shake + delta) < 0) {
             this._shake = 0;
         } else {
@@ -860,8 +860,8 @@ Game_Screen.prototype.updateShake = function () {
 
 Game_Screen.prototype.updateZoom = function () {
     if (this._zoomDuration > 0) {
-        var d = this._zoomDuration;
-        var t = this._zoomScaleTarget;
+        const d = this._zoomDuration;
+        const t = this._zoomScaleTarget;
         this._zoomScale = (this._zoomScale * (d - 1) + t) / d;
         this._zoomDuration--;
     }
@@ -869,8 +869,8 @@ Game_Screen.prototype.updateZoom = function () {
 
 Game_Screen.prototype.updateWeather = function () {
     if (this._weatherDuration > 0) {
-        var d = this._weatherDuration;
-        var t = this._weatherPowerTarget;
+        const d = this._weatherDuration;
+        const t = this._weatherPowerTarget;
         this._weatherPower = (this._weatherPower * (d - 1) + t) / d;
         this._weatherDuration--;
         if (this._weatherDuration === 0 && this._weatherPowerTarget === 0) {
@@ -893,36 +893,36 @@ Game_Screen.prototype.startFlashForDamage = function () {
 
 Game_Screen.prototype.showPicture = function (pictureId, name, origin, x, y,
     scaleX, scaleY, opacity, blendMode) {
-    var realPictureId = this.realPictureId(pictureId);
-    var picture = new Game_Picture();
+    const realPictureId = this.realPictureId(pictureId);
+    const picture = new Game_Picture();
     picture.show(name, origin, x, y, scaleX, scaleY, opacity, blendMode);
     this._pictures[realPictureId] = picture;
 };
 
 Game_Screen.prototype.movePicture = function (pictureId, origin, x, y, scaleX,
     scaleY, opacity, blendMode, duration) {
-    var picture = this.picture(pictureId);
+    const picture = this.picture(pictureId);
     if (picture) {
         picture.move(origin, x, y, scaleX, scaleY, opacity, blendMode, duration);
     }
 };
 
 Game_Screen.prototype.rotatePicture = function (pictureId, speed) {
-    var picture = this.picture(pictureId);
+    const picture = this.picture(pictureId);
     if (picture) {
         picture.rotate(speed);
     }
 };
 
 Game_Screen.prototype.tintPicture = function (pictureId, tone, duration) {
-    var picture = this.picture(pictureId);
+    const picture = this.picture(pictureId);
     if (picture) {
         picture.tint(tone, duration);
     }
 };
 
 Game_Screen.prototype.erasePicture = function (pictureId) {
-    var realPictureId = this.realPictureId(pictureId);
+    const realPictureId = this.realPictureId(pictureId);
     this._pictures[realPictureId] = null;
 };
 
@@ -1071,7 +1071,7 @@ Game_Picture.prototype.update = function () {
 
 Game_Picture.prototype.updateMove = function () {
     if (this._duration > 0) {
-        var d = this._duration;
+        const d = this._duration;
         this._x = (this._x * (d - 1) + this._targetX) / d;
         this._y = (this._y * (d - 1) + this._targetY) / d;
         this._scaleX = (this._scaleX * (d - 1) + this._targetScaleX) / d;
@@ -1083,8 +1083,8 @@ Game_Picture.prototype.updateMove = function () {
 
 Game_Picture.prototype.updateTone = function () {
     if (this._toneDuration > 0) {
-        var d = this._toneDuration;
-        for (var i = 0; i < 4; i++) {
+        const d = this._toneDuration;
+        for (let i = 0; i < 4; i++) {
             this._tone[i] = (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
         }
         this._toneDuration--;
@@ -1292,7 +1292,7 @@ Game_Action.prototype.isItem = function () {
 };
 
 Game_Action.prototype.numRepeats = function () {
-    var repeats = this.item().repeats;
+    let repeats = this.item().repeats;
     if (this.isAttack()) {
         repeats += this.subject().attackTimesAdd();
     }
@@ -1400,7 +1400,7 @@ Game_Action.prototype.isMagicSkill = function () {
 };
 
 Game_Action.prototype.decideRandomTarget = function () {
-    var target;
+    let target;
     if (this.isForDeadFriend()) {
         target = this.friendsUnit().randomDeadTarget();
     } else if (this.isForFriend()) {
@@ -1430,8 +1430,8 @@ Game_Action.prototype.isValid = function () {
 };
 
 Game_Action.prototype.speed = function () {
-    var agi = this.subject().agi;
-    var speed = agi + Math.randomInt(Math.floor(5 + agi / 4));
+    const agi = this.subject().agi;
+    let speed = agi + Math.randomInt(Math.floor(5 + agi / 4));
     if (this.item()) {
         speed += this.item().speed;
     }
@@ -1442,7 +1442,7 @@ Game_Action.prototype.speed = function () {
 };
 
 Game_Action.prototype.makeTargets = function () {
-    var targets = [];
+    let targets = [];
     if (!this._forcing && this.subject().isConfused()) {
         targets = [this.confusionTarget()];
     } else if (this.isForOpponent()) {
@@ -1454,12 +1454,12 @@ Game_Action.prototype.makeTargets = function () {
 };
 
 Game_Action.prototype.repeatTargets = function (targets) {
-    var repeatedTargets = [];
-    var repeats = this.numRepeats();
-    for (var i = 0; i < targets.length; i++) {
-        var target = targets[i];
+    const repeatedTargets = [];
+    const repeats = this.numRepeats();
+    for (let i = 0; i < targets.length; i++) {
+        const target = targets[i];
         if (target) {
-            for (var j = 0; j < repeats; j++) {
+            for (let j = 0; j < repeats; j++) {
                 repeatedTargets.push(target);
             }
         }
@@ -1482,10 +1482,10 @@ Game_Action.prototype.confusionTarget = function () {
 };
 
 Game_Action.prototype.targetsForOpponents = function () {
-    var targets = [];
-    var unit = this.opponentsUnit();
+    let targets = [];
+    const unit = this.opponentsUnit();
     if (this.isForRandom()) {
-        for (var i = 0; i < this.numTargets(); i++) {
+        for (let i = 0; i < this.numTargets(); i++) {
             targets.push(unit.randomTarget());
         }
     } else if (this.isForOne()) {
@@ -1501,8 +1501,8 @@ Game_Action.prototype.targetsForOpponents = function () {
 };
 
 Game_Action.prototype.targetsForFriends = function () {
-    var targets = [];
-    var unit = this.friendsUnit();
+    let targets = [];
+    const unit = this.friendsUnit();
     if (this.isForUser()) {
         return [this.subject()];
     } else if (this.isForDeadFriend()) {
@@ -1524,9 +1524,9 @@ Game_Action.prototype.targetsForFriends = function () {
 };
 
 Game_Action.prototype.evaluate = function () {
-    var value = 0;
+    let value = 0;
     this.itemTargetCandidates().forEach(function (target) {
-        var targetValue = this.evaluateWithTarget(target);
+        const targetValue = this.evaluateWithTarget(target);
         if (this.isForAll()) {
             value += targetValue;
         } else if (targetValue > value) {
@@ -1557,11 +1557,11 @@ Game_Action.prototype.itemTargetCandidates = function () {
 
 Game_Action.prototype.evaluateWithTarget = function (target) {
     if (this.isHpEffect()) {
-        var value = this.makeDamageValue(target, false);
+        const value = this.makeDamageValue(target, false);
         if (this.isForOpponent()) {
             return value / Math.max(target.hp, 1);
         } else {
-            var recovery = Math.min(-value, target.mhp - target.hp);
+            const recovery = Math.min(-value, target.mhp - target.hp);
             return recovery / target.mhp;
         }
     }
@@ -1645,7 +1645,7 @@ Game_Action.prototype.itemCri = function (target) {
 };
 
 Game_Action.prototype.apply = function (target) {
-    var result = target.result();
+    const result = target.result();
     this.subject().clearResult();
     result.clear();
     result.used = this.testApply(target);
@@ -1656,7 +1656,7 @@ Game_Action.prototype.apply = function (target) {
     if (result.isHit()) {
         if (this.item().damage.type > 0) {
             result.critical = (Math.random() < this.itemCri(target));
-            var value = this.makeDamageValue(target, result.critical);
+            const value = this.makeDamageValue(target, result.critical);
             this.executeDamage(target, value);
         }
         this.item().effects.forEach(function (effect) {
@@ -1667,9 +1667,9 @@ Game_Action.prototype.apply = function (target) {
 };
 
 Game_Action.prototype.makeDamageValue = function (target, critical) {
-    var item = this.item();
-    var baseValue = this.evalDamageFormula(target);
-    var value = baseValue * this.calcElementRate(target);
+    const item = this.item();
+    const baseValue = this.evalDamageFormula(target);
+    let value = baseValue * this.calcElementRate(target);
     if (this.isPhysical()) {
         value *= target.pdr;
     }
@@ -1690,12 +1690,12 @@ Game_Action.prototype.makeDamageValue = function (target, critical) {
 
 Game_Action.prototype.evalDamageFormula = function (target) {
     try {
-        var item = this.item();
-        var a = this.subject();
-        var b = target;
-        var v = $gameVariables._data;
-        var sign = ([3, 4].contains(item.damage.type) ? -1 : 1);
-        var value = Math.max(eval(item.damage.formula), 0) * sign; // jshint ignore:line
+        const item = this.item();
+        const a = this.subject();
+        const b = target;
+        const v = $gameVariables._data;
+        const sign = ([3, 4].contains(item.damage.type) ? -1 : 1);
+        let value = Math.max(eval(item.damage.formula), 0) * sign; // jshint ignore:line
         if (isNaN(value)) value = 0;
         return value;
     } catch (e) {
@@ -1726,8 +1726,8 @@ Game_Action.prototype.applyCritical = function (damage) {
 };
 
 Game_Action.prototype.applyVariance = function (damage, variance) {
-    var amp = Math.floor(Math.max(Math.abs(damage) * variance / 100, 0));
-    var v = Math.randomInt(amp + 1) + Math.randomInt(amp + 1) - amp;
+    const amp = Math.floor(Math.max(Math.abs(damage) * variance / 100, 0));
+    const v = Math.randomInt(amp + 1) + Math.randomInt(amp + 1) - amp;
     return damage >= 0 ? damage + v : damage - v;
 };
 
@@ -1736,7 +1736,7 @@ Game_Action.prototype.applyGuard = function (damage, target) {
 };
 
 Game_Action.prototype.executeDamage = function (target, value) {
-    var result = target.result();
+    const result = target.result();
     if (value === 0) {
         result.critical = false;
     }
@@ -1773,7 +1773,7 @@ Game_Action.prototype.executeMpDamage = function (target, value) {
 
 Game_Action.prototype.gainDrainedHp = function (value) {
     if (this.isDrain()) {
-        var gainTarget = this.subject();
+        let gainTarget = this.subject();
         if (this._reflectionTarget !== undefined) {
             gainTarget = this._reflectionTarget;
         }
@@ -1783,7 +1783,7 @@ Game_Action.prototype.gainDrainedHp = function (value) {
 
 Game_Action.prototype.gainDrainedMp = function (value) {
     if (this.isDrain()) {
-        var gainTarget = this.subject();
+        let gainTarget = this.subject();
         if (this._reflectionTarget !== undefined) {
             gainTarget = this._reflectionTarget;
         }
@@ -1836,7 +1836,7 @@ Game_Action.prototype.applyItemEffect = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectRecoverHp = function (target, effect) {
-    var value = (target.mhp * effect.value1 + effect.value2) * target.rec;
+    let value = (target.mhp * effect.value1 + effect.value2) * target.rec;
     if (this.isItem()) {
         value *= this.subject().pha;
     }
@@ -1848,7 +1848,7 @@ Game_Action.prototype.itemEffectRecoverHp = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectRecoverMp = function (target, effect) {
-    var value = (target.mmp * effect.value1 + effect.value2) * target.rec;
+    let value = (target.mmp * effect.value1 + effect.value2) * target.rec;
     if (this.isItem()) {
         value *= this.subject().pha;
     }
@@ -1860,7 +1860,7 @@ Game_Action.prototype.itemEffectRecoverMp = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectGainTp = function (target, effect) {
-    var value = Math.floor(effect.value1);
+    const value = Math.floor(effect.value1);
     if (value !== 0) {
         target.gainTp(value);
         this.makeSuccess(target);
@@ -1877,7 +1877,7 @@ Game_Action.prototype.itemEffectAddState = function (target, effect) {
 
 Game_Action.prototype.itemEffectAddAttackState = function (target, effect) {
     this.subject().attackStates().forEach(function (stateId) {
-        var chance = effect.value1;
+        let chance = effect.value1;
         chance *= target.stateRate(stateId);
         chance *= this.subject().attackStatesRate(stateId);
         chance *= this.lukEffectRate(target);
@@ -1889,7 +1889,7 @@ Game_Action.prototype.itemEffectAddAttackState = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectAddNormalState = function (target, effect) {
-    var chance = effect.value1;
+    let chance = effect.value1;
     if (!this.isCertainHit()) {
         chance *= target.stateRate(effect.dataId);
         chance *= this.lukEffectRate(target);
@@ -1901,7 +1901,7 @@ Game_Action.prototype.itemEffectAddNormalState = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectRemoveState = function (target, effect) {
-    var chance = effect.value1;
+    const chance = effect.value1;
     if (Math.random() < chance) {
         target.removeState(effect.dataId);
         this.makeSuccess(target);
@@ -1914,7 +1914,7 @@ Game_Action.prototype.itemEffectAddBuff = function (target, effect) {
 };
 
 Game_Action.prototype.itemEffectAddDebuff = function (target, effect) {
-    var chance = target.debuffRate(effect.dataId) * this.lukEffectRate(target);
+    const chance = target.debuffRate(effect.dataId) * this.lukEffectRate(target);
     if (Math.random() < chance) {
         target.addDebuff(effect.dataId, effect.value1);
         this.makeSuccess(target);
@@ -1962,7 +1962,7 @@ Game_Action.prototype.makeSuccess = function (target) {
 };
 
 Game_Action.prototype.applyItemUserEffect = function (target) {
-    var value = Math.floor(this.item().tpGain * this.subject().tcr);
+    const value = Math.floor(this.item().tpGain * this.subject().tcr);
     this.subject().gainSilentTp(value);
 };
 
@@ -2212,7 +2212,7 @@ Game_BattlerBase.prototype.clearStates = function () {
 };
 
 Game_BattlerBase.prototype.eraseState = function (stateId) {
-    var index = this._states.indexOf(stateId);
+    const index = this._states.indexOf(stateId);
     if (index >= 0) {
         this._states.splice(index, 1);
     }
@@ -2232,8 +2232,8 @@ Game_BattlerBase.prototype.deathStateId = function () {
 };
 
 Game_BattlerBase.prototype.resetStateCounts = function (stateId) {
-    var state = $dataStates[stateId];
-    var variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
+    const state = $dataStates[stateId];
+    const variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
     this._stateTurns[stateId] = state.minTurns + Math.randomInt(variance);
 };
 
@@ -2310,7 +2310,7 @@ Game_BattlerBase.prototype.isBuffExpired = function (paramId) {
 };
 
 Game_BattlerBase.prototype.updateBuffTurns = function () {
-    for (var i = 0; i < this._buffTurns.length; i++) {
+    for (let i = 0; i < this._buffTurns.length; i++) {
         if (this._buffTurns[i] > 0) {
             this._buffTurns[i]--;
         }
@@ -2344,8 +2344,8 @@ Game_BattlerBase.prototype.stateIcons = function () {
 };
 
 Game_BattlerBase.prototype.buffIcons = function () {
-    var icons = [];
-    for (var i = 0; i < this._buffs.length; i++) {
+    const icons = [];
+    for (let i = 0; i < this._buffs.length; i++) {
         if (this._buffs[i] !== 0) {
             icons.push(this.buffIconIndex(this._buffs[i], i));
         }
@@ -2449,10 +2449,10 @@ Game_BattlerBase.prototype.paramBuffRate = function (paramId) {
 };
 
 Game_BattlerBase.prototype.param = function (paramId) {
-    var value = this.paramBase(paramId) + this.paramPlus(paramId);
+    let value = this.paramBase(paramId) + this.paramPlus(paramId);
     value *= this.paramRate(paramId) * this.paramBuffRate(paramId);
-    var maxValue = this.paramMax(paramId);
-    var minValue = this.paramMin(paramId);
+    const maxValue = this.paramMax(paramId);
+    const minValue = this.paramMin(paramId);
     return Math.round(value.clamp(minValue, maxValue));
 };
 
@@ -2537,7 +2537,7 @@ Game_BattlerBase.prototype.isEquipTypeSealed = function (etypeId) {
 };
 
 Game_BattlerBase.prototype.slotType = function () {
-    var set = this.traitsSet(Game_BattlerBase.TRAIT_SLOT_TYPE);
+    const set = this.traitsSet(Game_BattlerBase.TRAIT_SLOT_TYPE);
     return set.length > 0 ? Math.max.apply(null, set) : 0;
 };
 
@@ -2558,7 +2558,7 @@ Game_BattlerBase.prototype.specialFlag = function (flagId) {
 };
 
 Game_BattlerBase.prototype.collapseType = function () {
-    var set = this.traitsSet(Game_BattlerBase.TRAIT_COLLAPSE_TYPE);
+    const set = this.traitsSet(Game_BattlerBase.TRAIT_COLLAPSE_TYPE);
     return set.length > 0 ? Math.max.apply(null, set) : 0;
 };
 
@@ -2693,8 +2693,8 @@ Game_BattlerBase.prototype.isEnemy = function () {
 
 Game_BattlerBase.prototype.sortStates = function () {
     this._states.sort(function (a, b) {
-        var p1 = $dataStates[a].priority;
-        var p2 = $dataStates[b].priority;
+        const p1 = $dataStates[a].priority;
+        const p2 = $dataStates[b].priority;
         if (p1 !== p2) {
             return p2 - p1;
         }
@@ -2712,7 +2712,7 @@ Game_BattlerBase.prototype.addNewState = function (stateId) {
     if (stateId === this.deathStateId()) {
         this.die();
     }
-    var restricted = this.isRestricted();
+    const restricted = this.isRestricted();
     this._states.push(stateId);
     this.sortStates();
     if (!restricted && this.isRestricted()) {
@@ -2724,8 +2724,8 @@ Game_BattlerBase.prototype.onRestrict = function () {
 };
 
 Game_BattlerBase.prototype.mostImportantStateText = function () {
-    var states = this.states();
-    for (var i = 0; i < states.length; i++) {
+    const states = this.states();
+    for (let i = 0; i < states.length; i++) {
         if (states[i].message3) {
             return states[i].message3;
         }
@@ -2734,7 +2734,7 @@ Game_BattlerBase.prototype.mostImportantStateText = function () {
 };
 
 Game_BattlerBase.prototype.stateMotionIndex = function () {
-    var states = this.states();
+    const states = this.states();
     if (states.length > 0) {
         return states[0].motion;
     } else {
@@ -2743,7 +2743,7 @@ Game_BattlerBase.prototype.stateMotionIndex = function () {
 };
 
 Game_BattlerBase.prototype.stateOverlayIndex = function () {
-    var states = this.states();
+    const states = this.states();
     if (states.length > 0) {
         return states[0].overlay;
     } else {
@@ -2961,7 +2961,7 @@ Game_Battler.prototype.shiftAnimation = function () {
 };
 
 Game_Battler.prototype.startAnimation = function (animationId, mirror, delay) {
-    var data = { animationId: animationId, mirror: mirror, delay: delay };
+    const data = { animationId: animationId, mirror: mirror, delay: delay };
     this._animations.push(data);
 };
 
@@ -3097,7 +3097,7 @@ Game_Battler.prototype.removeBattleStates = function () {
 };
 
 Game_Battler.prototype.removeAllBuffs = function () {
-    for (var i = 0; i < this.buffLength(); i++) {
+    for (let i = 0; i < this.buffLength(); i++) {
         this.removeBuff(i);
     }
 };
@@ -3111,7 +3111,7 @@ Game_Battler.prototype.removeStatesAuto = function (timing) {
 };
 
 Game_Battler.prototype.removeBuffsAuto = function () {
-    for (var i = 0; i < this.buffLength(); i++) {
+    for (let i = 0; i < this.buffLength(); i++) {
         if (this.isBuffExpired(i)) {
             this.removeBuff(i);
         }
@@ -3135,9 +3135,9 @@ Game_Battler.prototype.makeActionTimes = function () {
 Game_Battler.prototype.makeActions = function () {
     this.clearActions();
     if (this.canMove()) {
-        var actionTimes = this.makeActionTimes();
+        const actionTimes = this.makeActionTimes();
         this._actions = [];
-        for (var i = 0; i < actionTimes; i++) {
+        for (let i = 0; i < actionTimes; i++) {
             this._actions.push(new Game_Action(this));
         }
     }
@@ -3171,7 +3171,7 @@ Game_Battler.prototype.setLastTarget = function (target) {
 
 Game_Battler.prototype.forceAction = function (skillId, targetIndex) {
     this.clearActions();
-    var action = new Game_Action(this, true);
+    const action = new Game_Action(this, true);
     action.setSkill(skillId);
     if (targetIndex === -2) {
         action.setTarget(this._lastTargetIndex);
@@ -3224,12 +3224,12 @@ Game_Battler.prototype.clearTp = function () {
 };
 
 Game_Battler.prototype.chargeTpByDamage = function (damageRate) {
-    var value = Math.floor(50 * damageRate * this.tcr);
+    const value = Math.floor(50 * damageRate * this.tcr);
     this.gainSilentTp(value);
 };
 
 Game_Battler.prototype.regenerateHp = function () {
-    var value = Math.floor(this.mhp * this.hrg);
+    let value = Math.floor(this.mhp * this.hrg);
     value = Math.max(value, -this.maxSlipDamage());
     if (value !== 0) {
         this.gainHp(value);
@@ -3241,14 +3241,14 @@ Game_Battler.prototype.maxSlipDamage = function () {
 };
 
 Game_Battler.prototype.regenerateMp = function () {
-    var value = Math.floor(this.mmp * this.mrg);
+    const value = Math.floor(this.mmp * this.mrg);
     if (value !== 0) {
         this.gainMp(value);
     }
 };
 
 Game_Battler.prototype.regenerateTp = function () {
-    var value = Math.floor(100 * this.trg);
+    const value = Math.floor(100 * this.trg);
     this.gainSilentTp(value);
 };
 
@@ -3431,7 +3431,7 @@ Game_Actor.prototype.initMembers = function () {
 };
 
 Game_Actor.prototype.setup = function (actorId) {
-    var actor = $dataActors[actorId];
+    const actor = $dataActors[actorId];
     this._actorId = actorId;
     this._name = actor.name;
     this._nickname = actor.nickname;
@@ -3514,7 +3514,7 @@ Game_Actor.prototype.resetStateCounts = function (stateId) {
 };
 
 Game_Actor.prototype.initImages = function () {
-    var actor = this.actor();
+    const actor = this.actor();
     this._characterName = actor.characterName;
     this._characterIndex = actor.characterIndex;
     this._faceName = actor.faceName;
@@ -3523,11 +3523,11 @@ Game_Actor.prototype.initImages = function () {
 };
 
 Game_Actor.prototype.expForLevel = function (level) {
-    var c = this.currentClass();
-    var basis = c.expParams[0];
-    var extra = c.expParams[1];
-    var acc_a = c.expParams[2];
-    var acc_b = c.expParams[3];
+    const c = this.currentClass();
+    const basis = c.expParams[0];
+    const extra = c.expParams[1];
+    const acc_a = c.expParams[2];
+    const acc_b = c.expParams[3];
     return Math.round(basis * (Math.pow(level - 1, 0.9 + acc_a / 250)) * level *
         (level + 1) / (6 + Math.pow(level, 2) / 50 / acc_b) + (level - 1) * extra);
 };
@@ -3570,15 +3570,15 @@ Game_Actor.prototype.initSkills = function () {
 };
 
 Game_Actor.prototype.initEquips = function (equips) {
-    var slots = this.equipSlots();
-    var maxSlots = slots.length;
+    const slots = this.equipSlots();
+    const maxSlots = slots.length;
     this._equips = [];
-    for (var i = 0; i < maxSlots; i++) {
+    for (let i = 0; i < maxSlots; i++) {
         this._equips[i] = new Game_Item();
     }
-    for (var j = 0; j < equips.length; j++) {
-        if (j < maxSlots) {
-            this._equips[j].setEquip(slots[j] === 1, equips[j]);
+    for (let i = 0; i < equips.length; i++) {
+        if (i < maxSlots) {
+            this._equips[i].setEquip(slots[i] === 1, equips[i]);
         }
     }
     this.releaseUnequippableItems(true);
@@ -3586,8 +3586,8 @@ Game_Actor.prototype.initEquips = function (equips) {
 };
 
 Game_Actor.prototype.equipSlots = function () {
-    var slots = [];
-    for (var i = 1; i < $dataSystem.equipTypes.length; i++) {
+    const slots = [];
+    for (let i = 1; i < $dataSystem.equipTypes.length; i++) {
         slots.push(i);
     }
     if (slots.length >= 2 && this.isDualWield()) {
@@ -3652,7 +3652,7 @@ Game_Actor.prototype.tradeItemWithParty = function (newItem, oldItem) {
 };
 
 Game_Actor.prototype.changeEquipById = function (etypeId, itemId) {
-    var slotId = etypeId - 1;
+    const slotId = etypeId - 1;
     if (this.equipSlots()[slotId] === 1) {
         this.changeEquip(slotId, $dataWeapons[itemId]);
     } else {
@@ -3665,7 +3665,7 @@ Game_Actor.prototype.isEquipped = function (item) {
 };
 
 Game_Actor.prototype.discardEquip = function (item) {
-    var slotId = this.equips().indexOf(item);
+    const slotId = this.equips().indexOf(item);
     if (slotId >= 0) {
         this._equips[slotId].setObject(null);
     }
@@ -3673,11 +3673,11 @@ Game_Actor.prototype.discardEquip = function (item) {
 
 Game_Actor.prototype.releaseUnequippableItems = function (forcing) {
     for (; ;) {
-        var slots = this.equipSlots();
-        var equips = this.equips();
-        var changed = false;
-        for (var i = 0; i < equips.length; i++) {
-            var item = equips[i];
+        const slots = this.equipSlots();
+        const equips = this.equips();
+        let changed = false;
+        for (let i = 0; i < equips.length; i++) {
+            const item = equips[i];
             if (item && (!this.canEquip(item) || item.etypeId !== slots[i])) {
                 if (!forcing) {
                     this.tradeItemWithParty(null, item);
@@ -3693,8 +3693,8 @@ Game_Actor.prototype.releaseUnequippableItems = function (forcing) {
 };
 
 Game_Actor.prototype.clearEquipments = function () {
-    var maxSlots = this.equipSlots().length;
-    for (var i = 0; i < maxSlots; i++) {
+    const maxSlots = this.equipSlots().length;
+    for (let i = 0; i < maxSlots; i++) {
         if (this.isEquipChangeOk(i)) {
             this.changeEquip(i, null);
         }
@@ -3702,9 +3702,9 @@ Game_Actor.prototype.clearEquipments = function () {
 };
 
 Game_Actor.prototype.optimizeEquipments = function () {
-    var maxSlots = this.equipSlots().length;
+    const maxSlots = this.equipSlots().length;
     this.clearEquipments();
-    for (var i = 0; i < maxSlots; i++) {
+    for (let i = 0; i < maxSlots; i++) {
         if (this.isEquipChangeOk(i)) {
             this.changeEquip(i, this.bestEquipItem(i));
         }
@@ -3712,14 +3712,14 @@ Game_Actor.prototype.optimizeEquipments = function () {
 };
 
 Game_Actor.prototype.bestEquipItem = function (slotId) {
-    var etypeId = this.equipSlots()[slotId];
-    var items = $gameParty.equipItems().filter(function (item) {
+    const etypeId = this.equipSlots()[slotId];
+    const items = $gameParty.equipItems().filter(function (item) {
         return item.etypeId === etypeId && this.canEquip(item);
     }, this);
-    var bestItem = null;
-    var bestPerformance = -1000;
-    for (var i = 0; i < items.length; i++) {
-        var performance = this.calcEquipItemPerformance(items[i]);
+    let bestItem = null;
+    let bestPerformance = -1000;
+    for (let i = 0; i < items.length; i++) {
+        const performance = this.calcEquipItemPerformance(items[i]);
         if (performance > bestPerformance) {
             bestPerformance = performance;
             bestItem = items[i];
@@ -3735,8 +3735,8 @@ Game_Actor.prototype.calcEquipItemPerformance = function (item) {
 };
 
 Game_Actor.prototype.isSkillWtypeOk = function (skill) {
-    var wtypeId1 = skill.requiredWtypeId1;
-    var wtypeId2 = skill.requiredWtypeId2;
+    const wtypeId1 = skill.requiredWtypeId1;
+    const wtypeId2 = skill.requiredWtypeId2;
     if ((wtypeId1 === 0 && wtypeId2 === 0) ||
         (wtypeId1 > 0 && this.isWtypeEquipped(wtypeId1)) ||
         (wtypeId2 > 0 && this.isWtypeEquipped(wtypeId2))) {
@@ -3790,7 +3790,7 @@ Game_Actor.prototype.isClass = function (gameClass) {
 };
 
 Game_Actor.prototype.skills = function () {
-    var list = [];
+    const list = [];
     this._skills.concat(this.addedSkills()).forEach(function (id) {
         if (!list.contains($dataSkills[id])) {
             list.push($dataSkills[id]);
@@ -3806,11 +3806,11 @@ Game_Actor.prototype.usableSkills = function () {
 };
 
 Game_Actor.prototype.traitObjects = function () {
-    var objects = Game_Battler.prototype.traitObjects.call(this);
+    let objects = Game_Battler.prototype.traitObjects.call(this);
     objects = objects.concat([this.actor(), this.currentClass()]);
-    var equips = this.equips();
-    for (var i = 0; i < equips.length; i++) {
-        var item = equips[i];
+    const equips = this.equips();
+    for (let i = 0; i < equips.length; i++) {
+        const item = equips[i];
         if (item) {
             objects.push(item);
         }
@@ -3819,7 +3819,7 @@ Game_Actor.prototype.traitObjects = function () {
 };
 
 Game_Actor.prototype.attackElements = function () {
-    var set = Game_Battler.prototype.attackElements.call(this);
+    const set = Game_Battler.prototype.attackElements.call(this);
     if (this.hasNoWeapons() && !set.contains(this.bareHandsElementId())) {
         set.push(this.bareHandsElementId());
     }
@@ -3846,10 +3846,10 @@ Game_Actor.prototype.paramBase = function (paramId) {
 };
 
 Game_Actor.prototype.paramPlus = function (paramId) {
-    var value = Game_Battler.prototype.paramPlus.call(this, paramId);
-    var equips = this.equips();
-    for (var i = 0; i < equips.length; i++) {
-        var item = equips[i];
+    let value = Game_Battler.prototype.paramPlus.call(this, paramId);
+    const equips = this.equips();
+    for (let i = 0; i < equips.length; i++) {
+        const item = equips[i];
         if (item) {
             value += item.params[paramId];
         }
@@ -3861,13 +3861,13 @@ Game_Actor.prototype.attackAnimationId1 = function () {
     if (this.hasNoWeapons()) {
         return this.bareHandsAnimationId();
     } else {
-        var weapons = this.weapons();
+        const weapons = this.weapons();
         return weapons[0] ? weapons[0].animationId : 0;
     }
 };
 
 Game_Actor.prototype.attackAnimationId2 = function () {
-    var weapons = this.weapons();
+    const weapons = this.weapons();
     return weapons[1] ? weapons[1].animationId : 0;
 };
 
@@ -3877,8 +3877,8 @@ Game_Actor.prototype.bareHandsAnimationId = function () {
 
 Game_Actor.prototype.changeExp = function (exp, show) {
     this._exp[this._classId] = Math.max(exp, 0);
-    var lastLevel = this._level;
-    var lastSkills = this.skills();
+    const lastLevel = this._level;
+    const lastSkills = this.skills();
     while (!this.isMaxLevel() && this.currentExp() >= this.nextLevelExp()) {
         this.levelUp();
     }
@@ -3905,9 +3905,9 @@ Game_Actor.prototype.levelDown = function () {
 };
 
 Game_Actor.prototype.findNewSkills = function (lastSkills) {
-    var newSkills = this.skills();
-    for (var i = 0; i < lastSkills.length; i++) {
-        var index = newSkills.indexOf(lastSkills[i]);
+    const newSkills = this.skills();
+    for (let i = 0; i < lastSkills.length; i++) {
+        const index = newSkills.indexOf(lastSkills[i]);
         if (index >= 0) {
             newSkills.splice(index, 1);
         }
@@ -3916,7 +3916,7 @@ Game_Actor.prototype.findNewSkills = function (lastSkills) {
 };
 
 Game_Actor.prototype.displayLevelUp = function (newSkills) {
-    var text = TextManager.levelUp.format(this._name, TextManager.level, this._level);
+    const text = TextManager.levelUp.format(this._name, TextManager.level, this._level);
     $gameMessage.newPage();
     $gameMessage.add(text);
     newSkills.forEach(function (skill) {
@@ -3925,7 +3925,7 @@ Game_Actor.prototype.displayLevelUp = function (newSkills) {
 };
 
 Game_Actor.prototype.gainExp = function (exp) {
-    var newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
+    const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
     this.changeExp(newExp, this.shouldDisplayLevelUp());
 };
 
@@ -3956,7 +3956,7 @@ Game_Actor.prototype.learnSkill = function (skillId) {
 };
 
 Game_Actor.prototype.forgetSkill = function (skillId) {
-    var index = this._skills.indexOf(skillId);
+    const index = this._skills.indexOf(skillId);
     if (index >= 0) {
         this._skills.splice(index, 1);
     }
@@ -4026,9 +4026,9 @@ Game_Actor.prototype.performActionEnd = function () {
 };
 
 Game_Actor.prototype.performAttack = function () {
-    var weapons = this.weapons();
-    var wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
-    var attackMotion = $dataSystem.attackMotions[wtypeId];
+    const weapons = this.weapons();
+    const wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
+    const attackMotion = $dataSystem.attackMotions[wtypeId];
     if (attackMotion) {
         if (attackMotion.type === 0) {
             this.requestMotion('thrust');
@@ -4086,8 +4086,8 @@ Game_Actor.prototype.performEscape = function () {
 };
 
 Game_Actor.prototype.makeActionList = function () {
-    var list = [];
-    var action = new Game_Action(this);
+    const list = [];
+    let action = new Game_Action(this);
     action.setAttack();
     list.push(action);
     this.usableSkills().forEach(function (skill) {
@@ -4099,11 +4099,11 @@ Game_Actor.prototype.makeActionList = function () {
 };
 
 Game_Actor.prototype.makeAutoBattleActions = function () {
-    for (var i = 0; i < this.numActions(); i++) {
-        var list = this.makeActionList();
-        var maxValue = Number.MIN_VALUE;
-        for (var j = 0; j < list.length; j++) {
-            var value = list[j].evaluate();
+    for (let i = 0; i < this.numActions(); i++) {
+        const list = this.makeActionList();
+        let maxValue = Number.MIN_VALUE;
+        for (let j = 0; j < list.length; j++) {
+            const value = list[j].evaluate();
             if (value > maxValue) {
                 maxValue = value;
                 this.setAction(i, list[j]);
@@ -4114,7 +4114,7 @@ Game_Actor.prototype.makeAutoBattleActions = function () {
 };
 
 Game_Actor.prototype.makeConfusionActions = function () {
-    for (var i = 0; i < this.numActions(); i++) {
+    for (let i = 0; i < this.numActions(); i++) {
         this.action(i).setConfusion();
     }
     this.setActionState('waiting');
@@ -4193,7 +4193,7 @@ Game_Actor.prototype.checkFloorEffect = function () {
 };
 
 Game_Actor.prototype.executeFloorDamage = function () {
-    var damage = Math.floor(this.basicFloorDamage() * this.fdr);
+    let damage = Math.floor(this.basicFloorDamage() * this.fdr);
     damage = Math.min(damage, this.maxFloorDamage());
     this.gainHp(-damage);
     if (damage > 0) {
@@ -4459,7 +4459,7 @@ Game_Enemy.prototype.performCollapse = function () {
 };
 
 Game_Enemy.prototype.transform = function (enemyId) {
-    var name = this.originalName();
+    const name = this.originalName();
     this._enemyId = enemyId;
     if (this.originalName() !== name) {
         this._letter = '';
@@ -4472,8 +4472,8 @@ Game_Enemy.prototype.transform = function (enemyId) {
 };
 
 Game_Enemy.prototype.meetsCondition = function (action) {
-    var param1 = action.conditionParam1;
-    var param2 = action.conditionParam2;
+    const param1 = action.conditionParam1;
+    const param2 = action.conditionParam2;
     switch (action.conditionType) {
         case 1:
             return this.meetsTurnCondition(param1, param2);
@@ -4493,7 +4493,7 @@ Game_Enemy.prototype.meetsCondition = function (action) {
 };
 
 Game_Enemy.prototype.meetsTurnCondition = function (param1, param2) {
-    var n = $gameTroop.turnCount();
+    const n = $gameTroop.turnCount();
     if (param2 === 0) {
         return n === param1;
     } else {
@@ -4526,13 +4526,13 @@ Game_Enemy.prototype.isActionValid = function (action) {
 };
 
 Game_Enemy.prototype.selectAction = function (actionList, ratingZero) {
-    var sum = actionList.reduce(function (r, a) {
+    const sum = actionList.reduce(function (r, a) {
         return r + a.rating - ratingZero;
     }, 0);
     if (sum > 0) {
-        var value = Math.randomInt(sum);
-        for (var i = 0; i < actionList.length; i++) {
-            var action = actionList[i];
+        let value = Math.randomInt(sum);
+        for (let i = 0; i < actionList.length; i++) {
+            const action = actionList[i];
             value -= action.rating - ratingZero;
             if (value < 0) {
                 return action;
@@ -4544,14 +4544,14 @@ Game_Enemy.prototype.selectAction = function (actionList, ratingZero) {
 };
 
 Game_Enemy.prototype.selectAllActions = function (actionList) {
-    var ratingMax = Math.max.apply(null, actionList.map(function (a) {
+    const ratingMax = Math.max.apply(null, actionList.map(function (a) {
         return a.rating;
     }));
-    var ratingZero = ratingMax - 3;
+    const ratingZero = ratingMax - 3;
     actionList = actionList.filter(function (a) {
         return a.rating > ratingZero;
     });
-    for (var i = 0; i < this.numActions(); i++) {
+    for (let i = 0; i < this.numActions(); i++) {
         this.action(i).setEnemyAction(this.selectAction(actionList, ratingZero));
     }
 };
@@ -4559,7 +4559,7 @@ Game_Enemy.prototype.selectAllActions = function (actionList) {
 Game_Enemy.prototype.makeActions = function () {
     Game_Battler.prototype.makeActions.call(this);
     if (this.numActions() > 0) {
-        var actionList = this.enemy().actions.filter(function (a) {
+        const actionList = this.enemy().actions.filter(function (a) {
             return this.isActionValid(a);
         }, this);
         if (actionList.length > 0) {
@@ -4638,11 +4638,11 @@ Game_Unit.prototype.clearActions = function () {
 };
 
 Game_Unit.prototype.agility = function () {
-    var members = this.members();
+    const members = this.members();
     if (members.length === 0) {
         return 1;
     }
-    var sum = members.reduce(function (r, member) {
+    const sum = members.reduce(function (r, member) {
         return r + member.agi;
     }, 0);
     return sum / members.length;
@@ -4655,8 +4655,8 @@ Game_Unit.prototype.tgrSum = function () {
 };
 
 Game_Unit.prototype.randomTarget = function () {
-    var tgrRand = Math.random() * this.tgrSum();
-    var target = null;
+    let tgrRand = Math.random() * this.tgrSum();
+    let target = null;
     this.aliveMembers().forEach(function (member) {
         tgrRand -= member.tgr;
         if (tgrRand <= 0 && !target) {
@@ -4667,7 +4667,7 @@ Game_Unit.prototype.randomTarget = function () {
 };
 
 Game_Unit.prototype.randomDeadTarget = function () {
-    var members = this.deadMembers();
+    const members = this.deadMembers();
     if (members.length === 0) {
         return null;
     }
@@ -4678,7 +4678,7 @@ Game_Unit.prototype.smoothTarget = function (index) {
     if (index < 0) {
         index = 0;
     }
-    var member = this.members()[index];
+    const member = this.members()[index];
     return (member && member.isAlive()) ? member : this.aliveMembers()[0];
 };
 
@@ -4686,7 +4686,7 @@ Game_Unit.prototype.smoothDeadTarget = function (index) {
     if (index < 0) {
         index = 0;
     }
-    var member = this.members()[index];
+    const member = this.members()[index];
     return (member && member.isDead()) ? member : this.deadMembers()[0];
 };
 
@@ -4731,8 +4731,8 @@ Game_Unit.prototype.isAllDead = function () {
 };
 
 Game_Unit.prototype.substituteBattler = function () {
-    var members = this.members();
-    for (var i = 0; i < members.length; i++) {
+    const members = this.members();
+    for (let i = 0; i < members.length; i++) {
         if (members[i].isSubstitute()) {
             return members[i];
         }
@@ -4821,24 +4821,24 @@ Game_Party.prototype.reviveBattleMembers = function () {
 };
 
 Game_Party.prototype.items = function () {
-    var list = [];
-    for (var id in this._items) {
+    const list = [];
+    for (const id in this._items) {
         list.push($dataItems[id]);
     }
     return list;
 };
 
 Game_Party.prototype.weapons = function () {
-    var list = [];
-    for (var id in this._weapons) {
+    const list = [];
+    for (const id in this._weapons) {
         list.push($dataWeapons[id]);
     }
     return list;
 };
 
 Game_Party.prototype.armors = function () {
-    var list = [];
-    for (var id in this._armors) {
+    const list = [];
+    for (const id in this._armors) {
         list.push($dataArmors[id]);
     }
     return list;
@@ -4876,7 +4876,7 @@ Game_Party.prototype.setupStartingMembers = function () {
 };
 
 Game_Party.prototype.name = function () {
-    var numBattleMembers = this.battleMembers().length;
+    const numBattleMembers = this.battleMembers().length;
     if (numBattleMembers === 0) {
         return '';
     } else if (numBattleMembers === 1) {
@@ -4893,7 +4893,7 @@ Game_Party.prototype.setupBattleTest = function () {
 
 Game_Party.prototype.setupBattleTestMembers = function () {
     $dataSystem.testBattlers.forEach(function (battler) {
-        var actor = $gameActors.actor(battler.actorId);
+        const actor = $gameActors.actor(battler.actorId);
         if (actor) {
             actor.changeLevel(battler.level, false);
             actor.initEquips(battler.equips);
@@ -4958,7 +4958,7 @@ Game_Party.prototype.increaseSteps = function () {
 };
 
 Game_Party.prototype.numItems = function (item) {
-    var container = this.itemContainer(item);
+    const container = this.itemContainer(item);
     return container ? container[item.id] || 0 : 0;
 };
 
@@ -4990,10 +4990,10 @@ Game_Party.prototype.isAnyMemberEquipped = function (item) {
 };
 
 Game_Party.prototype.gainItem = function (item, amount, includeEquip) {
-    var container = this.itemContainer(item);
+    const container = this.itemContainer(item);
     if (container) {
-        var lastNumber = this.numItems(item);
-        var newNumber = lastNumber + amount;
+        const lastNumber = this.numItems(item);
+        const newNumber = lastNumber + amount;
         container[item.id] = newNumber.clamp(0, this.maxItems(item));
         if (container[item.id] === 0) {
             delete container[item.id];
@@ -5006,7 +5006,7 @@ Game_Party.prototype.gainItem = function (item, amount, includeEquip) {
 };
 
 Game_Party.prototype.discardMembersEquip = function (item, amount) {
-    var n = amount;
+    let n = amount;
     this.members().forEach(function (actor) {
         while (n > 0 && actor.isEquipped(item)) {
             actor.discardEquip(item);
@@ -5052,7 +5052,7 @@ Game_Party.prototype.onPlayerWalk = function () {
 };
 
 Game_Party.prototype.menuActor = function () {
-    var actor = $gameActors.actor(this._menuActorId);
+    let actor = $gameActors.actor(this._menuActorId);
     if (!this.members().contains(actor)) {
         actor = this.members()[0];
     }
@@ -5064,7 +5064,7 @@ Game_Party.prototype.setMenuActor = function (actor) {
 };
 
 Game_Party.prototype.makeMenuActorNext = function () {
-    var index = this.members().indexOf(this.menuActor());
+    let index = this.members().indexOf(this.menuActor());
     if (index >= 0) {
         index = (index + 1) % this.members().length;
         this.setMenuActor(this.members()[index]);
@@ -5074,7 +5074,7 @@ Game_Party.prototype.makeMenuActorNext = function () {
 };
 
 Game_Party.prototype.makeMenuActorPrevious = function () {
-    var index = this.members().indexOf(this.menuActor());
+    let index = this.members().indexOf(this.menuActor());
     if (index >= 0) {
         index = (index + this.members().length - 1) % this.members().length;
         this.setMenuActor(this.members()[index]);
@@ -5084,7 +5084,7 @@ Game_Party.prototype.makeMenuActorPrevious = function () {
 };
 
 Game_Party.prototype.targetActor = function () {
-    var actor = $gameActors.actor(this._targetActorId);
+    let actor = $gameActors.actor(this._targetActorId);
     if (!this.members().contains(actor)) {
         actor = this.members()[0];
     }
@@ -5104,7 +5104,7 @@ Game_Party.prototype.setLastItem = function (item) {
 };
 
 Game_Party.prototype.swapOrder = function (index1, index2) {
-    var temp = this._actors[index1];
+    const temp = this._actors[index1];
     this._actors[index1] = this._actors[index2];
     this._actors[index2] = temp;
     $gamePlayer.refresh();
@@ -5153,7 +5153,7 @@ Game_Party.prototype.hasDropItemDouble = function () {
 };
 
 Game_Party.prototype.ratePreemptive = function (troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.05 : 0.03;
+    let rate = this.agility() >= troopAgi ? 0.05 : 0.03;
     if (this.hasRaisePreemptive()) {
         rate *= 4;
     }
@@ -5161,7 +5161,7 @@ Game_Party.prototype.ratePreemptive = function (troopAgi) {
 };
 
 Game_Party.prototype.rateSurprise = function (troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.03 : 0.05;
+    let rate = this.agility() >= troopAgi ? 0.03 : 0.05;
     if (this.hasCancelSurprise()) {
         rate = 0;
     }
@@ -5254,10 +5254,10 @@ Game_Troop.prototype.setup = function (troopId) {
     this._enemies = [];
     this.troop().members.forEach(function (member) {
         if ($dataEnemies[member.enemyId]) {
-            var enemyId = member.enemyId;
-            var x = member.x;
-            var y = member.y;
-            var enemy = new Game_Enemy(enemyId, x, y);
+            const enemyId = member.enemyId;
+            const x = member.x;
+            const y = member.y;
+            const enemy = new Game_Enemy(enemyId, x, y);
             if (member.hidden) {
                 enemy.hide();
             }
@@ -5268,17 +5268,17 @@ Game_Troop.prototype.setup = function (troopId) {
 };
 
 Game_Troop.prototype.makeUniqueNames = function () {
-    var table = this.letterTable();
+    const table = this.letterTable();
     this.members().forEach(function (enemy) {
         if (enemy.isAlive() && enemy.isLetterEmpty()) {
-            var name = enemy.originalName();
-            var n = this._namesCount[name] || 0;
+            const name = enemy.originalName();
+            const n = this._namesCount[name] || 0;
             enemy.setLetter(table[n % table.length]);
             this._namesCount[name] = n + 1;
         }
     }, this);
     this.members().forEach(function (enemy) {
-        var name = enemy.originalName();
+        const name = enemy.originalName();
         if (this._namesCount[name] >= 2) {
             enemy.setPlural(true);
         }
@@ -5291,9 +5291,9 @@ Game_Troop.prototype.letterTable = function () {
 };
 
 Game_Troop.prototype.enemyNames = function () {
-    var names = [];
+    const names = [];
     this.members().forEach(function (enemy) {
-        var name = enemy.originalName();
+        const name = enemy.originalName();
         if (enemy.isAlive() && !names.contains(name)) {
             names.push(name);
         }
@@ -5302,7 +5302,7 @@ Game_Troop.prototype.enemyNames = function () {
 };
 
 Game_Troop.prototype.meetsConditions = function (page) {
-    var c = page.conditions;
+    const c = page.conditions;
     if (!c.turnEnding && !c.turnValid && !c.enemyValid &&
         !c.actorValid && !c.switchValid) {
         return false;  // Conditions not set
@@ -5313,9 +5313,9 @@ Game_Troop.prototype.meetsConditions = function (page) {
         }
     }
     if (c.turnValid) {
-        var n = this._turnCount;
-        var a = c.turnA;
-        var b = c.turnB;
+        const n = this._turnCount;
+        const a = c.turnA;
+        const b = c.turnB;
         if ((b === 0 && n !== a)) {
             return false;
         }
@@ -5324,13 +5324,13 @@ Game_Troop.prototype.meetsConditions = function (page) {
         }
     }
     if (c.enemyValid) {
-        var enemy = $gameTroop.members()[c.enemyIndex];
+        const enemy = $gameTroop.members()[c.enemyIndex];
         if (!enemy || enemy.hpRate() * 100 > c.enemyHp) {
             return false;
         }
     }
     if (c.actorValid) {
-        var actor = $gameActors.actor(c.actorId);
+        const actor = $gameActors.actor(c.actorId);
         if (!actor || actor.hpRate() * 100 > c.actorHp) {
             return false;
         }
@@ -5348,9 +5348,9 @@ Game_Troop.prototype.setupBattleEvent = function () {
         if (this._interpreter.setupReservedCommonEvent()) {
             return;
         }
-        var pages = this.troop().pages;
-        for (var i = 0; i < pages.length; i++) {
-            var page = pages[i];
+        const pages = this.troop().pages;
+        for (let i = 0; i < pages.length; i++) {
+            const page = pages[i];
             if (this.meetsConditions(page) && !this._eventFlags[i]) {
                 this._interpreter.setup(page.list);
                 if (page.span <= 1) {
@@ -5363,9 +5363,9 @@ Game_Troop.prototype.setupBattleEvent = function () {
 };
 
 Game_Troop.prototype.increaseTurn = function () {
-    var pages = this.troop().pages;
-    for (var i = 0; i < pages.length; i++) {
-        var page = pages[i];
+    const pages = this.troop().pages;
+    for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
         if (page.span === 1) {
             this._eventFlags[i] = false;
         }
@@ -5546,7 +5546,7 @@ Game_Map.prototype.airship = function () {
 
 Game_Map.prototype.setupEvents = function () {
     this._events = [];
-    for (var i = 0; i < $dataMap.events.length; i++) {
+    for (let i = 0; i < $dataMap.events.length; i++) {
         if ($dataMap.events[i]) {
             this._events[i] = new Game_Event(this._mapId, i);
         }
@@ -5609,7 +5609,7 @@ Game_Map.prototype.setDisplayPos = function (x, y) {
         this._displayX = x.mod(this.width());
         this._parallaxX = x;
     } else {
-        var endX = this.width() - this.screenTileX();
+        const endX = this.width() - this.screenTileX();
         this._displayX = endX < 0 ? endX / 2 : x.clamp(0, endX);
         this._parallaxX = this._displayX;
     }
@@ -5617,7 +5617,7 @@ Game_Map.prototype.setDisplayPos = function (x, y) {
         this._displayY = y.mod(this.height());
         this._parallaxY = y;
     } else {
-        var endY = this.height() - this.screenTileY();
+        const endY = this.height() - this.screenTileY();
         this._displayY = endY < 0 ? endY / 2 : y.clamp(0, endY);
         this._parallaxY = this._displayY;
     }
@@ -5648,7 +5648,7 @@ Game_Map.prototype.tileset = function () {
 };
 
 Game_Map.prototype.tilesetFlags = function () {
-    var tileset = this.tileset();
+    const tileset = this.tileset();
     if (tileset) {
         return tileset.flags;
     } else {
@@ -5747,7 +5747,7 @@ Game_Map.prototype.roundYWithDirection = function (y, d) {
 };
 
 Game_Map.prototype.deltaX = function (x1, x2) {
-    var result = x1 - x2;
+    let result = x1 - x2;
     if (this.isLoopHorizontal() && Math.abs(result) > this.width() / 2) {
         if (result < 0) {
             result += this.width();
@@ -5759,7 +5759,7 @@ Game_Map.prototype.deltaX = function (x1, x2) {
 };
 
 Game_Map.prototype.deltaY = function (y1, y2) {
-    var result = y1 - y2;
+    let result = y1 - y2;
     if (this.isLoopVertical() && Math.abs(result) > this.height() / 2) {
         if (result < 0) {
             result += this.height();
@@ -5775,16 +5775,16 @@ Game_Map.prototype.distance = function (x1, y1, x2, y2) {
 };
 
 Game_Map.prototype.canvasToMapX = function (x) {
-    var tileWidth = this.tileWidth();
-    var originX = this._displayX * tileWidth;
-    var mapX = Math.floor((originX + x) / tileWidth);
+    const tileWidth = this.tileWidth();
+    const originX = this._displayX * tileWidth;
+    const mapX = Math.floor((originX + x) / tileWidth);
     return this.roundX(mapX);
 };
 
 Game_Map.prototype.canvasToMapY = function (y) {
-    var tileHeight = this.tileHeight();
-    var originY = this._displayY * tileHeight;
-    var mapY = Math.floor((originY + y) / tileHeight);
+    const tileHeight = this.tileHeight();
+    const originY = this._displayY * tileHeight;
+    const mapY = Math.floor((originY + y) / tileHeight);
     return this.roundY(mapY);
 };
 
@@ -5843,7 +5843,7 @@ Game_Map.prototype.tileEventsXy = function (x, y) {
 };
 
 Game_Map.prototype.eventIdXy = function (x, y) {
-    var list = this.eventsXy(x, y);
+    const list = this.eventsXy(x, y);
     return list.length === 0 ? 0 : list[0].eventId();
 };
 
@@ -5855,7 +5855,7 @@ Game_Map.prototype.scrollDown = function (distance) {
             this._parallaxY += distance;
         }
     } else if (this.height() >= this.screenTileY()) {
-        var lastY = this._displayY;
+        const lastY = this._displayY;
         this._displayY = Math.min(this._displayY + distance,
             this.height() - this.screenTileY());
         this._parallaxY += this._displayY - lastY;
@@ -5870,7 +5870,7 @@ Game_Map.prototype.scrollLeft = function (distance) {
             this._parallaxX -= distance;
         }
     } else if (this.width() >= this.screenTileX()) {
-        var lastX = this._displayX;
+        const lastX = this._displayX;
         this._displayX = Math.max(this._displayX - distance, 0);
         this._parallaxX += this._displayX - lastX;
     }
@@ -5884,7 +5884,7 @@ Game_Map.prototype.scrollRight = function (distance) {
             this._parallaxX += distance;
         }
     } else if (this.width() >= this.screenTileX()) {
-        var lastX = this._displayX;
+        const lastX = this._displayX;
         this._displayX = Math.min(this._displayX + distance,
             this.width() - this.screenTileX());
         this._parallaxX += this._displayX - lastX;
@@ -5899,7 +5899,7 @@ Game_Map.prototype.scrollUp = function (distance) {
             this._parallaxY -= distance;
         }
     } else if (this.height() >= this.screenTileY()) {
-        var lastY = this._displayY;
+        const lastY = this._displayY;
         this._displayY = Math.max(this._displayY - distance, 0);
         this._parallaxY += this._displayY - lastY;
     }
@@ -5910,10 +5910,10 @@ Game_Map.prototype.isValid = function (x, y) {
 };
 
 Game_Map.prototype.checkPassage = function (x, y, bit) {
-    var flags = this.tilesetFlags();
-    var tiles = this.allTiles(x, y);
-    for (var i = 0; i < tiles.length; i++) {
-        var flag = flags[tiles[i]];
+    const flags = this.tilesetFlags();
+    const tiles = this.allTiles(x, y);
+    for (let i = 0; i < tiles.length; i++) {
+        const flag = flags[tiles[i]];
         if ((flag & 0x10) !== 0)  // [*] No effect on passage
             continue;
         if ((flag & bit) === 0)   // [o] Passable
@@ -5925,28 +5925,28 @@ Game_Map.prototype.checkPassage = function (x, y, bit) {
 };
 
 Game_Map.prototype.tileId = function (x, y, z) {
-    var width = $dataMap.width;
-    var height = $dataMap.height;
+    const width = $dataMap.width;
+    const height = $dataMap.height;
     return $dataMap.data[(z * height + y) * width + x] || 0;
 };
 
 Game_Map.prototype.layeredTiles = function (x, y) {
-    var tiles = [];
-    for (var i = 0; i < 4; i++) {
+    const tiles = [];
+    for (let i = 0; i < 4; i++) {
         tiles.push(this.tileId(x, y, 3 - i));
     }
     return tiles;
 };
 
 Game_Map.prototype.allTiles = function (x, y) {
-    var tiles = this.tileEventsXy(x, y).map(function (event) {
+    const tiles = this.tileEventsXy(x, y).map(function (event) {
         return event.tileId();
     });
     return tiles.concat(this.layeredTiles(x, y));
 };
 
 Game_Map.prototype.autotileType = function (x, y, z) {
-    var tileId = this.tileId(x, y, z);
+    const tileId = this.tileId(x, y, z);
     return tileId >= 2048 ? Math.floor((tileId - 2048) / 48) : -1;
 };
 
@@ -5967,7 +5967,7 @@ Game_Map.prototype.isAirshipLandOk = function (x, y) {
 };
 
 Game_Map.prototype.checkLayeredTilesFlags = function (x, y, bit) {
-    var flags = this.tilesetFlags();
+    const flags = this.tilesetFlags();
     return this.layeredTiles(x, y).some(function (tileId) {
         return (flags[tileId] & bit) !== 0;
     });
@@ -5991,10 +5991,10 @@ Game_Map.prototype.isDamageFloor = function (x, y) {
 
 Game_Map.prototype.terrainTag = function (x, y) {
     if (this.isValid(x, y)) {
-        var flags = this.tilesetFlags();
-        var tiles = this.layeredTiles(x, y);
-        for (var i = 0; i < tiles.length; i++) {
-            var tag = flags[tiles[i]] >> 12;
+        const flags = this.tilesetFlags();
+        const tiles = this.layeredTiles(x, y);
+        for (let i = 0; i < tiles.length; i++) {
+            const tag = flags[tiles[i]] >> 12;
             if (tag > 0) {
                 return tag;
             }
@@ -6030,8 +6030,8 @@ Game_Map.prototype.update = function (sceneActive) {
 
 Game_Map.prototype.updateScroll = function () {
     if (this.isScrolling()) {
-        var lastX = this._displayX;
-        var lastY = this._displayY;
+        const lastX = this._displayX;
+        const lastY = this._displayY;
         this.doScroll(this._scrollDirection, this.scrollDistance());
         if (this._displayX === lastX && this._displayY === lastY) {
             this._scrollRest = 0;
@@ -6160,9 +6160,9 @@ Game_Map.prototype.setupTestEvent = function () {
 };
 
 Game_Map.prototype.setupStartingMapEvent = function () {
-    var events = this.events();
-    for (var i = 0; i < events.length; i++) {
-        var event = events[i];
+    const events = this.events();
+    for (let i = 0; i < events.length; i++) {
+        const event = events[i];
         if (event.isStarting()) {
             event.clearStartingFlag();
             this._interpreter.setup(event.list(), event.eventId());
@@ -6173,8 +6173,8 @@ Game_Map.prototype.setupStartingMapEvent = function () {
 };
 
 Game_Map.prototype.setupAutorunCommonEvent = function () {
-    for (var i = 0; i < $dataCommonEvents.length; i++) {
-        var event = $dataCommonEvents[i];
+    for (let i = 0; i < $dataCommonEvents.length; i++) {
+        const event = $dataCommonEvents[i];
         if (event && event.trigger === 1 && $gameSwitches.value(event.switchId)) {
             this._interpreter.setup(event.list);
             return true;
@@ -6223,7 +6223,7 @@ Game_CommonEvent.prototype.refresh = function () {
 };
 
 Game_CommonEvent.prototype.isActive = function () {
-    var event = this.event();
+    const event = this.event();
     return event.trigger === 2 && $gameSwitches.value(event.switchId);
 };
 
@@ -6390,8 +6390,8 @@ Game_CharacterBase.prototype.reverseDir = function (d) {
 };
 
 Game_CharacterBase.prototype.canPass = function (x, y, d) {
-    var x2 = $gameMap.roundXWithDirection(x, d);
-    var y2 = $gameMap.roundYWithDirection(y, d);
+    const x2 = $gameMap.roundXWithDirection(x, d);
+    const y2 = $gameMap.roundYWithDirection(y, d);
     if (!$gameMap.isValid(x2, y2)) {
         return false;
     }
@@ -6408,8 +6408,8 @@ Game_CharacterBase.prototype.canPass = function (x, y, d) {
 };
 
 Game_CharacterBase.prototype.canPassDiagonally = function (x, y, horz, vert) {
-    var x2 = $gameMap.roundXWithDirection(x, horz);
-    var y2 = $gameMap.roundYWithDirection(y, vert);
+    const x2 = $gameMap.roundXWithDirection(x, horz);
+    const y2 = $gameMap.roundYWithDirection(y, vert);
     if (this.canPass(x, y, vert) && this.canPass(x, y2, horz)) {
         return true;
     }
@@ -6420,9 +6420,9 @@ Game_CharacterBase.prototype.canPassDiagonally = function (x, y, horz, vert) {
 };
 
 Game_CharacterBase.prototype.isMapPassable = function (x, y, d) {
-    var x2 = $gameMap.roundXWithDirection(x, d);
-    var y2 = $gameMap.roundYWithDirection(y, d);
-    var d2 = this.reverseDir(d);
+    const x2 = $gameMap.roundXWithDirection(x, d);
+    const y2 = $gameMap.roundYWithDirection(y, d);
+    const d2 = this.reverseDir(d);
     return $gameMap.isPassable(x, y, d) && $gameMap.isPassable(x2, y2, d2);
 };
 
@@ -6431,7 +6431,7 @@ Game_CharacterBase.prototype.isCollidedWithCharacters = function (x, y) {
 };
 
 Game_CharacterBase.prototype.isCollidedWithEvents = function (x, y) {
-    var events = $gameMap.eventsXyNt(x, y);
+    const events = $gameMap.eventsXyNt(x, y);
     return events.some(function (event) {
         return event.isNormalPriority();
     });
@@ -6494,12 +6494,12 @@ Game_CharacterBase.prototype.scrolledY = function () {
 };
 
 Game_CharacterBase.prototype.screenX = function () {
-    var tw = $gameMap.tileWidth();
+    const tw = $gameMap.tileWidth();
     return Math.round(this.scrolledX() * tw + tw / 2);
 };
 
 Game_CharacterBase.prototype.screenY = function () {
-    var th = $gameMap.tileHeight();
+    const th = $gameMap.tileHeight();
     return Math.round(this.scrolledY() * th + th -
         this.shiftY() - this.jumpHeight());
 };
@@ -6509,12 +6509,12 @@ Game_CharacterBase.prototype.screenZ = function () {
 };
 
 Game_CharacterBase.prototype.isNearTheScreen = function () {
-    var gw = Graphics.width;
-    var gh = Graphics.height;
-    var tw = $gameMap.tileWidth();
-    var th = $gameMap.tileHeight();
-    var px = this.scrolledX() * tw + tw / 2 - gw / 2;
-    var py = this.scrolledY() * th + th / 2 - gh / 2;
+    const gw = Graphics.width;
+    const gh = Graphics.height;
+    const tw = $gameMap.tileWidth();
+    const th = $gameMap.tileHeight();
+    const px = this.scrolledX() * tw + tw / 2 - gw / 2;
+    const py = this.scrolledY() * th + th / 2 - gh / 2;
     return px >= -gw && px <= gw && py >= -gh && py <= gh;
 };
 
@@ -6673,8 +6673,8 @@ Game_CharacterBase.prototype.setTileImage = function (tileId) {
 };
 
 Game_CharacterBase.prototype.checkEventTriggerTouchFront = function (d) {
-    var x2 = $gameMap.roundXWithDirection(this._x, d);
-    var y2 = $gameMap.roundYWithDirection(this._y, d);
+    const x2 = $gameMap.roundXWithDirection(this._x, d);
+    const y2 = $gameMap.roundYWithDirection(this._y, d);
     this.checkEventTriggerTouch(x2, y2);
 };
 
@@ -6734,7 +6734,7 @@ Game_CharacterBase.prototype.jump = function (xPlus, yPlus) {
     }
     this._x += xPlus;
     this._y += yPlus;
-    var distance = Math.round(Math.sqrt(xPlus * xPlus + yPlus * yPlus));
+    const distance = Math.round(Math.sqrt(xPlus * xPlus + yPlus * yPlus));
     this._jumpPeak = 10 + distance - this._moveSpeed;
     this._jumpCount = this._jumpPeak * 2;
     this.resetStopCount();
@@ -6943,7 +6943,7 @@ Game_Character.prototype.updateRoutineMove = function () {
         this._waitCount--;
     } else {
         this.setMovementSuccess(true);
-        var command = this._moveRoute.list[this._moveRouteIndex];
+        const command = this._moveRoute.list[this._moveRouteIndex];
         if (command) {
             this.processMoveCommand(command);
             this.advanceMoveRouteIndex();
@@ -6952,8 +6952,8 @@ Game_Character.prototype.updateRoutineMove = function () {
 };
 
 Game_Character.prototype.processMoveCommand = function (command) {
-    var gc = Game_Character;
-    var params = command.parameters;
+    const gc = Game_Character;
+    const params = command.parameters;
     switch (command.code) {
         case gc.ROUTE_END:
             this.processRouteEnd();
@@ -7105,15 +7105,15 @@ Game_Character.prototype.deltaYFrom = function (y) {
 };
 
 Game_Character.prototype.moveRandom = function () {
-    var d = 2 + Math.randomInt(4) * 2;
+    const d = 2 + Math.randomInt(4) * 2;
     if (this.canPass(this.x, this.y, d)) {
         this.moveStraight(d);
     }
 };
 
 Game_Character.prototype.moveTowardCharacter = function (character) {
-    var sx = this.deltaXFrom(character.x);
-    var sy = this.deltaYFrom(character.y);
+    const sx = this.deltaXFrom(character.x);
+    const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
         this.moveStraight(sx > 0 ? 4 : 6);
         if (!this.isMovementSucceeded() && sy !== 0) {
@@ -7128,8 +7128,8 @@ Game_Character.prototype.moveTowardCharacter = function (character) {
 };
 
 Game_Character.prototype.moveAwayFromCharacter = function (character) {
-    var sx = this.deltaXFrom(character.x);
-    var sy = this.deltaYFrom(character.y);
+    const sx = this.deltaXFrom(character.x);
+    const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
         this.moveStraight(sx > 0 ? 6 : 4);
         if (!this.isMovementSucceeded() && sy !== 0) {
@@ -7144,8 +7144,8 @@ Game_Character.prototype.moveAwayFromCharacter = function (character) {
 };
 
 Game_Character.prototype.turnTowardCharacter = function (character) {
-    var sx = this.deltaXFrom(character.x);
-    var sy = this.deltaYFrom(character.y);
+    const sx = this.deltaXFrom(character.x);
+    const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
         this.setDirection(sx > 0 ? 4 : 6);
     } else if (sy !== 0) {
@@ -7154,8 +7154,8 @@ Game_Character.prototype.turnTowardCharacter = function (character) {
 };
 
 Game_Character.prototype.turnAwayFromCharacter = function (character) {
-    var sx = this.deltaXFrom(character.x);
-    var sy = this.deltaYFrom(character.y);
+    const sx = this.deltaXFrom(character.x);
+    const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
         this.setDirection(sx > 0 ? 6 : 4);
     } else if (sy !== 0) {
@@ -7184,7 +7184,7 @@ Game_Character.prototype.moveForward = function () {
 };
 
 Game_Character.prototype.moveBackward = function () {
-    var lastDirectionFix = this.isDirectionFixed();
+    const lastDirectionFix = this.isDirectionFixed();
     this.setDirectionFix(true);
     this.moveStraight(this.reverseDir(this.direction()));
     this.setDirectionFix(lastDirectionFix);
@@ -7200,9 +7200,9 @@ Game_Character.prototype.processRouteEnd = function () {
 };
 
 Game_Character.prototype.advanceMoveRouteIndex = function () {
-    var moveRoute = this._moveRoute;
+    const moveRoute = this._moveRoute;
     if (moveRoute && (this.isMovementSucceeded() || moveRoute.skippable)) {
-        var numCommands = moveRoute.list.length - 1;
+        const numCommands = moveRoute.list.length - 1;
         this._moveRouteIndex++;
         if (moveRoute.repeat && this._moveRouteIndex >= numCommands) {
             this._moveRouteIndex = 0;
@@ -7264,20 +7264,20 @@ Game_Character.prototype.turnRandom = function () {
 };
 
 Game_Character.prototype.swap = function (character) {
-    var newX = character.x;
-    var newY = character.y;
+    const newX = character.x;
+    const newY = character.y;
     character.locate(this.x, this.y);
     this.locate(newX, newY);
 };
 
 Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
-    var searchLimit = this.searchLimit();
-    var mapWidth = $gameMap.width();
-    var nodeList = [];
-    var openList = [];
-    var closedList = [];
-    var start = {};
-    var best = start;
+    const searchLimit = this.searchLimit();
+    const mapWidth = $gameMap.width();
+    const nodeList = [];
+    const openList = [];
+    const closedList = [];
+    const start = {};
+    let best = start;
 
     if (this.x === goalX && this.y === goalY) {
         return 0;
@@ -7292,18 +7292,18 @@ Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
     openList.push(start.y * mapWidth + start.x);
 
     while (nodeList.length > 0) {
-        var bestIndex = 0;
-        for (var i = 0; i < nodeList.length; i++) {
+        let bestIndex = 0;
+        for (let i = 0; i < nodeList.length; i++) {
             if (nodeList[i].f < nodeList[bestIndex].f) {
                 bestIndex = i;
             }
         }
 
-        var current = nodeList[bestIndex];
-        var x1 = current.x;
-        var y1 = current.y;
-        var pos1 = y1 * mapWidth + x1;
-        var g1 = current.g;
+        const current = nodeList[bestIndex];
+        const x1 = current.x;
+        const y1 = current.y;
+        const pos1 = y1 * mapWidth + x1;
+        const g1 = current.g;
 
         nodeList.splice(bestIndex, 1);
         openList.splice(openList.indexOf(pos1), 1);
@@ -7318,11 +7318,11 @@ Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
             continue;
         }
 
-        for (var j = 0; j < 4; j++) {
-            var direction = 2 + j * 2;
-            var x2 = $gameMap.roundXWithDirection(x1, direction);
-            var y2 = $gameMap.roundYWithDirection(y1, direction);
-            var pos2 = y2 * mapWidth + x2;
+        for (let i = 0; i < 4; i++) {
+            const direction = 2 + i * 2;
+            const x2 = $gameMap.roundXWithDirection(x1, direction);
+            const y2 = $gameMap.roundYWithDirection(y1, direction);
+            const pos2 = y2 * mapWidth + x2;
 
             if (closedList.contains(pos2)) {
                 continue;
@@ -7331,11 +7331,11 @@ Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
                 continue;
             }
 
-            var g2 = g1 + 1;
-            var index2 = openList.indexOf(pos2);
+            const g2 = g1 + 1;
+            const index2 = openList.indexOf(pos2);
 
             if (index2 < 0 || g2 < nodeList[index2].g) {
-                var neighbor;
+                let neighbor;
                 if (index2 >= 0) {
                     neighbor = nodeList[index2];
                 } else {
@@ -7355,13 +7355,13 @@ Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
         }
     }
 
-    var node = best;
+    let node = best;
     while (node.parent && node.parent !== start) {
         node = node.parent;
     }
 
-    var deltaX1 = $gameMap.deltaX(node.x, start.x);
-    var deltaY1 = $gameMap.deltaY(node.y, start.y);
+    const deltaX1 = $gameMap.deltaX(node.x, start.x);
+    const deltaY1 = $gameMap.deltaY(node.y, start.y);
     if (deltaY1 > 0) {
         return 2;
     } else if (deltaX1 < 0) {
@@ -7372,8 +7372,8 @@ Game_Character.prototype.findDirectionTo = function (goalX, goalY) {
         return 8;
     }
 
-    var deltaX2 = this.deltaXFrom(goalX);
-    var deltaY2 = this.deltaYFrom(goalY);
+    const deltaX2 = this.deltaXFrom(goalX);
+    const deltaY2 = this.deltaYFrom(goalY);
     if (Math.abs(deltaX2) > Math.abs(deltaY2)) {
         return deltaX2 > 0 ? 4 : 6;
     } else if (deltaY2 !== 0) {
@@ -7435,9 +7435,9 @@ Game_Player.prototype.followers = function () {
 };
 
 Game_Player.prototype.refresh = function () {
-    var actor = $gameParty.leader();
-    var characterName = actor ? actor.characterName() : '';
-    var characterIndex = actor ? actor.characterIndex() : 0;
+    const actor = $gameParty.leader();
+    const characterName = actor ? actor.characterName() : '';
+    const characterIndex = actor ? actor.characterIndex() : 0;
     this.setImage(characterName, characterIndex);
     this._followers.refresh();
 };
@@ -7488,7 +7488,7 @@ Game_Player.prototype.performTransfer = function () {
 };
 
 Game_Player.prototype.isMapPassable = function (x, y, d) {
-    var vehicle = this.vehicle();
+    const vehicle = this.vehicle();
     if (vehicle) {
         return vehicle.isMapPassable(x, y, d);
     } else {
@@ -7566,13 +7566,13 @@ Game_Player.prototype.increaseSteps = function () {
 };
 
 Game_Player.prototype.makeEncounterCount = function () {
-    var n = $gameMap.encounterStep();
+    const n = $gameMap.encounterStep();
     this._encounterCount = Math.randomInt(n) + Math.randomInt(n) + 1;
 };
 
 Game_Player.prototype.makeEncounterTroopId = function () {
-    var encounterList = [];
-    var weightSum = 0;
+    const encounterList = [];
+    let weightSum = 0;
     $gameMap.encounterList().forEach(function (encounter) {
         if (this.meetsEncounterConditions(encounter)) {
             encounterList.push(encounter);
@@ -7580,8 +7580,8 @@ Game_Player.prototype.makeEncounterTroopId = function () {
         }
     }, this);
     if (weightSum > 0) {
-        var value = Math.randomInt(weightSum);
-        for (var i = 0; i < encounterList.length; i++) {
+        let value = Math.randomInt(weightSum);
+        for (let i = 0; i < encounterList.length; i++) {
             value -= encounterList[i].weight;
             if (value < 0) {
                 return encounterList[i].troopId;
@@ -7599,7 +7599,7 @@ Game_Player.prototype.meetsEncounterConditions = function (encounter) {
 Game_Player.prototype.executeEncounter = function () {
     if (!$gameMap.isEventRunning() && this._encounterCount <= 0) {
         this.makeEncounterCount();
-        var troopId = this.makeEncounterTroopId();
+        const troopId = this.makeEncounterTroopId();
         if ($dataTroops[troopId]) {
             BattleManager.setup(troopId, true, false);
             BattleManager.onEncounter();
@@ -7624,12 +7624,12 @@ Game_Player.prototype.startMapEvent = function (x, y, triggers, normal) {
 
 Game_Player.prototype.moveByInput = function () {
     if (!this.isMoving() && this.canMove()) {
-        var direction = this.getInputDirection();
+        let direction = this.getInputDirection();
         if (direction > 0) {
             $gameTemp.clearDestination();
         } else if ($gameTemp.isDestinationValid()) {
-            var x = $gameTemp.destinationX();
-            var y = $gameTemp.destinationY();
+            const x = $gameTemp.destinationX();
+            const y = $gameTemp.destinationY();
             direction = this.findDirectionTo(x, y);
         }
         if (direction > 0) {
@@ -7663,9 +7663,9 @@ Game_Player.prototype.executeMove = function (direction) {
 };
 
 Game_Player.prototype.update = function (sceneActive) {
-    var lastScrolledX = this.scrolledX();
-    var lastScrolledY = this.scrolledY();
-    var wasMoving = this.isMoving();
+    const lastScrolledX = this.scrolledX();
+    const lastScrolledY = this.scrolledY();
+    const wasMoving = this.isMoving();
     this.updateDashing();
     if (sceneActive) {
         this.moveByInput();
@@ -7691,7 +7691,7 @@ Game_Player.prototype.updateDashing = function () {
 };
 
 Game_Player.prototype.isDashButtonPressed = function () {
-    var shift = Input.isPressed('shift');
+    const shift = Input.isPressed('shift');
     if (ConfigManager.alwaysDash) {
         return !shift;
     } else {
@@ -7700,10 +7700,10 @@ Game_Player.prototype.isDashButtonPressed = function () {
 };
 
 Game_Player.prototype.updateScroll = function (lastScrolledX, lastScrolledY) {
-    var x1 = lastScrolledX;
-    var y1 = lastScrolledY;
-    var x2 = this.scrolledX();
-    var y2 = this.scrolledY();
+    const x1 = lastScrolledX;
+    const y1 = lastScrolledY;
+    const x2 = this.scrolledX();
+    const y2 = this.scrolledY();
     if (y2 > y1 && y2 > this.centerY()) {
         $gameMap.scrollDown(y2 - y1);
     }
@@ -7802,15 +7802,15 @@ Game_Player.prototype.triggerButtonAction = function () {
 
 Game_Player.prototype.triggerTouchAction = function () {
     if ($gameTemp.isDestinationValid()) {
-        var direction = this.direction();
-        var x1 = this.x;
-        var y1 = this.y;
-        var x2 = $gameMap.roundXWithDirection(x1, direction);
-        var y2 = $gameMap.roundYWithDirection(y1, direction);
-        var x3 = $gameMap.roundXWithDirection(x2, direction);
-        var y3 = $gameMap.roundYWithDirection(y2, direction);
-        var destX = $gameTemp.destinationX();
-        var destY = $gameTemp.destinationY();
+        const direction = this.direction();
+        const x1 = this.x;
+        const y1 = this.y;
+        const x2 = $gameMap.roundXWithDirection(x1, direction);
+        const y2 = $gameMap.roundYWithDirection(y1, direction);
+        const x3 = $gameMap.roundXWithDirection(x2, direction);
+        const y3 = $gameMap.roundYWithDirection(y2, direction);
+        const destX = $gameTemp.destinationX();
+        const destY = $gameTemp.destinationY();
         if (destX === x1 && destY === y1) {
             return this.triggerTouchActionD1(x1, y1);
         } else if (destX === x2 && destY === y2) {
@@ -7866,7 +7866,7 @@ Game_Player.prototype.canEncounter = function () {
 };
 
 Game_Player.prototype.encounterProgressValue = function () {
-    var value = $gameMap.isBush(this.x, this.y) ? 2 : 1;
+    let value = $gameMap.isBush(this.x, this.y) ? 2 : 1;
     if ($gameParty.hasEncounterHalf()) {
         value *= 0.5;
     }
@@ -7884,15 +7884,15 @@ Game_Player.prototype.checkEventTriggerHere = function (triggers) {
 
 Game_Player.prototype.checkEventTriggerThere = function (triggers) {
     if (this.canStartLocalEvents()) {
-        var direction = this.direction();
-        var x1 = this.x;
-        var y1 = this.y;
-        var x2 = $gameMap.roundXWithDirection(x1, direction);
-        var y2 = $gameMap.roundYWithDirection(y1, direction);
+        const direction = this.direction();
+        const x1 = this.x;
+        const y1 = this.y;
+        const x2 = $gameMap.roundXWithDirection(x1, direction);
+        const y2 = $gameMap.roundYWithDirection(y1, direction);
         this.startMapEvent(x2, y2, triggers, true);
         if (!$gameMap.isAnyEventStarting() && $gameMap.isCounter(x2, y2)) {
-            var x3 = $gameMap.roundXWithDirection(x2, direction);
-            var y3 = $gameMap.roundYWithDirection(y2, direction);
+            const x3 = $gameMap.roundXWithDirection(x2, direction);
+            const y3 = $gameMap.roundYWithDirection(y2, direction);
             this.startMapEvent(x3, y3, triggers, true);
         }
     }
@@ -7917,11 +7917,11 @@ Game_Player.prototype.getOnOffVehicle = function () {
 };
 
 Game_Player.prototype.getOnVehicle = function () {
-    var direction = this.direction();
-    var x1 = this.x;
-    var y1 = this.y;
-    var x2 = $gameMap.roundXWithDirection(x1, direction);
-    var y2 = $gameMap.roundYWithDirection(y1, direction);
+    const direction = this.direction();
+    const x1 = this.x;
+    const y1 = this.y;
+    const x2 = $gameMap.roundXWithDirection(x1, direction);
+    const y2 = $gameMap.roundYWithDirection(y1, direction);
     if ($gameMap.airship().pos(x1, y1)) {
         this._vehicleType = 'airship';
     } else if ($gameMap.ship().pos(x2, y2)) {
@@ -8029,8 +8029,8 @@ Game_Follower.prototype.initialize = function (memberIndex) {
 };
 
 Game_Follower.prototype.refresh = function () {
-    var characterName = this.isVisible() ? this.actor().characterName() : '';
-    var characterIndex = this.isVisible() ? this.actor().characterIndex() : 0;
+    const characterName = this.isVisible() ? this.actor().characterName() : '';
+    const characterIndex = this.isVisible() ? this.actor().characterIndex() : 0;
     this.setImage(characterName, characterIndex);
 };
 
@@ -8054,8 +8054,8 @@ Game_Follower.prototype.update = function () {
 };
 
 Game_Follower.prototype.chaseCharacter = function (character) {
-    var sx = this.deltaXFrom(character.x);
-    var sy = this.deltaYFrom(character.y);
+    const sx = this.deltaXFrom(character.x);
+    const sy = this.deltaYFrom(character.y);
     if (sx !== 0 && sy !== 0) {
         this.moveDiagonally(sx > 0 ? 4 : 6, sy > 0 ? 8 : 2);
     } else if (sx !== 0) {
@@ -8079,7 +8079,7 @@ Game_Followers.prototype.initialize = function () {
     this._visible = $dataSystem.optFollowers;
     this._gathering = false;
     this._data = [];
-    for (var i = 1; i < $gameParty.maxBattleMembers(); i++) {
+    for (let i = 1; i < $gameParty.maxBattleMembers(); i++) {
         this._data.push(new Game_Follower(i));
     }
 };
@@ -8131,18 +8131,18 @@ Game_Followers.prototype.update = function () {
 };
 
 Game_Followers.prototype.updateMove = function () {
-    for (var i = this._data.length - 1; i >= 0; i--) {
-        var precedingCharacter = (i > 0 ? this._data[i - 1] : $gamePlayer);
+    for (let i = this._data.length - 1; i >= 0; i--) {
+        const precedingCharacter = (i > 0 ? this._data[i - 1] : $gamePlayer);
         this._data[i].chaseCharacter(precedingCharacter);
     }
 };
 
 Game_Followers.prototype.jumpAll = function () {
     if ($gamePlayer.isJumping()) {
-        for (var i = 0; i < this._data.length; i++) {
-            var follower = this._data[i];
-            var sx = $gamePlayer.deltaXFrom(follower.x);
-            var sy = $gamePlayer.deltaYFrom(follower.y);
+        for (let i = 0; i < this._data.length; i++) {
+            const follower = this._data[i];
+            const sx = $gamePlayer.deltaXFrom(follower.x);
+            const sy = $gamePlayer.deltaYFrom(follower.y);
             follower.jump(sx, sy);
         }
     }
@@ -8255,7 +8255,7 @@ Game_Vehicle.prototype.vehicle = function () {
 };
 
 Game_Vehicle.prototype.loadSystemSettings = function () {
-    var vehicle = this.vehicle();
+    const vehicle = this.vehicle();
     this._mapId = vehicle.startMapId;
     this.setPosition(vehicle.startX, vehicle.startY);
     this.setImage(vehicle.characterName, vehicle.characterIndex);
@@ -8293,8 +8293,8 @@ Game_Vehicle.prototype.pos = function (x, y) {
 };
 
 Game_Vehicle.prototype.isMapPassable = function (x, y, d) {
-    var x2 = $gameMap.roundXWithDirection(x, d);
-    var y2 = $gameMap.roundYWithDirection(y, d);
+    const x2 = $gameMap.roundXWithDirection(x, d);
+    const y2 = $gameMap.roundYWithDirection(y, d);
     if (this.isBoat()) {
         return $gameMap.isBoatPassable(x2, y2);
     } else if (this.isShip()) {
@@ -8406,8 +8406,8 @@ Game_Vehicle.prototype.isLandOk = function (x, y, d) {
             return false;
         }
     } else {
-        var x2 = $gameMap.roundXWithDirection(x, d);
-        var y2 = $gameMap.roundYWithDirection(y, d);
+        const x2 = $gameMap.roundXWithDirection(x, d);
+        const y2 = $gameMap.roundYWithDirection(y, d);
         if (!$gameMap.isValid(x2, y2)) {
             return false;
         }
@@ -8477,7 +8477,7 @@ Game_Event.prototype.isCollidedWithCharacters = function (x, y) {
 };
 
 Game_Event.prototype.isCollidedWithEvents = function (x, y) {
-    var events = $gameMap.eventsXyNt(x, y);
+    const events = $gameMap.eventsXyNt(x, y);
     return events.length > 0;
 };
 
@@ -8564,8 +8564,8 @@ Game_Event.prototype.moveTypeTowardPlayer = function () {
 };
 
 Game_Event.prototype.isNearThePlayer = function () {
-    var sx = Math.abs(this.deltaXFrom($gamePlayer.x));
-    var sy = Math.abs(this.deltaYFrom($gamePlayer.y));
+    const sx = Math.abs(this.deltaXFrom($gamePlayer.x));
+    const sy = Math.abs(this.deltaYFrom($gamePlayer.y));
     return sx + sy < 20;
 };
 
@@ -8586,7 +8586,7 @@ Game_Event.prototype.isTriggerIn = function (triggers) {
 };
 
 Game_Event.prototype.start = function () {
-    var list = this.list();
+    const list = this.list();
     if (list && list.length > 1) {
         this._starting = true;
         if (this.isTriggerIn([0, 1, 2])) {
@@ -8601,7 +8601,7 @@ Game_Event.prototype.erase = function () {
 };
 
 Game_Event.prototype.refresh = function () {
-    var newPageIndex = this._erased ? -1 : this.findProperPageIndex();
+    const newPageIndex = this._erased ? -1 : this.findProperPageIndex();
     if (this._pageIndex !== newPageIndex) {
         this._pageIndex = newPageIndex;
         this.setupPage();
@@ -8609,9 +8609,9 @@ Game_Event.prototype.refresh = function () {
 };
 
 Game_Event.prototype.findProperPageIndex = function () {
-    var pages = this.event().pages;
-    for (var i = pages.length - 1; i >= 0; i--) {
-        var page = pages[i];
+    const pages = this.event().pages;
+    for (let i = pages.length - 1; i >= 0; i--) {
+        const page = pages[i];
         if (this.meetsConditions(page)) {
             return i;
         }
@@ -8620,7 +8620,7 @@ Game_Event.prototype.findProperPageIndex = function () {
 };
 
 Game_Event.prototype.meetsConditions = function (page) {
-    var c = page.conditions;
+    const c = page.conditions;
     if (c.switch1Valid) {
         if (!$gameSwitches.value(c.switch1Id)) {
             return false;
@@ -8637,19 +8637,19 @@ Game_Event.prototype.meetsConditions = function (page) {
         }
     }
     if (c.selfSwitchValid) {
-        var key = [this._mapId, this._eventId, c.selfSwitchCh];
+        const key = [this._mapId, this._eventId, c.selfSwitchCh];
         if ($gameSelfSwitches.value(key) !== true) {
             return false;
         }
     }
     if (c.itemValid) {
-        var item = $dataItems[c.itemId];
+        const item = $dataItems[c.itemId];
         if (!$gameParty.hasItem(item)) {
             return false;
         }
     }
     if (c.actorValid) {
-        var actor = $gameActors.actor(c.actorId);
+        const actor = $gameActors.actor(c.actorId);
         if (!$gameParty.members().contains(actor)) {
             return false;
         }
@@ -8677,8 +8677,8 @@ Game_Event.prototype.clearPageSettings = function () {
 };
 
 Game_Event.prototype.setupPageSettings = function () {
-    var page = this.page();
-    var image = page.image;
+    const page = this.page();
+    const image = page.image;
     if (image.tileId > 0) {
         this.setTileImage(image.tileId);
     } else {
@@ -8870,7 +8870,7 @@ Game_Interpreter.prototype.updateWaitCount = function () {
 };
 
 Game_Interpreter.prototype.updateWaitMode = function () {
-    var waiting = false;
+    let waiting = false;
     switch (this._waitMode) {
         case 'message':
             waiting = $gameMessage.isBusy();
@@ -8922,11 +8922,11 @@ Game_Interpreter.prototype.fadeSpeed = function () {
 };
 
 Game_Interpreter.prototype.executeCommand = function () {
-    var command = this.currentCommand();
+    const command = this.currentCommand();
     if (command) {
         this._params = command.parameters;
         this._indent = command.indent;
-        var methodName = 'command' + command.code;
+        const methodName = 'command' + command.code;
         if (typeof this[methodName] === 'function') {
             if (!this[methodName]()) {
                 return false;
@@ -8967,7 +8967,7 @@ Game_Interpreter.prototype.currentCommand = function () {
 };
 
 Game_Interpreter.prototype.nextEventCode = function () {
-    var command = this._list[this._index + 1];
+    const command = this._list[this._index + 1];
     if (command) {
         return command.code;
     } else {
@@ -8979,7 +8979,7 @@ Game_Interpreter.prototype.iterateActorId = function (param, callback) {
     if (param === 0) {
         $gameParty.members().forEach(callback);
     } else {
-        var actor = $gameActors.actor(param);
+        const actor = $gameActors.actor(param);
         if (actor) {
             callback(actor);
         }
@@ -8998,7 +8998,7 @@ Game_Interpreter.prototype.iterateActorIndex = function (param, callback) {
     if (param < 0) {
         $gameParty.members().forEach(callback);
     } else {
-        var actor = $gameParty.members()[param];
+        const actor = $gameParty.members()[param];
         if (actor) {
             callback(actor);
         }
@@ -9009,7 +9009,7 @@ Game_Interpreter.prototype.iterateEnemyIndex = function (param, callback) {
     if (param < 0) {
         $gameTroop.members().forEach(callback);
     } else {
-        var enemy = $gameTroop.members()[param];
+        const enemy = $gameTroop.members()[param];
         if (enemy) {
             callback(enemy);
         }
@@ -9039,7 +9039,7 @@ Game_Interpreter.prototype.character = function (param) {
 };
 
 Game_Interpreter.prototype.operateValue = function (operation, operandType, operand) {
-    var value = operandType === 0 ? operand : $gameVariables.value(operand);
+    const value = operandType === 0 ? operand : $gameVariables.value(operand);
     return operation === 0 ? value : -value;
 };
 
@@ -9096,11 +9096,11 @@ Game_Interpreter.prototype.command102 = function () {
 };
 
 Game_Interpreter.prototype.setupChoices = function (params) {
-    var choices = params[0].clone();
-    var cancelType = params[1];
-    var defaultType = params.length > 2 ? params[2] : 0;
-    var positionType = params.length > 3 ? params[3] : 2;
-    var background = params.length > 4 ? params[4] : 0;
+    const choices = params[0].clone();
+    let cancelType = params[1];
+    const defaultType = params.length > 2 ? params[2] : 0;
+    const positionType = params.length > 3 ? params[3] : 2;
+    const background = params.length > 4 ? params[4] : 0;
     if (cancelType >= choices.length) {
         cancelType = -2;
     }
@@ -9182,14 +9182,14 @@ Game_Interpreter.prototype.command108 = function () {
 
 // Conditional Branch
 Game_Interpreter.prototype.command111 = function () {
-    var result = false;
+    let result = false;
     switch (this._params[0]) {
         case 0:  // Switch
             result = ($gameSwitches.value(this._params[1]) === (this._params[2] === 0));
             break;
         case 1:  // Variable
-            var value1 = $gameVariables.value(this._params[1]);
-            var value2;
+            const value1 = $gameVariables.value(this._params[1]);
+            let value2;
             if (this._params[2] === 0) {
                 value2 = this._params[3];
             } else {
@@ -9218,7 +9218,7 @@ Game_Interpreter.prototype.command111 = function () {
             break;
         case 2:  // Self Switch
             if (this._eventId > 0) {
-                var key = [this._mapId, this._eventId, this._params[1]];
+                const key = [this._mapId, this._eventId, this._params[1]];
                 result = ($gameSelfSwitches.value(key) === (this._params[2] === 0));
             }
             break;
@@ -9232,9 +9232,9 @@ Game_Interpreter.prototype.command111 = function () {
             }
             break;
         case 4:  // Actor
-            var actor = $gameActors.actor(this._params[1]);
+            const actor = $gameActors.actor(this._params[1]);
             if (actor) {
-                var n = this._params[3];
+                const n = this._params[3];
                 switch (this._params[2]) {
                     case 0:  // In the Party
                         result = $gameParty.members().contains(actor);
@@ -9261,7 +9261,7 @@ Game_Interpreter.prototype.command111 = function () {
             }
             break;
         case 5:  // Enemy
-            var enemy = $gameTroop.members()[this._params[1]];
+            const enemy = $gameTroop.members()[this._params[1]];
             if (enemy) {
                 switch (this._params[2]) {
                     case 0:  // Appeared
@@ -9274,7 +9274,7 @@ Game_Interpreter.prototype.command111 = function () {
             }
             break;
         case 6:  // Character
-            var character = this.character(this._params[1]);
+            const character = this.character(this._params[1]);
             if (character) {
                 result = (character.direction() === this._params[2]);
             }
@@ -9341,10 +9341,10 @@ Game_Interpreter.prototype.command413 = function () {
 
 // Break Loop
 Game_Interpreter.prototype.command113 = function () {
-    var depth = 0;
+    let depth = 0;
     while (this._index < this._list.length - 1) {
         this._index++;
-        var command = this.currentCommand();
+        const command = this.currentCommand();
 
         if (command.code === 112)
             depth++;
@@ -9367,9 +9367,9 @@ Game_Interpreter.prototype.command115 = function () {
 
 // Common Event
 Game_Interpreter.prototype.command117 = function () {
-    var commonEvent = $dataCommonEvents[this._params[0]];
+    const commonEvent = $dataCommonEvents[this._params[0]];
     if (commonEvent) {
-        var eventId = this.isOnCurrentMap() ? this._eventId : 0;
+        const eventId = this.isOnCurrentMap() ? this._eventId : 0;
         this.setupChild(commonEvent.list, eventId);
     }
     return true;
@@ -9387,9 +9387,9 @@ Game_Interpreter.prototype.command118 = function () {
 
 // Jump to Label
 Game_Interpreter.prototype.command119 = function () {
-    var labelName = this._params[0];
-    for (var i = 0; i < this._list.length; i++) {
-        var command = this._list[i];
+    const labelName = this._params[0];
+    for (let i = 0; i < this._list.length; i++) {
+        const command = this._list[i];
         if (command.code === 118 && command.parameters[0] === labelName) {
             this.jumpTo(i);
             return;
@@ -9399,12 +9399,12 @@ Game_Interpreter.prototype.command119 = function () {
 };
 
 Game_Interpreter.prototype.jumpTo = function (index) {
-    var lastIndex = this._index;
-    var startIndex = Math.min(index, lastIndex);
-    var endIndex = Math.max(index, lastIndex);
-    var indent = this._indent;
-    for (var i = startIndex; i <= endIndex; i++) {
-        var newIndent = this._list[i].indent;
+    const lastIndex = this._index;
+    const startIndex = Math.min(index, lastIndex);
+    const endIndex = Math.max(index, lastIndex);
+    let indent = this._indent;
+    for (let i = startIndex; i <= endIndex; i++) {
+        const newIndent = this._list[i].indent;
         if (newIndent !== indent) {
             this._branch[indent] = null;
             indent = newIndent;
@@ -9415,7 +9415,7 @@ Game_Interpreter.prototype.jumpTo = function (index) {
 
 // Control Switches
 Game_Interpreter.prototype.command121 = function () {
-    for (var i = this._params[0]; i <= this._params[1]; i++) {
+    for (let i = this._params[0]; i <= this._params[1]; i++) {
         $gameSwitches.setValue(i, this._params[2] === 0);
     }
     return true;
@@ -9423,7 +9423,7 @@ Game_Interpreter.prototype.command121 = function () {
 
 // Control Variables
 Game_Interpreter.prototype.command122 = function () {
-    var value = 0;
+    let value = 0;
     switch (this._params[3]) { // Operand
         case 0: // Constant
             value = this._params[4];
@@ -9433,7 +9433,7 @@ Game_Interpreter.prototype.command122 = function () {
             break;
         case 2: // Random
             value = this._params[5] - this._params[4] + 1;
-            for (var i = this._params[0]; i <= this._params[1]; i++) {
+            for (let i = this._params[0]; i <= this._params[1]; i++) {
                 this.operateVariable(i, this._params[2], this._params[4] + Math.randomInt(value));
             }
             return true;
@@ -9444,8 +9444,8 @@ Game_Interpreter.prototype.command122 = function () {
             value = eval(this._params[4]); // jshint ignore:line
             break;
     }
-    for (var j = this._params[0]; j <= this._params[1]; j++) {
-        this.operateVariable(j, this._params[2], value);
+    for (let i = this._params[0]; i <= this._params[1]; i++) {
+        this.operateVariable(i, this._params[2], value);
     }
     return true;
 };
@@ -9459,7 +9459,7 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
         case 2:  // Armor
             return $gameParty.numItems($dataArmors[param1]);
         case 3:  // Actor
-            var actor = $gameActors.actor(param1);
+            let actor = $gameActors.actor(param1);
             if (actor) {
                 switch (param2) {
                     case 0:  // Level
@@ -9478,7 +9478,7 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
             }
             break;
         case 4:  // Enemy
-            var enemy = $gameTroop.members()[param1];
+            const enemy = $gameTroop.members()[param1];
             if (enemy) {
                 switch (param2) {
                     case 0:  // HP
@@ -9493,7 +9493,7 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
             }
             break;
         case 5:  // Character
-            var character = this.character(param1);
+            const character = this.character(param1);
             if (character) {
                 switch (param2) {
                     case 0:  // Map X
@@ -9542,7 +9542,7 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
 
 Game_Interpreter.prototype.operateVariable = function (variableId, operationType, value) {
     try {
-        var oldValue = $gameVariables.value(variableId);
+        let oldValue = $gameVariables.value(variableId);
         switch (operationType) {
             case 0:  // Set
                 $gameVariables.setValue(variableId, oldValue = value);
@@ -9571,7 +9571,7 @@ Game_Interpreter.prototype.operateVariable = function (variableId, operationType
 // Control Self Switch
 Game_Interpreter.prototype.command123 = function () {
     if (this._eventId > 0) {
-        var key = [this._mapId, this._eventId, this._params[0]];
+        const key = [this._mapId, this._eventId, this._params[0]];
         $gameSelfSwitches.setValue(key, this._params[1] === 0);
     }
     return true;
@@ -9589,35 +9589,35 @@ Game_Interpreter.prototype.command124 = function () {
 
 // Change Gold
 Game_Interpreter.prototype.command125 = function () {
-    var value = this.operateValue(this._params[0], this._params[1], this._params[2]);
+    const value = this.operateValue(this._params[0], this._params[1], this._params[2]);
     $gameParty.gainGold(value);
     return true;
 };
 
 // Change Items
 Game_Interpreter.prototype.command126 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     $gameParty.gainItem($dataItems[this._params[0]], value);
     return true;
 };
 
 // Change Weapons
 Game_Interpreter.prototype.command127 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     $gameParty.gainItem($dataWeapons[this._params[0]], value, this._params[4]);
     return true;
 };
 
 // Change Armors
 Game_Interpreter.prototype.command128 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     $gameParty.gainItem($dataArmors[this._params[0]], value, this._params[4]);
     return true;
 };
 
 // Change Party Member
 Game_Interpreter.prototype.command129 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         if (this._params[1] === 0) {  // Add
             if (this._params[2]) {   // Initialize
@@ -9698,7 +9698,7 @@ Game_Interpreter.prototype.command139 = function () {
 
 // Change Vehicle BGM
 Game_Interpreter.prototype.command140 = function () {
-    var vehicle = $gameMap.vehicle(this._params[0]);
+    const vehicle = $gameMap.vehicle(this._params[0]);
     if (vehicle) {
         vehicle.setBgm(this._params[1]);
     }
@@ -9708,7 +9708,9 @@ Game_Interpreter.prototype.command140 = function () {
 // Transfer Player
 Game_Interpreter.prototype.command201 = function () {
     if (!$gameParty.inBattle() && !$gameMessage.isBusy()) {
-        var mapId, x, y;
+        let mapId;
+        let x;
+        let y;
         if (this._params[0] === 0) {  // Direct designation
             mapId = this._params[1];
             x = this._params[2];
@@ -9727,7 +9729,9 @@ Game_Interpreter.prototype.command201 = function () {
 
 // Set Vehicle Location
 Game_Interpreter.prototype.command202 = function () {
-    var mapId, x, y;
+    let mapId;
+    let x;
+    let y;
     if (this._params[1] === 0) {  // Direct designation
         mapId = this._params[2];
         x = this._params[3];
@@ -9737,7 +9741,7 @@ Game_Interpreter.prototype.command202 = function () {
         x = $gameVariables.value(this._params[3]);
         y = $gameVariables.value(this._params[4]);
     }
-    var vehicle = $gameMap.vehicle(this._params[0]);
+    const vehicle = $gameMap.vehicle(this._params[0]);
     if (vehicle) {
         vehicle.setLocation(mapId, x, y);
     }
@@ -9746,16 +9750,16 @@ Game_Interpreter.prototype.command202 = function () {
 
 // Set Event Location
 Game_Interpreter.prototype.command203 = function () {
-    var character = this.character(this._params[0]);
+    const character = this.character(this._params[0]);
     if (character) {
         if (this._params[1] === 0) {  // Direct designation
             character.locate(this._params[2], this._params[3]);
         } else if (this._params[1] === 1) {  // Designation with variables
-            var x = $gameVariables.value(this._params[2]);
-            var y = $gameVariables.value(this._params[3]);
+            const x = $gameVariables.value(this._params[2]);
+            const y = $gameVariables.value(this._params[3]);
             character.locate(x, y);
         } else {  // Exchange with another event
-            var character2 = this.character(this._params[2]);
+            const character2 = this.character(this._params[2]);
             if (character2) {
                 character.swap(character2);
             }
@@ -9911,7 +9915,8 @@ Game_Interpreter.prototype.command230 = function () {
 
 // Show Picture
 Game_Interpreter.prototype.command231 = function () {
-    var x, y;
+    let x;
+    let y;
     if (this._params[3] === 0) {  // Direct designation
         x = this._params[4];
         y = this._params[5];
@@ -9926,7 +9931,8 @@ Game_Interpreter.prototype.command231 = function () {
 
 // Move Picture
 Game_Interpreter.prototype.command232 = function () {
-    var x, y;
+    let x;
+    let y;
     if (this._params[3] === 0) {  // Direct designation
         x = this._params[4];
         y = this._params[5];
@@ -10031,9 +10037,9 @@ Game_Interpreter.prototype.command251 = function () {
 // Play Movie
 Game_Interpreter.prototype.command261 = function () {
     if (!$gameMessage.isBusy()) {
-        var name = this._params[0];
+        const name = this._params[0];
         if (name.length > 0) {
-            var ext = this.videoFileExt();
+            const ext = this.videoFileExt();
             Graphics.playVideo('movies/' + name + ext);
             this.setWaitMode('video');
         }
@@ -10062,12 +10068,12 @@ Game_Interpreter.prototype.command281 = function () {
 
 // Change Tileset
 Game_Interpreter.prototype.command282 = function () {
-    var tileset = $dataTilesets[this._params[0]];
+    const tileset = $dataTilesets[this._params[0]];
     if (!this._imageReservationId) {
         this._imageReservationId = Utils.generateRuntimeId();
     }
 
-    var allReady = tileset.tilesetNames.map(function (tilesetName) {
+    const allReady = tileset.tilesetNames.map(function (tilesetName) {
         return ImageManager.reserveTileset(tilesetName, 0, this._imageReservationId);
     }, this).every(function (bitmap) { return bitmap.isReady(); });
 
@@ -10097,7 +10103,9 @@ Game_Interpreter.prototype.command284 = function () {
 
 // Get Location Info
 Game_Interpreter.prototype.command285 = function () {
-    var x, y, value;
+    let x;
+    let y;
+    let value;
     if (this._params[2] === 0) {  // Direct designation
         x = this._params[3];
         y = this._params[4];
@@ -10129,7 +10137,7 @@ Game_Interpreter.prototype.command285 = function () {
 // Battle Processing
 Game_Interpreter.prototype.command301 = function () {
     if (!$gameParty.inBattle()) {
-        var troopId;
+        let troopId;
         if (this._params[0] === 0) {  // Direct designation
             troopId = this._params[1];
         } else if (this._params[0] === 1) {  // Designation with a variable
@@ -10176,7 +10184,7 @@ Game_Interpreter.prototype.command603 = function () {
 // Shop Processing
 Game_Interpreter.prototype.command302 = function () {
     if (!$gameParty.inBattle()) {
-        var goods = [this._params];
+        const goods = [this._params];
         while (this.nextEventCode() === 605) {
             this._index++;
             goods.push(this.currentCommand().parameters);
@@ -10200,7 +10208,7 @@ Game_Interpreter.prototype.command303 = function () {
 
 // Change HP
 Game_Interpreter.prototype.command311 = function () {
-    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    const value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         this.changeHp(actor, value, this._params[5]);
     }.bind(this));
@@ -10209,7 +10217,7 @@ Game_Interpreter.prototype.command311 = function () {
 
 // Change MP
 Game_Interpreter.prototype.command312 = function () {
-    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    const value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         actor.gainMp(value);
     }.bind(this));
@@ -10218,7 +10226,7 @@ Game_Interpreter.prototype.command312 = function () {
 
 // Change TP
 Game_Interpreter.prototype.command326 = function () {
-    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    const value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         actor.gainTp(value);
     }.bind(this));
@@ -10228,7 +10236,7 @@ Game_Interpreter.prototype.command326 = function () {
 // Change State
 Game_Interpreter.prototype.command313 = function () {
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
-        var alreadyDead = actor.isDead();
+        const alreadyDead = actor.isDead();
         if (this._params[2] === 0) {
             actor.addState(this._params[3]);
         } else {
@@ -10252,7 +10260,7 @@ Game_Interpreter.prototype.command314 = function () {
 
 // Change EXP
 Game_Interpreter.prototype.command315 = function () {
-    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    const value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         actor.changeExp(actor.currentExp() + value, this._params[5]);
     }.bind(this));
@@ -10261,7 +10269,7 @@ Game_Interpreter.prototype.command315 = function () {
 
 // Change Level
 Game_Interpreter.prototype.command316 = function () {
-    var value = this.operateValue(this._params[2], this._params[3], this._params[4]);
+    const value = this.operateValue(this._params[2], this._params[3], this._params[4]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         actor.changeLevel(actor.level + value, this._params[5]);
     }.bind(this));
@@ -10270,7 +10278,7 @@ Game_Interpreter.prototype.command316 = function () {
 
 // Change Parameter
 Game_Interpreter.prototype.command317 = function () {
-    var value = this.operateValue(this._params[3], this._params[4], this._params[5]);
+    const value = this.operateValue(this._params[3], this._params[4], this._params[5]);
     this.iterateActorEx(this._params[0], this._params[1], function (actor) {
         actor.addParam(this._params[2], value);
     }.bind(this));
@@ -10291,7 +10299,7 @@ Game_Interpreter.prototype.command318 = function () {
 
 // Change Equipment
 Game_Interpreter.prototype.command319 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         actor.changeEquipById(this._params[1], this._params[2]);
     }
@@ -10300,7 +10308,7 @@ Game_Interpreter.prototype.command319 = function () {
 
 // Change Name
 Game_Interpreter.prototype.command320 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         actor.setName(this._params[1]);
     }
@@ -10309,7 +10317,7 @@ Game_Interpreter.prototype.command320 = function () {
 
 // Change Class
 Game_Interpreter.prototype.command321 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor && $dataClasses[this._params[1]]) {
         actor.changeClass(this._params[1], this._params[2]);
     }
@@ -10318,7 +10326,7 @@ Game_Interpreter.prototype.command321 = function () {
 
 // Change Actor Images
 Game_Interpreter.prototype.command322 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         actor.setCharacterImage(this._params[1], this._params[2]);
         actor.setFaceImage(this._params[3], this._params[4]);
@@ -10330,7 +10338,7 @@ Game_Interpreter.prototype.command322 = function () {
 
 // Change Vehicle Image
 Game_Interpreter.prototype.command323 = function () {
-    var vehicle = $gameMap.vehicle(this._params[0]);
+    const vehicle = $gameMap.vehicle(this._params[0]);
     if (vehicle) {
         vehicle.setImage(this._params[1], this._params[2]);
     }
@@ -10339,7 +10347,7 @@ Game_Interpreter.prototype.command323 = function () {
 
 // Change Nickname
 Game_Interpreter.prototype.command324 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         actor.setNickname(this._params[1]);
     }
@@ -10348,7 +10356,7 @@ Game_Interpreter.prototype.command324 = function () {
 
 // Change Profile
 Game_Interpreter.prototype.command325 = function () {
-    var actor = $gameActors.actor(this._params[0]);
+    const actor = $gameActors.actor(this._params[0]);
     if (actor) {
         actor.setProfile(this._params[1]);
     }
@@ -10357,7 +10365,7 @@ Game_Interpreter.prototype.command325 = function () {
 
 // Change Enemy HP
 Game_Interpreter.prototype.command331 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     this.iterateEnemyIndex(this._params[0], function (enemy) {
         this.changeHp(enemy, value, this._params[4]);
     }.bind(this));
@@ -10366,7 +10374,7 @@ Game_Interpreter.prototype.command331 = function () {
 
 // Change Enemy MP
 Game_Interpreter.prototype.command332 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     this.iterateEnemyIndex(this._params[0], function (enemy) {
         enemy.gainMp(value);
     }.bind(this));
@@ -10375,7 +10383,7 @@ Game_Interpreter.prototype.command332 = function () {
 
 // Change Enemy TP
 Game_Interpreter.prototype.command342 = function () {
-    var value = this.operateValue(this._params[1], this._params[2], this._params[3]);
+    const value = this.operateValue(this._params[1], this._params[2], this._params[3]);
     this.iterateEnemyIndex(this._params[0], function (enemy) {
         enemy.gainTp(value);
     }.bind(this));
@@ -10385,7 +10393,7 @@ Game_Interpreter.prototype.command342 = function () {
 // Change Enemy State
 Game_Interpreter.prototype.command333 = function () {
     this.iterateEnemyIndex(this._params[0], function (enemy) {
-        var alreadyDead = enemy.isDead();
+        const alreadyDead = enemy.isDead();
         if (this._params[1] === 0) {
             enemy.addState(this._params[2]);
         } else {
@@ -10492,7 +10500,7 @@ Game_Interpreter.prototype.command354 = function () {
 
 // Script
 Game_Interpreter.prototype.command355 = function () {
-    var script = this.currentCommand().parameters[0] + '\n';
+    let script = this.currentCommand().parameters[0] + '\n';
     while (this.nextEventCode() === 655) {
         this._index++;
         script += this.currentCommand().parameters[0] + '\n';
@@ -10503,8 +10511,8 @@ Game_Interpreter.prototype.command355 = function () {
 
 // Plugin Command
 Game_Interpreter.prototype.command356 = function () {
-    var args = this._params[0].split(" ");
-    var command = args.shift();
+    const args = this._params[0].split(" ");
+    const command = args.shift();
     this.pluginCommand(command, args);
     return true;
 };
@@ -10517,8 +10525,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
     if (!list) return;
 
     list.forEach(function (command) {
-        var params = command.parameters;
-        var name = "";
+        const params = command.parameters;
         switch (command.code) {
             // Show Text
             case 101:
@@ -10527,7 +10534,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
 
             // Common Event
             case 117:
-                var commonEvent = $dataCommonEvents[params[0]];
+                const commonEvent = $dataCommonEvents[params[0]];
                 if (commonEvent) {
                     if (!commonList) {
                         commonList = [];
@@ -10541,9 +10548,9 @@ Game_Interpreter.requestImages = function (list, commonList) {
 
             // Change Party Member
             case 129:
-                var actor = $gameActors.actor(params[0]);
+                const actor = $gameActors.actor(params[0]);
                 if (actor && params[1] === 0) {
-                    name = actor.characterName();
+                    const name = actor.characterName();
                     ImageManager.requestCharacter(name);
                 }
                 break;
@@ -10552,7 +10559,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
             case 205:
                 if (params[1]) {
                     params[1].list.forEach(function (command) {
-                        var params = command.parameters;
+                        const params = command.parameters;
                         if (command.code === Game_Character.ROUTE_CHANGE_IMAGE) {
                             ImageManager.requestCharacter(params[0]);
                         }
@@ -10563,11 +10570,11 @@ Game_Interpreter.requestImages = function (list, commonList) {
             // Show Animation, Show Battle Animation
             case 212: case 337:
                 if (params[1]) {
-                    var animation = $dataAnimations[params[1]];
-                    var name1 = animation.animation1Name;
-                    var name2 = animation.animation2Name;
-                    var hue1 = animation.animation1Hue;
-                    var hue2 = animation.animation2Hue;
+                    const animation = $dataAnimations[params[1]];
+                    const name1 = animation.animation1Name;
+                    const name2 = animation.animation2Name;
+                    const hue1 = animation.animation1Hue;
+                    const hue2 = animation.animation2Hue;
                     ImageManager.requestAnimation(name1, hue1);
                     ImageManager.requestAnimation(name2, hue2);
                 }
@@ -10577,7 +10584,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
             case 216:
                 if (params[0] === 0) {
                     $gamePlayer.followers().forEach(function (follower) {
-                        var name = follower.characterName();
+                        const name = follower.characterName();
                         ImageManager.requestCharacter(name);
                     });
                 }
@@ -10590,7 +10597,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
 
             // Change Tileset
             case 282:
-                var tileset = $dataTilesets[params[0]];
+                const tileset = $dataTilesets[params[0]];
                 tileset.tilesetNames.forEach(function (tilesetName) {
                     ImageManager.requestTileset(tilesetName);
                 });
@@ -10620,7 +10627,7 @@ Game_Interpreter.requestImages = function (list, commonList) {
 
             // Change Vehicle Image
             case 323:
-                var vehicle = $gameMap.vehicle(params[0]);
+                const vehicle = $gameMap.vehicle(params[0]);
                 if (vehicle) {
                     ImageManager.requestCharacter(params[1]);
                 }
@@ -10628,9 +10635,9 @@ Game_Interpreter.requestImages = function (list, commonList) {
 
             // Enemy Transform
             case 336:
-                var enemy = $dataEnemies[params[1]];
-                name = enemy.battlerName;
-                var hue = enemy.battlerHue;
+                const enemy = $dataEnemies[params[1]];
+                const name = enemy.battlerName;
+                const hue = enemy.battlerHue;
                 if ($gameSystem.isSideView()) {
                     ImageManager.requestSvEnemy(name, hue);
                 } else {

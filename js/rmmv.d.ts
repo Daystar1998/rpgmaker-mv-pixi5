@@ -1691,7 +1691,7 @@ interface String {
      * Replaces %1, %2 and so on in the string to the arguments.
      *
      * @method String.prototype.format
-     * @param {Any} ...args The objects to format
+     * @param {Array<any>} ...args The objects to format
      * @return {String} A formatted string
      */
     format(...args: Array<any>): string;
