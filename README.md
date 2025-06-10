@@ -32,6 +32,12 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https
 - Submit issue against NW.js for performance issues starting with v0.46
 - Bring in proper filter fix for Pixi-Picture when it is released
 
+## Ported Plugins
+
+- [DragonBones](https://github.com/DragonBones/DragonBonesJS/tree/master/Pixi/5.x)
+- [Yanfly](https://yanflyengineplugins.itch.io/free-starter-pack-essentials)
+  - KELYEP_DragonBones
+
 ## License
 
 - PixiJS is covered by the [MIT License](https://github.com/pixijs/pixi.js/blob/dev/LICENSE)
