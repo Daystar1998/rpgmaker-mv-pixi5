@@ -139,6 +139,19 @@ Scene_Base.prototype.isBusy = function () {
 };
 
 /**
+ * Clears all children
+ * 
+ * @method clearChildren
+ * @instance 
+ * @memberof Scene_Base
+ */
+Scene_Base.prototype.clearChildren = function() {
+  while (this.children.length > 0) {
+    this.removeChild(this.children[0]);
+  }
+};
+
+/**
  * Terminate the scene before switching to a another scene.
  * 
  * @method terminate
@@ -146,6 +159,8 @@ Scene_Base.prototype.isBusy = function () {
  * @memberof Scene_Base
  */
 Scene_Base.prototype.terminate = function () {
+  if (this._bypassFirstClear) return;
+  this.clearChildren();
 };
 
 /**
@@ -462,8 +477,10 @@ Scene_Title.prototype.isBusy = function () {
 };
 
 Scene_Title.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_Base.prototype.terminate.call(this);
     SceneManager.snapForBackground();
+    this.clearChildren();
 };
 
 Scene_Title.prototype.createBackground = function () {
@@ -637,6 +654,7 @@ Scene_Map.prototype.isBusy = function () {
 };
 
 Scene_Map.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_Base.prototype.terminate.call(this);
     if (!SceneManager.isNextScene(Scene_Battle)) {
         this._spriteset.update();
@@ -652,10 +670,7 @@ Scene_Map.prototype.terminate = function () {
 
     $gameScreen.clearZoom();
 
-    this.removeChild(this._fadeSprite);
-    this.removeChild(this._mapNameWindow);
-    this.removeChild(this._windowLayer);
-    this.removeChild(this._spriteset);
+    this.clearChildren();
 };
 
 Scene_Map.prototype.needsFadeIn = function () {
@@ -1592,8 +1607,10 @@ Scene_Options.prototype.create = function () {
 };
 
 Scene_Options.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_MenuBase.prototype.terminate.call(this);
     ConfigManager.save();
+    this.clearChildren();
 };
 
 Scene_Options.prototype.createOptionsWindow = function () {
@@ -1741,10 +1758,12 @@ Scene_Load.prototype.initialize = function () {
 };
 
 Scene_Load.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_File.prototype.terminate.call(this);
     if (this._loadSuccess) {
         $gameSystem.onAfterLoad();
     }
+    this.clearChildren();
 };
 
 Scene_Load.prototype.mode = function () {
@@ -2302,12 +2321,14 @@ Scene_Battle.prototype.stop = function () {
 };
 
 Scene_Battle.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_Base.prototype.terminate.call(this);
     $gameParty.onBattleEnd();
     $gameTroop.onBattleEnd();
     AudioManager.stopMe();
 
     ImageManager.clearRequest();
+    this.clearChildren();
 };
 
 Scene_Battle.prototype.needsSlowFadeOut = function () {
@@ -2665,8 +2686,10 @@ Scene_Gameover.prototype.stop = function () {
 };
 
 Scene_Gameover.prototype.terminate = function () {
+    this._bypassFirstClear = true;
     Scene_Base.prototype.terminate.call(this);
     AudioManager.stopAll();
+    this.clearChildren();
 };
 
 Scene_Gameover.prototype.playGameoverMusic = function () {
