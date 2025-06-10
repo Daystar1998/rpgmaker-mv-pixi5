@@ -35,6 +35,7 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https
 ## Ported Plugins
 
 - [DragonBones](https://github.com/DragonBones/DragonBonesJS/tree/master/Pixi/5.x)
+- [Spriter](https://github.com/AlexanderKanakis/RPGMV/blob/master/Spriter.js)
 - [Yanfly](https://yanflyengineplugins.itch.io/free-starter-pack-essentials)
   - KELYEP_DragonBones
 
