@@ -9370,6 +9370,9 @@ CS_URL.InitializeMap = function (baseSystemPath, baseFilePath) {
             CS_URL.urlMap[folderPathPosix] = folderPathPosix;
             CS_URL.urlMap[folderPathPosix.toLowerCase()] = folderPathPosix;
             CS_URL.urlMap[folderPath] = folderPathPosix;
+            CS_URL.urlMap[folderPathPosix + "/"] = folderPathPosix + "/";
+            CS_URL.urlMap[folderPathPosix.toLowerCase() + "/"] = folderPathPosix + "/";
+            CS_URL.urlMap[folderPath] = folderPathPosix + "/";
             CS_URL.InitializeMap(
                 path.join(baseSystemPath, entry.name),
                 path.posix.join(baseFilePath, entry.name));
@@ -9426,6 +9429,7 @@ CS_URL.MapURL = function (url) {
     result = CS_URL.urlMap[item.toLowerCase()];
     if (result) { return result; }
     if (url !== decodeURIComponent(url)) { return CS_URL.MapURL(decodeURIComponent(url)); }
+    throw new Error("Missing Image: " + url);
     //console.log("\"" + item + "\" still not found giving up");
     return url;
 };

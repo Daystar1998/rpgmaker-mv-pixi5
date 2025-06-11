@@ -1680,7 +1680,7 @@ Spriter_Base.prototype.loadFromNotes = function (item) {
         }
     }
 
-    i.path = path;
+    i.path = path.toLowerCase();
     i.skin = skin;
     i.filePath = filePath;
 
@@ -1728,7 +1728,7 @@ Spriter_Base.prototype.loadFromEquipment = function (item, tag) {
         path = "Spriter/" + folder + "/" + filePath;
     }
 
-    i.path = path;
+    i.path = path.toLowerCase();
     i.skin = folder;
     i.filePath = filePath;
 
@@ -1771,7 +1771,7 @@ Spriter_Base.prototype.loadFromApparell = function (item, tag) {
         path = "Spriter/" + bodyItem.name + fileName;
     }
 
-    i.path = path;
+    i.path = path.toLowerCase();
     i.skin = skin;
     i.filePath = fileDirection + "/" + fileName;
     return i;
@@ -1843,7 +1843,7 @@ Spriter_Base.prototype.unpackTexture = function (item, skin, filePath) {
     const source = packerData.frames[filePath].spriteSourceSize;
     const sourceSize = packerData.frames[filePath].sourceSize;
     const isRotated = packerData.frames[filePath].rotated;
-    const texture = $spriterTextures["/" + SpriterData.spriteFolder + "Spriter/" + skin + "/" + name + ".png"];
+    const texture = $spriterTextures[("/" + SpriterData.spriteFolder + "Spriter/" + skin + "/" + name + ".png").toLowerCase()];
     let originX;
     let originY;
     if (isRotated) {
@@ -2812,7 +2812,7 @@ Scene_Boot.prototype.getDirContents = function (dir) {
     const fs = require('fs');
     const path = require('path');
     const base = path.dirname(process.mainModule.filename);
-    fs.readdirSync(base + dir).forEach(function (file) {
+    fs.readdirSync(CS_URL.MapURL(base + dir)).forEach(function (file) {
         files.push(file);
     });
     return files;
@@ -2824,7 +2824,7 @@ Scene_Boot.prototype.loadTextures = function (dir) {
     for (let i = 0; i < mainFolder.length; i++) {
         let path = dir + mainFolder[i];
         if (mainFolder[i].slice(-4) === ".png") {
-            $spriterTextures[path] = PIXI.Texture.fromImage(outPath + path);
+            $spriterTextures[path.toLowerCase()] = PIXI.Texture.fromImage(CS_URL.MapURL(outPath + path));
         }
         else if (this.isDirectory(path)) {
             path = path + "/";
@@ -2838,7 +2838,7 @@ Scene_Boot.prototype.getDirContents = function (dir) {
     const fs = require('fs');
     const path = require('path');
     const base = path.dirname(process.mainModule.filename);
-    fs.readdirSync(base + dir).forEach(function (file) {
+    fs.readdirSync(CS_URL.MapURL(base + dir)).forEach(function (file) {
         files.push(file);
     });
     return files;
@@ -2849,7 +2849,7 @@ Scene_Boot.prototype.isDirectory = function (path) {
     const basePath = require('path');
     const base = basePath.dirname(process.mainModule.filename);
     try {
-        if (fs.lstatSync(base + path).isDirectory()) {
+        if (fs.lstatSync(CS_URL.MapURL(base + path)).isDirectory()) {
             return true;
         }
         else {
