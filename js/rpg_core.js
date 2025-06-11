@@ -1340,7 +1340,7 @@ Bitmap.prototype.drawCircle = function (x, y, radius, color) {
  * @param {Number} lineHeight The height of the text line
  * @param {String} align The alignment of the text
  */
-Bitmap.prototype.drawText = function (text, x, y, maxWidth, lineHeight, align) {
+Bitmap.prototype.drawText = function (text, x, y, maxWidth, lineHeight, align = 'left') {
     // Note: Firefox has a bug with textBaseline: Bug 737852
     //       So we use 'alphabetic' here.
     if (text !== undefined) {

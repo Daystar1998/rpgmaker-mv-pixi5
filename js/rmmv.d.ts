@@ -327,7 +327,7 @@ declare class Bitmap {
      * @param {String} align The alignment of the text
      */
     drawText(text: string, x: number, y: number,
-        maxWidth: number, lineHeight: number, align: string): void;
+        maxWidth: number, lineHeight: number, align?: string): void;
 
     /**
      * Returns the width of the specified text.
@@ -17662,10 +17662,10 @@ declare class Window_Base {
      * @param {number} x 
      * @param {number} y 
      * @param {number} maxWidth 
-     * @param {string} align 
+     * @param {string} align
      * @memberof Window_Base
      */
-    drawText(text: string | number, x: number, y: number, maxWidth: number, align: string): void;
+    drawText(text: string | number, x: number, y: number, maxWidth: number, align?: string): void;
     /**
      * Calculates the width of a text string and
      * returns a number.

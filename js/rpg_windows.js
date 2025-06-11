@@ -253,7 +253,7 @@ Window_Base.prototype.changePaintOpacity = function (enabled) {
     this.contents.paintOpacity = enabled ? 255 : this.translucentOpacity();
 };
 
-Window_Base.prototype.drawText = function (text, x, y, maxWidth, align) {
+Window_Base.prototype.drawText = function (text, x, y, maxWidth, align = 'left') {
     this.contents.drawText(text, x, y, maxWidth, this.lineHeight(), align);
 };
 
@@ -2404,7 +2404,7 @@ Window_EquipSlot.prototype.drawItem = function (index) {
         const rect = this.itemRectForText(index);
         this.changeTextColor(this.systemColor());
         this.changePaintOpacity(this.isEnabled(index));
-        this.drawText(this.slotName(index), rect.x, rect.y, 138, this.lineHeight());
+        this.drawText(this.slotName(index), rect.x, rect.y, 138);
         this.drawItemName(this._actor.equips()[index], rect.x + 138, rect.y);
         this.changePaintOpacity(true);
     }
