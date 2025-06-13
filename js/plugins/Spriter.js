@@ -2824,7 +2824,7 @@ Scene_Boot.prototype.loadTextures = function (dir) {
     for (let i = 0; i < mainFolder.length; i++) {
         let path = dir + mainFolder[i];
         if (mainFolder[i].slice(-4) === ".png") {
-            $spriterTextures[path.toLowerCase()] = PIXI.Texture.fromImage(CS_URL.MapURL(outPath + path));
+            $spriterTextures[path.toLowerCase()] = PIXI.Texture.from(CS_URL.MapURL(outPath + path));
         }
         else if (this.isDirectory(path)) {
             path = path + "/";
