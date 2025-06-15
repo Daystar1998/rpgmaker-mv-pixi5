@@ -516,11 +516,9 @@ Sprite_Battler.prototype.updateMain = function () {
     this.updatePosition();
 };
 
-Sprite_Battler.prototype.updateBitmap = function () {
-};
+Sprite_Battler.prototype.updateBitmap = function () {};
 
-Sprite_Battler.prototype.updateFrame = function () {
-};
+Sprite_Battler.prototype.updateFrame = function () {};
 
 Sprite_Battler.prototype.updateMove = function () {
     if (this._movementDuration > 0) {
@@ -620,8 +618,7 @@ Sprite_Battler.prototype.startMove = function (x, y, duration) {
     }
 };
 
-Sprite_Battler.prototype.onMoveEnd = function () {
-};
+Sprite_Battler.prototype.onMoveEnd = function () {};
 
 Sprite_Battler.prototype.isEffecting = function () {
     return false;
@@ -2578,21 +2575,26 @@ Spriteset_Battle.prototype.normalBattleback2Name = function () {
 
 Spriteset_Battle.prototype.terrainBattleback1Name = function (type) {
     switch (type) {
-        case 24: case 25:
+        case 24:
+        case 25:
             return 'Wasteland';
-        case 26: case 27:
+        case 26:
+        case 27:
             return 'DirtField';
-        case 32: case 33:
+        case 32:
+        case 33:
             return 'Desert';
         case 34:
             return 'Lava1';
         case 35:
             return 'Lava2';
-        case 40: case 41:
+        case 40:
+        case 41:
             return 'Snowfield';
         case 42:
             return 'Clouds';
-        case 4: case 5:
+        case 4:
+        case 5:
             return 'PoisonSwamp';
         default:
             return null;
@@ -2601,21 +2603,31 @@ Spriteset_Battle.prototype.terrainBattleback1Name = function (type) {
 
 Spriteset_Battle.prototype.terrainBattleback2Name = function (type) {
     switch (type) {
-        case 20: case 21:
+        case 20:
+        case 21:
             return 'Forest';
-        case 22: case 30: case 38:
+        case 22:
+        case 30:
+        case 38:
             return 'Cliff';
-        case 24: case 25: case 26: case 27:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
             return 'Wasteland';
-        case 32: case 33:
+        case 32:
+        case 33:
             return 'Desert';
-        case 34: case 35:
+        case 34:
+        case 35:
             return 'Lava';
-        case 40: case 41:
+        case 40:
+        case 41:
             return 'Snowfield';
         case 42:
             return 'Clouds';
-        case 4: case 5:
+        case 4:
+        case 5:
             return 'PoisonSwamp';
     }
 };

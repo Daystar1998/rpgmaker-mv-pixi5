@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target":"es6",
     "checkJs": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "noUnusedLocals": true
   },
   "files": [
     "./rmmv.d.ts",

@@ -8533,10 +8533,13 @@ Game_Event.prototype.stopCountThreshold = function () {
 
 Game_Event.prototype.moveTypeRandom = function () {
     switch (Math.randomInt(6)) {
-        case 0: case 1:
+        case 0:
+        case 1:
             this.moveRandom();
             break;
-        case 2: case 3: case 4:
+        case 2:
+        case 3:
+        case 4:
             this.moveForward();
             break;
         case 5:
@@ -8548,7 +8551,10 @@ Game_Event.prototype.moveTypeRandom = function () {
 Game_Event.prototype.moveTypeTowardPlayer = function () {
     if (this.isNearThePlayer()) {
         switch (Math.randomInt(6)) {
-            case 0: case 1: case 2: case 3:
+            case 0:
+            case 1:
+            case 2:
+            case 3:
                 this.moveTowardPlayer();
                 break;
             case 4:
@@ -10568,7 +10574,8 @@ Game_Interpreter.requestImages = function (list, commonList) {
                 break;
 
             // Show Animation, Show Battle Animation
-            case 212: case 337:
+            case 212:
+            case 337:
                 if (params[1]) {
                     const animation = $dataAnimations[params[1]];
                     const name1 = animation.animation1Name;

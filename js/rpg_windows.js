@@ -1259,8 +1259,7 @@ Window_Selectable.prototype.drawAllItems = function () {
     }
 };
 
-Window_Selectable.prototype.drawItem = function (index) {
-};
+Window_Selectable.prototype.drawItem = function (index) {};
 
 Window_Selectable.prototype.clearItem = function (index) {
     const rect = this.itemRect(index);
@@ -1328,8 +1327,7 @@ Window_Command.prototype.clearCommandList = function () {
     this._list = [];
 };
 
-Window_Command.prototype.makeCommandList = function () {
-};
+Window_Command.prototype.makeCommandList = function () {};
 
 Window_Command.prototype.addCommand = function (name, symbol, enabled, ext) {
     if (enabled === undefined) {
@@ -1616,8 +1614,7 @@ Window_MenuCommand.prototype.addFormationCommand = function () {
     }
 };
 
-Window_MenuCommand.prototype.addOriginalCommands = function () {
-};
+Window_MenuCommand.prototype.addOriginalCommands = function () {};
 
 Window_MenuCommand.prototype.addOptionsCommand = function () {
     if (this.needsCommand('options')) {
@@ -2488,8 +2485,7 @@ Window_EquipItem.prototype.isEnabled = function (item) {
     return true;
 };
 
-Window_EquipItem.prototype.selectLast = function () {
-};
+Window_EquipItem.prototype.selectLast = function () {};
 
 Window_EquipItem.prototype.setStatusWindow = function (statusWindow) {
     this._statusWindow = statusWindow;
@@ -2505,8 +2501,7 @@ Window_EquipItem.prototype.updateHelp = function () {
     }
 };
 
-Window_EquipItem.prototype.playOkSound = function () {
-};
+Window_EquipItem.prototype.playOkSound = function () {};
 
 //-----------------------------------------------------------------------------
 // Window_Status
@@ -2874,8 +2869,7 @@ Window_SavefileList.prototype.drawPlaytime = function (info, x, y, width) {
     }
 };
 
-Window_SavefileList.prototype.playOkSound = function () {
-};
+Window_SavefileList.prototype.playOkSound = function () {};
 
 //-----------------------------------------------------------------------------
 // Window_ShopCommand
@@ -3206,8 +3200,7 @@ Window_ShopNumber.prototype.isOkTriggered = function () {
     return Input.isTriggered('ok');
 };
 
-Window_ShopNumber.prototype.playOkSound = function () {
-};
+Window_ShopNumber.prototype.playOkSound = function () {};
 
 Window_ShopNumber.prototype.processNumberChange = function () {
     if (this.isOpenAndActive()) {

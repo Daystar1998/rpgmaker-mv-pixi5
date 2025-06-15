@@ -64,8 +64,7 @@ Scene_Base.prototype.detachReservation = function () {
  * @instance 
  * @memberof Scene_Base
  */
-Scene_Base.prototype.create = function () {
-};
+Scene_Base.prototype.create = function () {};
 
 /**
  * Returns whether the scene is active or not.
@@ -145,10 +144,10 @@ Scene_Base.prototype.isBusy = function () {
  * @instance 
  * @memberof Scene_Base
  */
-Scene_Base.prototype.clearChildren = function() {
-  while (this.children.length > 0) {
-    this.removeChild(this.children[0]);
-  }
+Scene_Base.prototype.clearChildren = function () {
+    while (this.children.length > 0) {
+        this.removeChild(this.children[0]);
+    }
 };
 
 /**
@@ -159,8 +158,8 @@ Scene_Base.prototype.clearChildren = function() {
  * @memberof Scene_Base
  */
 Scene_Base.prototype.terminate = function () {
-  if (this._bypassFirstClear) return;
-  this.clearChildren();
+    if (this._bypassFirstClear) return;
+    this.clearChildren();
 };
 
 /**
@@ -829,7 +828,8 @@ Scene_Map.prototype.isDebugCalled = function () {
 Scene_Map.prototype.fadeInForTransfer = function () {
     const fadeType = $gamePlayer.fadeType();
     switch (fadeType) {
-        case 0: case 1:
+        case 0:
+        case 1:
             this.startFadeIn(this.fadeSpeed(), fadeType === 1);
             break;
     }
@@ -838,7 +838,8 @@ Scene_Map.prototype.fadeInForTransfer = function () {
 Scene_Map.prototype.fadeOutForTransfer = function () {
     const fadeType = $gamePlayer.fadeType();
     switch (fadeType) {
-        case 0: case 1:
+        case 0:
+        case 1:
             this.startFadeOut(this.fadeSpeed(), fadeType === 1);
             break;
     }
@@ -964,8 +965,7 @@ Scene_MenuBase.prototype.previousActor = function () {
     this.onActorChange();
 };
 
-Scene_MenuBase.prototype.onActorChange = function () {
-};
+Scene_MenuBase.prototype.onActorChange = function () {};
 
 //-----------------------------------------------------------------------------
 // Scene_Menu
@@ -1074,7 +1074,6 @@ Scene_Menu.prototype.onPersonalCancel = function () {
 
 Scene_Menu.prototype.onFormationOk = function () {
     const index = this._statusWindow.index();
-    const actor = $gameParty.members()[index];
     const pendingIndex = this._statusWindow.pendingIndex();
     if (pendingIndex >= 0) {
         $gameParty.swapOrder(index, pendingIndex);
@@ -1688,8 +1687,7 @@ Scene_File.prototype.firstSavefileIndex = function () {
     return 0;
 };
 
-Scene_File.prototype.onSavefileOk = function () {
-};
+Scene_File.prototype.onSavefileOk = function () {};
 
 //-----------------------------------------------------------------------------
 // Scene_Save

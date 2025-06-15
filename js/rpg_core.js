@@ -1601,7 +1601,8 @@ Bitmap.prototype._onLoad = function () {
 
 Bitmap.prototype.decode = function () {
     switch (this._loadingState) {
-        case 'requestCompleted': case 'decryptCompleted':
+        case 'requestCompleted':
+        case 'decryptCompleted':
             this._loadingState = 'loaded';
 
             if (!this.__canvas) this._createBaseTexture(this._image);
@@ -1609,7 +1610,8 @@ Bitmap.prototype.decode = function () {
             this._callLoadListeners();
             break;
 
-        case 'requesting': case 'decrypting':
+        case 'requesting':
+        case 'decrypting':
             this._decodeAfterRequest = true;
             if (!this._loader) {
                 this._loader = ResourceHandler.createLoader(this._url, this._requestImage.bind(this, this._url), this._onError.bind(this));
@@ -1618,7 +1620,9 @@ Bitmap.prototype.decode = function () {
             }
             break;
 
-        case 'pending': case 'purged': case 'error':
+        case 'pending':
+        case 'purged':
+        case 'error':
             this._decodeAfterRequest = true;
             this._requestImage(this._url);
             break;
@@ -1688,7 +1692,6 @@ Bitmap.prototype._requestImage = function (url) {
         this._loader = ResourceHandler.createLoader(url, this._requestImage.bind(this, url), this._onError.bind(this));
     }
 
-    this._image = new Image();
     this._url = url;
     this._loadingState = 'requesting';
 
@@ -1696,7 +1699,7 @@ Bitmap.prototype._requestImage = function (url) {
         this._loadingState = 'decrypting';
         Decrypter.decryptImg(url, this);
     } else {
-        this._image.src = CS_URL.MapURL(url);
+        this._image.src = url;
 
         this._image.addEventListener('load', this._loadListener = Bitmap.prototype._onLoad.bind(this));
         this._image.addEventListener('error', this._errorListener = this._loader || Bitmap.prototype._onError.bind(this));
@@ -5063,8 +5066,7 @@ Tilemap.prototype._drawAutotile = function (bitmap, tileId, dx, dy) {
             by = ty * 6 + Math.floor(tx / 2) % 2 * 3;
             if (kind % 2 === 0) {
                 bx += waterSurfaceIndex * 2;
-            }
-            else {
+            } else {
                 bx += 6;
                 autotileTable = Tilemap.WATERFALL_AUTOTILE_TABLE;
                 by += this.animationFrame % 3;
@@ -5589,14 +5591,6 @@ ShaderTilemap.prototype.updateTransform = function () {
  * @private
  */
 ShaderTilemap.prototype._createLayers = function () {
-    const width = this._width;
-    const height = this._height;
-    const margin = this._margin;
-    const tileCols = Math.ceil(width / this._tileWidth) + 1;
-    const tileRows = Math.ceil(height / this._tileHeight) + 1;
-    const layerWidth = this._layerWidth = tileCols * this._tileWidth;
-    const layerHeight = this._layerHeight = tileRows * this._tileHeight;
-    this._needsRepaint = true;
 
     if (!this.lowerZLayer) {
         //@hackerham: create layers only in initialization. Doesn't depend on width/height
@@ -5607,7 +5601,6 @@ ShaderTilemap.prototype._createLayers = function () {
 
         this.addChild(this.upperZLayer = new PIXI.tilemap.ZLayer(this, 4));
         this.upperZLayer.addChild(this.upperLayer = new PIXI.tilemap.CompositeRectTileLayer(0, []));
-
     }
 };
 
@@ -5789,8 +5782,7 @@ ShaderTilemap.prototype._drawAutotile = function (layer, tileId, dx, dy) {
             by = ty * 6 + Math.floor(tx / 2) % 2 * 3;
             if (kind % 2 === 0) {
                 animX = 2;
-            }
-            else {
+            } else {
                 bx += 6;
                 autotileTable = Tilemap.WATERFALL_AUTOTILE_TABLE;
                 animY = 1;
@@ -8133,7 +8125,7 @@ WebAudio.prototype._load = function (url) {
         const xhr = new XMLHttpRequest();
         if (Decrypter.hasEncryptedAudio) url = Decrypter.extToEncryptExt(url);
         else url = CS_URL.MapURL(url);
-        xhr.open('GET', CS_URL.MapURL(url));
+        xhr.open('GET', url);
         xhr.responseType = 'arraybuffer';
         xhr.onload = function () {
             if (xhr.status < 400) {
@@ -9142,17 +9134,17 @@ Decrypter.checkImgIgnore = function (url) {
 };
 
 Decrypter.decryptImg = function (url, bitmap) {
-    let orig_url = url;
+    const orig_url = url;
     url = this.extToEncryptExt(url);
 
-    let requestFile = new XMLHttpRequest();
+    const requestFile = new XMLHttpRequest();
     requestFile.open("GET", url);
     requestFile.responseType = "arraybuffer";
     requestFile.send();
 
     requestFile.onload = function () {
         if (this.status < Decrypter._xhrOk) {
-            let arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response, orig_url);
+            const arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response, orig_url);
             bitmap._image.src = Decrypter.createBlobUrl(arrayBuffer);
             bitmap._image.addEventListener('load', bitmap._loadListener = Bitmap.prototype._onLoad.bind(bitmap));
             bitmap._image.addEventListener('error', bitmap._errorListener = bitmap._loader || Bitmap.prototype._onError.bind(bitmap));

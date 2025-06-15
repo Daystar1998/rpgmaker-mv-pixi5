@@ -79,7 +79,7 @@ DataManager.loadDatabase = function () {
 DataManager.loadDataFile = function (name, src) {
     const xhr = new XMLHttpRequest();
     const url = CS_URL.MapURL('data/' + src);
-    xhr.open('GET', CS_URL.MapURL(url));
+    xhr.open('GET', url);
     xhr.overrideMimeType('application/json');
     xhr.onload = function () {
         if (xhr.status < 400) {
@@ -344,8 +344,7 @@ DataManager.saveGame = function (savefileId) {
         try {
             StorageManager.remove(savefileId);
             StorageManager.restoreBackup(savefileId);
-        } catch (e2) {
-        }
+        } catch (e2) {}
         return false;
     }
 };
@@ -382,7 +381,6 @@ DataManager.saveGameWithoutRescue = function (savefileId) {
 };
 
 DataManager.loadGameWithoutRescue = function (savefileId) {
-    const globalInfo = this.loadGlobalInfo();
     if (this.isThisGameFile(savefileId)) {
         const json = StorageManager.load(savefileId);
         this.createGameObjects();
@@ -603,11 +601,9 @@ StorageManager.remove = function (savefileId) {
 
 StorageManager.backup = function (savefileId) {
     if (this.exists(savefileId)) {
-        let data;
-        let compressed;
         if (this.isLocalMode()) {
-            data = this.loadFromLocalFile(savefileId);
-            compressed = LZString.compressToBase64(data);
+            const data = this.loadFromLocalFile(savefileId);
+            const compressed = LZString.compressToBase64(data);
             const fs = require('fs');
             const dirPath = this.localFileDirectoryPath();
             const filePath = this.localFilePath(savefileId) + ".bak";
@@ -616,8 +612,8 @@ StorageManager.backup = function (savefileId) {
             }
             fs.writeFileSync(filePath, compressed);
         } else {
-            data = this.loadFromWebStorage(savefileId);
-            compressed = LZString.compressToBase64(data);
+            const data = this.loadFromWebStorage(savefileId);
+            const compressed = LZString.compressToBase64(data);
             const key = this.webStorageKey(savefileId) + "bak";
             localStorage.setItem(key, compressed);
         }
@@ -636,7 +632,6 @@ StorageManager.cleanBackup = function (savefileId) {
     if (this.backupExists(savefileId)) {
         if (this.isLocalMode()) {
             const fs = require('fs');
-            const dirPath = this.localFileDirectoryPath();
             const filePath = this.localFilePath(savefileId);
             fs.unlinkSync(filePath + ".bak");
         } else {
@@ -648,11 +643,9 @@ StorageManager.cleanBackup = function (savefileId) {
 
 StorageManager.restoreBackup = function (savefileId) {
     if (this.backupExists(savefileId)) {
-        let data;
-        let compressed;
         if (this.isLocalMode()) {
-            data = this.loadFromLocalBackupFile(savefileId);
-            compressed = LZString.compressToBase64(data);
+            const data = this.loadFromLocalBackupFile(savefileId);
+            const compressed = LZString.compressToBase64(data);
             const fs = require('fs');
             const dirPath = this.localFileDirectoryPath();
             const filePath = this.localFilePath(savefileId);
@@ -662,8 +655,8 @@ StorageManager.restoreBackup = function (savefileId) {
             fs.writeFileSync(filePath, compressed);
             fs.unlinkSync(filePath + ".bak");
         } else {
-            data = this.loadFromWebStorageBackup(savefileId);
-            compressed = LZString.compressToBase64(data);
+            const data = this.loadFromWebStorageBackup(savefileId);
+            const compressed = LZString.compressToBase64(data);
             const key = this.webStorageKey(savefileId);
             localStorage.setItem(key, compressed);
             localStorage.removeItem(key + "bak");
@@ -1931,8 +1924,7 @@ SceneManager.onError = function (e) {
         this.stop();
         Graphics.printError('Error', e.message);
         AudioManager.stopAll();
-    } catch (e2) {
-    }
+    } catch (e2) {}
 };
 
 SceneManager.onKeyDown = function (event) {
