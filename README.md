@@ -38,6 +38,8 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https
 - [Filter Controller](https://plugin.fungamemake.com/archives/13553)
 - [FTKR_ExMessageWindow2](https://plugin.fungamemake.com/archives/1326)
 - [Spriter](https://github.com/AlexanderKanakis/RPGMV/blob/master/Spriter.js)
+- [Triacontane](https://github.com/triacontane/RPGMakerMV/tree/master)
+  - ApngPicture
 - [Yanfly](https://yanflyengineplugins.itch.io/free-starter-pack-essentials)
   - KELYEP_DragonBones
 
