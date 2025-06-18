@@ -37,6 +37,7 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https
 - [DragonBones](https://github.com/DragonBones/DragonBonesJS/tree/master/Pixi/5.x)
 - [Filter Controller](https://plugin.fungamemake.com/archives/13553)
 - [FTKR_ExMessageWindow2](https://plugin.fungamemake.com/archives/1326)
+- [PKD_VPlayer](https://kdworkshop.net/plugins/vplayer/)
 - [Spriter](https://github.com/AlexanderKanakis/RPGMV/blob/master/Spriter.js)
 - [Triacontane](https://github.com/triacontane/RPGMakerMV/tree/master)
   - ApngPicture
