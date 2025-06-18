@@ -40,6 +40,7 @@ This is a set of updates based on RPGMaker MV 1.6.2 to use [PixiJS 5.3.12](https
 - [Spriter](https://github.com/AlexanderKanakis/RPGMV/blob/master/Spriter.js)
 - [Triacontane](https://github.com/triacontane/RPGMakerMV/tree/master)
   - ApngPicture
+  - MoviePicture
 - [Yanfly](https://yanflyengineplugins.itch.io/free-starter-pack-essentials)
   - KELYEP_DragonBones
 
