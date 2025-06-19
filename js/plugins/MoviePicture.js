@@ -913,7 +913,7 @@
 
     Bitmap_Video.prototype._createVideoBaseTexture = function() {
         var scaleMode              = this.smooth ? PIXI.SCALE_MODES.LINEAR : PIXI.SCALE_MODES.NEAREST;
-        this._baseTexture = PIXI.Texture.from(this._video, {scaleMode: scaleMode});
+        this.__baseTexture = PIXI.Texture.from(this._video, {scaleMode: scaleMode});
         this._baseTexture.autoPlay = true;
     };
 
