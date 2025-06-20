@@ -958,7 +958,7 @@ VWSprite = class VWSprite extends Sprite {
   }
 
   create() {
-    this.vidTexture = PIXI.Texture.from('movies/' + this.filename + '.webm');
+    this.vidTexture = PIXI.Texture.from(CS_URL.MapURL('movies/' + this.filename + '.webm'));
     this.surface = new PIXI.Sprite(this.vidTexture);
     this.source = null;
     if (KDCore.isMZ() && this.surface._texture.valid === true) {

@@ -667,7 +667,7 @@
                 this._fileHash[name] = ApngLoader.convertDecryptExt(path);
                 this._cachePolicy[name] = item.CachePolicy;
                 this._options[name] = item;
-                PIXI.Loader.shared.add(path, option);
+                PIXI.Loader.shared.add(CS_URL.MapURL(path), option);
             }
         }
 
