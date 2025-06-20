@@ -160,7 +160,7 @@ SceneManager.onError = function (e) {
         this.stop();
         Graphics.printError('Error', e.message);
         AudioManager.stopAll();
-    } catch (e2) {}
+    } catch (e2) { }
 };
 
 SceneManager.onKeyDown = function (event) {

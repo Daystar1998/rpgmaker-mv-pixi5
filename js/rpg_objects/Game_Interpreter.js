@@ -697,7 +697,7 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
         case 2:  // Armor
             return $gameParty.numItems($dataArmors[param1]);
         case 3:  // Actor
-            let actor = $gameActors.actor(param1);
+            const actor = $gameActors.actor(param1);
             if (actor) {
                 switch (param2) {
                     case 0:  // Level
@@ -748,8 +748,8 @@ Game_Interpreter.prototype.gameDataOperand = function (type, param1, param2) {
             }
             break;
         case 6:  // Party
-            actor = $gameParty.members()[param1];
-            return actor ? actor.actorId() : 0;
+            const actor_party = $gameParty.members()[param1];
+            return actor_party ? actor_party.actorId() : 0;
         case 7:  // Other
             switch (param1) {
                 case 0:  // Map ID

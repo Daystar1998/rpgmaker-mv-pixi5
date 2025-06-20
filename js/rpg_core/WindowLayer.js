@@ -158,7 +158,7 @@ WindowLayer.prototype.render_PIXI = PIXI.Container.prototype.render;
 
 /**
  * @method render
- * @param {PIXI.WebGLRenderer} renderSession
+ * @param {PIXI.Renderer} renderSession
  * @private
  */
 WindowLayer.prototype.render = function (renderer) {
@@ -180,7 +180,7 @@ WindowLayer.prototype._maskWindow = function (window, shift) {
     this._windowMask.boundsDirty = true;
     const rect = this._windowRect;
     rect.x = this.x + shift.x + window.x;
-    rect.y = this.x + shift.y + window.y + window.height / 2 * (1 - window._openness / 255);
+    rect.y = this.y + shift.y + window.y + window.height / 2 * (1 - window._openness / 255);
     rect.width = window.width;
     rect.height = window.height * window._openness / 255;
 };

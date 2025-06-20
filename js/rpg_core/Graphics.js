@@ -164,7 +164,7 @@ Graphics.tickEnd = function () {
  * @param {Stage} stage The stage object to be rendered
  */
 Graphics.render = function (stage) {
-    if (this._skipCount === 0) {
+    if (this._skipCount <= 0) {
         const startTime = Date.now();
         if (stage) {
             this._renderer.render(stage);
@@ -1197,9 +1197,9 @@ Graphics._switchStretchMode = function () {
  */
 Graphics._switchFullScreen = function () {
     if (this._isFullScreen()) {
-        this._requestFullScreen();
-    } else {
         this._cancelFullScreen();
+    } else {
+        this._requestFullScreen();
     }
 };
 
@@ -1210,9 +1210,10 @@ Graphics._switchFullScreen = function () {
  * @private
  */
 Graphics._isFullScreen = function () {
-    return ((document.fullScreenElement && document.fullScreenElement !== null) ||
-        (!document.mozFullScreen && !document.webkitFullscreenElement &&
-            !document.msFullscreenElement));
+    return document.fullScreenElement ||
+        document.mozFullScreen ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement;
 };
 
 /**

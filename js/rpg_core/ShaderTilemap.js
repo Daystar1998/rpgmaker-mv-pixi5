@@ -407,7 +407,7 @@ ShaderTilemap.prototype._sortChildren = function () {
  * @private
  *//*
 ShaderTilemap.prototype._compareChildOrder = function (a, b) {
-   return a.z - b.z;
+  return a.z - b.z;
 };*/
 
 /**

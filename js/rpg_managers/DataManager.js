@@ -339,7 +339,7 @@ DataManager.saveGame = function (savefileId) {
         try {
             StorageManager.remove(savefileId);
             StorageManager.restoreBackup(savefileId);
-        } catch (e2) {}
+        } catch (e2) { }
         return false;
     }
 };
