@@ -37,8 +37,12 @@ Utils.RPGMAKER_VERSION = "1.6.2.2";
  * @return {Boolean} True if the option is in the query string
  */
 Utils.isOptionValid = function (name) {
-    if (location.search.slice(1).split('&').contains(name)) { return true; }
-    if (typeof nw !== "undefined" && nw.App.argv.length > 0 && nw.App.argv[0].split('&').contains(name)) { return true; }
+    if (location.search.slice(1).split('&').contains(name)) {
+        return true;
+    }
+    if (typeof nw !== "undefined" && nw.App.argv.length > 0 && nw.App.argv[0].split('&').contains(name)) {
+        return true;
+    }
     return false;
 };
 

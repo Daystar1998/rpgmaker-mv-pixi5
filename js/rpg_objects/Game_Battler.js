@@ -501,15 +501,13 @@ Game_Battler.prototype.performActionStart = function (action) {
     }
 };
 
-Game_Battler.prototype.performAction = function (action) {
-};
+Game_Battler.prototype.performAction = function (action) {};
 
 Game_Battler.prototype.performActionEnd = function () {
     this.setActionState('done');
 };
 
-Game_Battler.prototype.performDamage = function () {
-};
+Game_Battler.prototype.performDamage = function () {};
 
 Game_Battler.prototype.performMiss = function () {
     SoundManager.playMiss();
@@ -535,8 +533,6 @@ Game_Battler.prototype.performReflection = function () {
     SoundManager.playReflection();
 };
 
-Game_Battler.prototype.performSubstitute = function (target) {
-};
+Game_Battler.prototype.performSubstitute = function (target) {};
 
-Game_Battler.prototype.performCollapse = function () {
-};
+Game_Battler.prototype.performCollapse = function () {};

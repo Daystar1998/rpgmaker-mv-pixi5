@@ -66,9 +66,7 @@ Object.defineProperty(TilingSprite.prototype, 'bitmap', {
             if (this._bitmap) {
                 this._bitmap.addLoadListener(this._onBitmapLoad.bind(this));
             } else {
-                try {
-                    this.texture.frame = Rectangle.emptyRectangle;
-                } catch (e) { }
+                this.texture.frame = Rectangle.emptyRectangle;
             }
         }
     },

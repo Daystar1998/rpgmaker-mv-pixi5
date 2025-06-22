@@ -296,8 +296,7 @@ TouchInput._onLeftButtonDown = function (event) {
  * @param {MouseEvent} event
  * @private
  */
-TouchInput._onMiddleButtonDown = function (event) {
-};
+TouchInput._onMiddleButtonDown = function (event) {};
 
 /**
  * @static

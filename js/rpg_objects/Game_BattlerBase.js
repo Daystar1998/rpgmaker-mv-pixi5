@@ -635,8 +635,7 @@ Game_BattlerBase.prototype.addNewState = function (stateId) {
     }
 };
 
-Game_BattlerBase.prototype.onRestrict = function () {
-};
+Game_BattlerBase.prototype.onRestrict = function () {};
 
 Game_BattlerBase.prototype.mostImportantStateText = function () {
     const states = this.states();

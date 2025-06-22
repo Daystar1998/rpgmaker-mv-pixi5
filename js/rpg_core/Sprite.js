@@ -64,9 +64,7 @@ Object.defineProperty(Sprite.prototype, 'bitmap', {
                 value.addLoadListener(this._onBitmapLoad.bind(this));
             } else {
                 this._refreshFrame = false;
-                try {
-                    this.texture.frame = Rectangle.emptyRectangle;
-                } catch (e) { }
+                this.texture.frame = Rectangle.emptyRectangle;
             }
         }
     },
