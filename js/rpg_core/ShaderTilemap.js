@@ -156,8 +156,8 @@ ShaderTilemap.prototype._updateLayerPositions = function (startX, startY) {
 ShaderTilemap.prototype._paintAllTiles = function (startX, startY) {
     this.lowerZLayer.children[0].clear();
     this.upperZLayer.children[0].clear();
-    let tileCols = Math.ceil(this._width / this._tileWidth) + 1;
-    let tileRows = Math.ceil(this._height / this._tileHeight) + 1;
+    const tileCols = Math.ceil(this._width / this._tileWidth) + 1;
+    const tileRows = Math.ceil(this._height / this._tileHeight) + 1;
     for (let y = 0; y < tileRows; y++) {
         for (let x = 0; x < tileCols; x++) {
             this._paintTiles(startX, startY, x, y);
@@ -226,7 +226,7 @@ ShaderTilemap.prototype._paintTiles = function (startX, startY, x, y) {
     }
 
     for (let i = 0; i < lowerTiles.length; i++) {
-        let lowerTileId = lowerTiles[i];
+        const lowerTileId = lowerTiles[i];
         if (lowerTileId < 0) {
             this._drawShadow(lowerLayer, shadowBits, dx, dy);
         } else if (lowerTileId >= tableEdgeVirtualId) {
@@ -258,10 +258,10 @@ ShaderTilemap.prototype._drawNormalTile = function (layer, tileId, dx, dy) {
         setNumber = 5 + Math.floor(tileId / 256);
     }
 
-    let w = this._tileWidth;
-    let h = this._tileHeight;
-    let sx = (Math.floor(tileId / 128) % 2 * 8 + tileId % 8) * w;
-    let sy = (Math.floor(tileId % 256 / 8) % 16) * h;
+    const w = this._tileWidth;
+    const h = this._tileHeight;
+    const sx = (Math.floor(tileId / 128) % 2 * 8 + tileId % 8) * w;
+    const sy = (Math.floor(tileId % 256 / 8) % 16) * h;
 
     layer.addRect(setNumber, sx, sy, dx, dy, w, h);
 };

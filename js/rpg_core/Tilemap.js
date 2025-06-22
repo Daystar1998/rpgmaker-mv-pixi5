@@ -412,7 +412,7 @@ Tilemap.prototype._paintTiles = function (startX, startY, x, y) {
         (Tilemap.isTileA1(tileId0) && this._frameUpdated)) {
         this._lowerBitmap.clearRect(dx, dy, this._tileWidth, this._tileHeight);
         for (let i = 0; i < lowerTiles.length; i++) {
-            let lowerTileId = lowerTiles[i];
+            const lowerTileId = lowerTiles[i];
             if (lowerTileId < 0) {
                 this._drawShadow(lowerLayer, shadowBits, dx, dy);
             } else if (lowerTileId >= tableEdgeVirtualId) {

@@ -127,7 +127,7 @@ Input.update = function () {
     } else {
         this._latestButton = null;
     }
-    for (let name in this._currentState) {
+    for (const name in this._currentState) {
         if (this._currentState[name] && !this._previousState[name]) {
             this._latestButton = name;
             this._pressedTime = 0;

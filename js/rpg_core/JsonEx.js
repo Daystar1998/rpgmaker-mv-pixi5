@@ -130,7 +130,7 @@ JsonEx._encode = function (value, circular, depth) {
         if (constructorName !== 'Object' && constructorName !== 'Array') {
             value['@'] = constructorName;
         }
-        for (let key in value) {
+        for (const key in value) {
             if (value.hasOwnProperty(key) && !key.match(/^@./)) {
                 if (value[key] && typeof value[key] === 'object') {
                     if (value[key]['@c']) {
@@ -179,7 +179,7 @@ JsonEx._decode = function (value, circular, registry) {
                 value = this._resetPrototype(value, constructor.prototype);
             }
         }
-        for (let key in value) {
+        for (const key in value) {
             if (value.hasOwnProperty(key)) {
                 if (value[key] && value[key]['@a']) {
                     //object is array wrapper
@@ -229,7 +229,7 @@ JsonEx._resetPrototype = function (value, prototype) {
         value.__proto__ = prototype; // jshint ignore:line
     } else {
         const newValue = Object.create(prototype);
-        for (let key in value) {
+        for (const key in value) {
             if (value.hasOwnProperty(key)) {
                 newValue[key] = value[key];
             }

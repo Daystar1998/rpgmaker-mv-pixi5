@@ -24,7 +24,7 @@ CacheMap.prototype.checkTTL = function () {
         temp = [];
         this._lastRemovedEntries = temp;
     }
-    for (let key in cache) {
+    for (const key in cache) {
         const entry = cache[key];
         if (!entry.isStillAlive()) {
             temp.push(entry);
