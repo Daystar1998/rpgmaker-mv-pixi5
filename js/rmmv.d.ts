@@ -7046,6 +7046,7 @@ interface PluginManagerStatic {
     _scripts: Array<string>;
     _errorUrls: Array<string>;
     _parameters: { [key: string]: { [key: string]: string } };
+    _ignoredPlugins: Array<string>;
 
     setup(plugins: Array<MV.PluginSettings>): void;
     /**

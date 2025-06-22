@@ -12,8 +12,16 @@ PluginManager._scripts = [];
 PluginManager._errorUrls = [];
 PluginManager._parameters = {};
 
+PluginManager._ignoredPlugins = [
+    "CaeF_restoreMoveIndex"
+];
+
 PluginManager.setup = function (plugins) {
     plugins.forEach(function (plugin) {
+
+        if(this._ignoredPlugins.contains(plugin.name))
+            return;
+
         if (plugin.status && !this._scripts.contains(plugin.name)) {
             this.setParameters(plugin.name, plugin.parameters);
             this.loadScript(plugin.name + '.js');
