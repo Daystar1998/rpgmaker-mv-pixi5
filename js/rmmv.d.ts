@@ -6192,6 +6192,8 @@ declare var Decrypter: DecrypterStatic; declare namespace RPG {
 //=============================================================================
 // rpg_managers.js v1.5.0
 //=============================================================================
+/** @global RPGMaker Plugin's Object */
+declare var $plugins: Array<MV.PluginSettings>;
 /** @global RPGMakerMV Actor data. */
 declare var $dataActors: Array<RPG.Actor>;
 /** @global RPGMakerMV Class data. */
@@ -7103,6 +7105,7 @@ declare namespace MV {
         x: number;
         y: number;
         left: number;
+        text: string;
     }
     export interface BattleLogMethod {
         name: string;
@@ -13851,6 +13854,13 @@ declare class Scene_Base extends Stage {
     protected _imageReservationId: any | number;
     protected _windowLayer: WindowLayer;
 
+
+    /**
+     * Initializes the scene.
+     * 
+     * @memberof Scene_Base
+     */
+    initialize(): void
     /**
      * Attach a reservation to the reserve queue
      * 
@@ -15409,6 +15419,12 @@ declare class Sprite_Base extends Sprite {
     constructor();
 
     /**
+     * Initializes the sprite.
+     * 
+     * @memberof Sprite_Base
+     */
+    initialize(): void;
+    /**
      * Hides the sprite.
      *
      * @memberof Sprite_Base
@@ -15688,7 +15704,7 @@ declare class Sprite_Character extends Sprite_Base {
     startBalloon(): void;
     /**
      * Processes the balloon sprite, calls
-     * the endBallon method if the balloon sprite is done playing.
+     * the endBalloon method if the balloon sprite is done playing.
      * @memberof Sprite_Character
      */
     updateBalloon(): void;
@@ -17015,7 +17031,7 @@ declare class Spriteset_Battle extends Spriteset_Base {
  * @class Window_Base
  * @extends {Window}
  */
-declare class Window_Base {
+declare class Window_Base extends _Window {
     /**
      * The standard icon width;
      * default is 32.
@@ -17079,6 +17095,12 @@ declare class Window_Base {
      */
     constructor(x: number, y: number, width: number, height: number);
 
+    /**
+     * Initializes the window.
+     * 
+     * @memberof Window_Base
+     */
+    initialize(x?: number, y?: number, width?: number, height?: number): void;
     /**
      * Returns the standard line height of the current window;
      * default is 36.
@@ -18169,7 +18191,7 @@ declare class Window_Command extends Window_Selectable {
      * @param {(any | object)} ext 
      * @memberof Window_Command
      */
-    addCommand(name: string, symbol: string, enabled: boolean, ext: any | object)
+    addCommand(name: string, symbol: string, enabled?: boolean, ext?: any | object)
     /**
      * Returns the command name given an index.
      * 
@@ -18328,7 +18350,8 @@ declare class Window_Gold extends Window_Base {
 
 declare class Window_MenuCommand extends Window_Command {
     constructor(x: number, y: number);
-    initCommandPosition(): void;
+    static initCommandPosition(): void;
+    static _lastCommandSymbol: any;
     /**
      * Adds the standard game commands to the
      * RPGMakerMV main menu.
