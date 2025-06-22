@@ -24,7 +24,6 @@ declare -a rpg_core=(
 './js/rpg_core/ToneSprite.js'
 './js/rpg_core/Stage.js'
 './js/rpg_core/WebAudio.js'
-'./js/rpg_core/Html5Audio.js'
 './js/rpg_core/JsonEx.js'
 './js/rpg_core/Decrypter.js'
 './js/rpg_core/ResourceHandler.js'

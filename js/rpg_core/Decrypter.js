@@ -52,21 +52,6 @@ Decrypter.decryptImg = function (url, bitmap) {
     };
 };
 
-Decrypter.decryptHTML5Audio = function (url, bgm, pos) {
-    const requestFile = new XMLHttpRequest();
-    requestFile.open("GET", url);
-    requestFile.responseType = "arraybuffer";
-    requestFile.send();
-
-    requestFile.onload = function () {
-        if (this.status < Decrypter._xhrOk) {
-            const arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response, url);
-            const url = Decrypter.createBlobUrl(arrayBuffer);
-            AudioManager.createDecryptBuffer(url, bgm, pos);
-        }
-    };
-};
-
 Decrypter.cutArrayHeader = function (arrayBuffer, length) {
     return arrayBuffer.slice(length);
 };

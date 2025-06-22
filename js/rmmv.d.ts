@@ -1102,256 +1102,6 @@ interface GraphicsStatic {
 declare var Graphics: GraphicsStatic;
 
 /**
- * The static class that handles HTML5 Audio.
- *
- * @class Html5Audio
- * @constructor
- */
-interface Html5AudioStatic {
-    _initialized: boolean;
-    _unlocked: boolean;
-    _audioElement: HTMLAudioElement;
-    _gainTweenInterval: number;
-    _tweenGain: number;
-    _tweenTargetGain: number;
-    _tweenGainStep: number;
-    _staticSePath: boolean;
-    _volume: number;
-    _loadListeners: Array<() => void>;
-    _hasError: boolean;
-    _autoPlay: boolean;
-    _isLoading: boolean;
-    _buffered: boolean;
-
-    /**
-     * [read-only] The url of the audio file.
-     *
-     * @property url
-     * @type String
-     */
-    url: string;
-
-    /**
-     * The volume of the audio.
-     *
-     * @property volume
-     * @type Number
-     */
-    volume: number;
-
-    /**
-     * Sets up the Html5 Audio.
-     *
-     * @static
-     * @method setup
-     * @param {String} url The url of the audio file
-     */
-    setup(url: string): void;
-
-    /**
-     * Initializes the audio system.
-     *
-     * @static
-     * @method initialize
-     * @return {Boolean} True if the audio system is available
-     */
-    initialize(): void;
-
-    /**
-     * Clears the audio data.
-     *
-     * @static
-     * @method clear
-     */
-    clear(): void;
-
-    /**
-     * Set the URL of static se.
-     *
-     * @static
-     * @param {String} url
-     */
-    setStaticSe(url: string): void;
-
-    /**
-     * Checks whether the audio data is ready to play.
-     *
-     * @static
-     * @method isReady
-     * @return {Boolean} True if the audio data is ready to play
-     */
-    isReady(): boolean;
-
-    /**
-     * Checks whether a loading error has occurred.
-     *
-     * @static
-     * @method isError
-     * @return {Boolean} True if a loading error has occurred
-     */
-    isError(): boolean;
-
-    /**
-     * Checks whether the audio is playing.
-     *
-     * @static
-     * @method isPlaying
-     * @return {Boolean} True if the audio is playing
-     */
-    isPlaying(): boolean;
-
-    /**
-     * Plays the audio.
-     *
-     * @static
-     * @method play
-     * @param {Boolean} loop Whether the audio data play in a loop
-     * @param {Number} offset The start position to play in seconds
-     */
-    play(loop: boolean, offset: number): void;
-
-    /**
-     * Stops the audio.
-     *
-     * @static
-     * @method stop
-     */
-    stop(): void;
-
-    /**
-     * Performs the audio fade-in.
-     *
-     * @static
-     * @method fadeIn
-     * @param {Number} duration Fade-in time in seconds
-     */
-    fadeIn(duration: number): void;
-
-    /**
-     * Performs the audio fade-out.
-     *
-     * @static
-     * @method fadeOut
-     * @param {Number} duration Fade-out time in seconds
-     */
-    fadeOut(duration: number): void;
-
-    /**
-     * Gets the seek position of the audio.
-     *
-     * @static
-     * @method seek
-     */
-    seek(): void;
-
-    /**
-     * Add a callback function that will be called when the audio data is loaded.
-     *
-     * @static
-     * @method addLoadListener
-     * @param {Function} listener The callback function
-     */
-    addLoadListener(listener: () => void): void;
-
-    /**
-     * @static
-     * @method _setupEventHandlers
-     * @private
-     */
-    _setupEventHandlers(): void;
-
-    /**
-     * @static
-     * @method _onTouchStart
-     * @private
-     */
-    _onTouchStart(): void;
-
-    /**
-     * @static
-     * @method _onVisibilityChange
-     * @private
-     */
-    _onVisibilityChange(): void;
-
-    /**
-     * @static
-     * @method _onLoadedData
-     * @private
-     */
-    _onLoadedData(): void;
-
-    /**
-     * @static
-     * @method _onError
-     * @private
-     */
-    _onError(): void;
-
-    /**
-     * @static
-     * @method _onEnded
-     * @private
-     */
-    _onEnded(): void;
-
-    /**
-     * @static
-     * @method _onHide
-     * @private
-     */
-    _onHide(): void;
-
-    /**
-     * @static
-     * @method _onShow
-     * @private
-     */
-    _onShow(): void;
-
-    /**
-     * @static
-     * @method _load
-     * @param {String} url
-     * @private
-     */
-    _load(url: string): void;
-
-    /**
-     * @static
-     * @method _startPlaying
-     * @param {Boolean} loop
-     * @param {Number} offset
-     * @private
-     */
-    _startPlaying(loop: boolean, offset: number): void;
-
-    /**
-     * @static
-     * @method _onLoad
-     * @private
-     */
-    _onLoad(): void;
-
-    /**
-     * @static
-     * @method _startGainTween
-     * @params {Number} duration
-     * @private
-     */
-    _startGainTweenfunction(duration: number): void;
-
-    /**
-     * @static
-     * @method _applyTweenValue
-     * @param {Number} volume
-     * @private
-     */
-    _applyTweenValue(volume: number): void;
-}
-declare var Html5Audio: Html5AudioStatic;
-
-/**
  * The static class that handles input data from the keyboard and gamepads.
  *
  * @class Input
@@ -4404,7 +4154,7 @@ declare class CacheEntry {
      * @constructor
      * @param {ResourceManager} resource manager
      * @param {string} key, url of the resource
-     * @param {string} item - Bitmap, HTML5Audio, WebAudio - whatever you want to store in the cache
+     * @param {string} item - Bitmap, WebAudio - whatever you want to store in the cache
      */
     constructor(cache: CacheMap, key: string, item: string)
 
@@ -4478,7 +4228,6 @@ interface DecrypterStatic {
 
     checkImgIgnore(url: string): boolean;
     decryptImg(url: string, bitmap: Bitmap): void;
-    decryptHTML5Audio(url: string, bgm: MV.AudioParameters, pos?: number): void;
     cutArrayHeader(arrayBuffer: ArrayBuffer, length: number): ArrayBuffer;
     decryptArrayBuffer(arrayBuffer: ArrayBuffer): void;
     createBlobUrl(arrayBuffer: ArrayBuffer): string;
@@ -6671,11 +6420,11 @@ interface AudioManagerStatic {
     _seVolume: number;
     _currentBgm: MV.AudioParameters;
     _currentBgs: MV.AudioParameters;
-    _bgmBuffer: Html5AudioStatic | WebAudio;
-    _bgsBuffer: Html5AudioStatic | WebAudio;
-    _meBuffer: Html5AudioStatic | WebAudio;
-    _seBuffers: Array<Html5AudioStatic | WebAudio>;
-    _staticBuffers: Array<Html5AudioStatic | WebAudio>;
+    _bgmBuffer: WebAudio;
+    _bgsBuffer: WebAudio;
+    _meBuffer: WebAudio;
+    _seBuffers: Array<WebAudio>;
+    _staticBuffers: Array<WebAudio>;
     _replayFadeTime: number;
     _path: string;
     _blobUrl: string;
@@ -6720,13 +6469,13 @@ interface AudioManagerStatic {
     saveBgm(): MV.AudioParameters;
     saveBgs(): MV.AudioParameters;
     makeEmptyAudioObject(): MV.AudioParameters;
-    createBuffer(): Html5AudioStatic | WebAudio;
+    createBuffer(): WebAudio;
     updateBufferParameters(buffer: MV.AudioParameters, configVolume: number, audio: MV.AudioParameters): void;
     audioFileExt(): string;
     shouldUseHtml5Audio(): boolean;
     checkErrors(): void;
     checkWebAudioError(): void;
-    checkWebAudioError(webAudio: Html5AudioStatic | WebAudio): void;
+    checkWebAudioError(webAudio: WebAudio): void;
     playEncryptedBgm(bgm: MV.AudioParameters, pos?: number): void;
     createDecryptBuffer(url: string, bgm: MV.AudioParameters, pos?: number): void;
 }

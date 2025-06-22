@@ -110,7 +110,6 @@
         "CacheMap": true,
         "ImageCache": true,
         "WebAudio": true,
-        "Html5Audio": true,
         "RequestQueue": true,
         "Window_TitleCommand": true,
         "Window_MapName": true,
