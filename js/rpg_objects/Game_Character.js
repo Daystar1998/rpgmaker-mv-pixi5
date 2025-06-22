@@ -78,7 +78,8 @@ Game_Character.prototype.memorizeMoveRoute = function () {
 
 Game_Character.prototype.restoreMoveRoute = function () {
     this._moveRoute = this._originalMoveRoute;
-    this._moveRouteIndex = this._originalMoveRouteIndex;
+    // Caethyril's bug fix to prevent one command from being skipped
+    this._moveRouteIndex = this._originalMoveRouteIndex - 1;
     this._originalMoveRoute = null;
 };
 
