@@ -884,8 +884,6 @@
         if (this.isReady()) {
             this.pause();
             this._video = null;
-            this._baseTexture.destroy();
-            this.__baseTexture = null;
         } else {
             this._loadingDestory = true;
         }
