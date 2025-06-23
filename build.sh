@@ -1,3 +1,5 @@
+#!/bin/bash
+
 declare -a rpg_core=(
 './js/rpg_core/_header.js'
 './js/rpg_core/JsExtensions.js'
