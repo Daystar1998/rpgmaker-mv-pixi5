@@ -885,7 +885,17 @@ Graphics._createRenderer = function () {
         resolution: window.devicePixelRatio
     };
     try {
-        this._renderer = new PIXI.Renderer(options);
+        switch (this._rendererType) {
+        case 'canvas':
+            this._renderer = new PIXI.CanvasRenderer(options);
+            break;
+        case 'webgl':
+            this._renderer = new PIXI.Renderer(options);
+            break;
+        default:
+            this._renderer = PIXI.autoDetectRenderer(options);
+            break;
+        }
     } catch (e) {
         this._renderer = null;
     }
