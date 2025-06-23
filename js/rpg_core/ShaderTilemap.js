@@ -116,6 +116,8 @@ ShaderTilemap.prototype.updateTransform = function () {
  */
 ShaderTilemap.prototype._createLayers = function () {
 
+    this._needsRepaint = true;
+
     if (!this.lowerZLayer) {
         //@hackerham: create layers only in initialization. Doesn't depend on width/height
         this.addChild(this.lowerZLayer = new PIXI.tilemap.ZLayer(this, 0));
