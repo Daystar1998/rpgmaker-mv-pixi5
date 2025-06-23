@@ -42,7 +42,7 @@ ShaderTilemap.prototype._hackRenderer = function (renderer) {
  * PIXI render method
  *
  * @method renderCanvas
- * @param {Object} pixi renderer
+ * @param {PIXI.CanvasRenderer} pixi renderer
  */
 ShaderTilemap.prototype.renderCanvas = function (renderer) {
     this._hackRenderer(renderer);
@@ -54,7 +54,7 @@ ShaderTilemap.prototype.renderCanvas = function (renderer) {
  * PIXI render method
  *
  * @method render
- * @param {Object} pixi renderer
+ * @param {PIXI.Renderer} pixi renderer
  */
 ShaderTilemap.prototype.render = function (renderer) {
     this._hackRenderer(renderer);

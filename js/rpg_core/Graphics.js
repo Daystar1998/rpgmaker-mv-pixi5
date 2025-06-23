@@ -36,9 +36,6 @@ Graphics.initialize = function (width, height, type) {
     this._errorPrinter = null;
     this._canvas = null;
     this._video = null;
-    // Before bringing in 1.6.2 this was:
-    // this._videoUnlocked = !Utils.isMobileDevice();
-    // From 1.6.2
     this._videoUnlocked = false;
     this._videoLoading = false;
     this._upperCanvas = null;
@@ -46,7 +43,6 @@ Graphics.initialize = function (width, height, type) {
     this._fpsMeter = null;
     this._modeBox = null;
     this._skipCount = 0;
-    this._gcCount = 0;
     this._maxSkip = 3;
     this._rendered = false;
     this._loadingImage = null;
@@ -522,10 +518,7 @@ Graphics.isInsideCanvas = function (x, y) {
  */
 Graphics.callGC = function () {
     if (Graphics.isWebGL()) {
-        //if(this._gcCount++ > 30){
         Graphics._renderer.textureGC.run();
-        //}
-        //this._gcCount %= 30;
     }
 };
 
@@ -1210,7 +1203,7 @@ Graphics._switchFullScreen = function () {
  * @private
  */
 Graphics._isFullScreen = function () {
-    return document.fullScreenElement ||
+    return document.fullscreenElement ||
         document.mozFullScreen ||
         document.webkitFullscreenElement ||
         document.msFullscreenElement;
@@ -1223,8 +1216,8 @@ Graphics._isFullScreen = function () {
  */
 Graphics._requestFullScreen = function () {
     const element = document.body;
-    if (element.requestFullScreen) {
-        element.requestFullScreen();
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
     } else if (element.mozRequestFullScreen) {
         element.mozRequestFullScreen();
     } else if (element.webkitRequestFullScreen) {

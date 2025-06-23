@@ -38,7 +38,7 @@ TilingSprite.prototype._renderCanvas_PIXI = PIXI.picture.TilingSprite.prototype.
 
 /**
  * @method _renderCanvas
- * @param {Object} renderer
+ * @param {PIXI.CanvasRenderer} renderer
  * @private
  */
 TilingSprite.prototype._renderCanvas = function (renderer) {

@@ -89,7 +89,7 @@ WindowLayer.prototype.update = function () {
 
 /**
  * @method _renderCanvas
- * @param {Object} renderSession
+ * @param {PIXI.CanvasRenderer} renderSession
  * @private
  */
 WindowLayer.prototype._renderCanvas = function (renderer) {
@@ -142,7 +142,7 @@ WindowLayer.prototype._renderCanvas = function (renderer) {
 };
 /**
  * @method _canvasClearWindowRect
- * @param {Object} renderSession
+ * @param {PIXI.CanvasRenderer} renderSession
  * @param {Window} window
  * @private
  */

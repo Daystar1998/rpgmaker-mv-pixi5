@@ -392,11 +392,11 @@ Input._updateGamepadState = function (gamepad) {
     } else if (axes[0] > threshold) {
         newState[15] = true;    // right
     }
-    for (let j = 0; j < newState.length; j++) {
-        if (newState[j] !== lastState[j]) {
-            const buttonName = this.gamepadMapper[j];
+    for (let i = 0; i < newState.length; i++) {
+        if (newState[i] !== lastState[i]) {
+            const buttonName = this.gamepadMapper[i];
             if (buttonName) {
-                this._currentState[buttonName] = newState[j];
+                this._currentState[buttonName] = newState[i];
             }
         }
     }

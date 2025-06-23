@@ -400,7 +400,7 @@ Sprite.prototype._render_PIXI = PIXI.Sprite.prototype._render;
 
 /**
  * @method _renderCanvas
- * @param {Object} renderer
+ * @param {PIXI.CanvasRenderer} renderer
  * @private
  */
 Sprite.prototype._renderCanvas = function (renderer) {
@@ -418,7 +418,7 @@ Sprite.prototype._renderCanvas = function (renderer) {
 
 /**
  * @method _render
- * @param {Object} renderer
+ * @param {PIXI.Renderer} renderer
  * @private
  */
 Sprite.prototype._render = function (renderer) {

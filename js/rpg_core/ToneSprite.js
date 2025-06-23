@@ -47,7 +47,7 @@ ToneSprite.prototype.setTone = function (r, g, b, gray) {
 
 /**
  * @method _renderCanvas
- * @param {Object} renderSession
+ * @param {PIXI.CanvasRenderer} renderSession
  * @private
  */
 ToneSprite.prototype._renderCanvas = function (renderer) {
